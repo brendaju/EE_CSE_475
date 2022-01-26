@@ -1,0 +1,6 @@
+LEDControl.c:28:10:Wheel	16	static
+LEDControl.c:44:6:visRainbow	32	static
+LEDControl.c:65:6:visDots	32	static
+LEDControl.c:101:6:visInit	16	static
+LEDControl.c:144:6:visHandle2	24	static
+LEDControl.c:183:6:visHandle	16	static
