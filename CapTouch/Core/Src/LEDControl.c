@@ -150,6 +150,21 @@ void setLEDPixel(uint8_t x, uint8_t, uint16_t red, uint16_t green, uint16_t blue
 	frameBuffer[(12*x+y)*3 + 2] = color >> 16 & 0xFF;
 }
 
+// Takes a 3D array (2D with array of color values RGB) and sets all the pixels based on this
+void setAllPixelsFromGrid(uint32_t*** colorGrid) {
+	uint32_t color = newColor(0, 0, 0);
+
+	for (uint8_t x = 0; x < 12; x++) {
+		for (uint8_t y = 0; y < 16; y++) {
+			color = newColor(colorGrid[x][y][0], colorGrid[x][y][1], colorGrid[x][y][2]);
+
+			frameBuffer[(12*x+y)*3 + 0] = color & 0xFF;
+			frameBuffer[(12*x+y)*3 + 1] = color >> 8 & 0xFF;
+			frameBuffer[(12*x+y)*3 + 2] = color >> 16 & 0xFF;
+		}
+	}
+}
+
 // Animate effects
 void visHandle2(uint16_t *input)
 {
