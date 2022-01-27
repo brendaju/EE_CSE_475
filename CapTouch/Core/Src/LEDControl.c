@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 // RGB Framebuffers
-uint8_t frameBuffer[3*120];
+uint8_t frameBuffer[3*192];
 uint8_t frameBuffer2[3*20];
 
 
@@ -139,6 +139,16 @@ void visInit()
 uint16_t blue = 0;
 uint16_t red = 0;
 uint16_t green = 0;
+
+// x is value from 0 to 11
+// y is value from 0 to 15
+void setLEDPixel(uint8_t x, uint8_t, uint16_t red, uint16_t green, uint16_t blue) {
+	uint32_t color = newColor(red, green, blue);
+
+	frameBuffer[(12*x+y)*3 + 0] = color & 0xFF;
+	frameBuffer[(12*x+y)*3 + 1] = color >> 8 & 0xFF;
+	frameBuffer[(12*x+y)*3 + 2] = color >> 16 & 0xFF;
+}
 
 // Animate effects
 void visHandle2(uint16_t *input)

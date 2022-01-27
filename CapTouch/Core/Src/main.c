@@ -80,7 +80,7 @@ void MX_USB_HOST_Process(void);
 /* USER CODE BEGIN 0 */
 void IIC_ByteWrite(uint8_t dev_addr, uint8_t reg_addr, uint8_t data);
 void MPR121_init(uint8_t addr);
-
+uint8_t* determinePixel(uint16_t* input);
 /* USER CODE END 0 */
 
 /**
@@ -609,6 +609,21 @@ void MPR121_init(uint8_t addr) {
 
 	IIC_ByteWrite(addr ,0x5E,0xCC);
 
+}
+
+// Returns a 2 wide array of which pixel was touched on the board
+// Input is the concatenated version of each capacitive touch board
+uint8_t* determinePixel(uint16_t* input) {
+	uint8_t pixelSelected[2] = {20, 20};
+	uint16_t log2X = log2(input[0]);
+	// X is a power of 2
+	if (ceil(log2X) == floor(log2X))
+		pixelSelected[0] = log2X;
+	uint32_t yInput = ((input[2] & 0x0FFF)) << 12 | (input[1] & 0x0FFF);
+	uint16_t log2Y = log2(yInput);
+	if (ceil(log2Y) == floor (log2Y))
+		pixelSelected[1] = log2Y;
+	return pixelSelected;
 }
 
 /* USER CODE END 4 */
