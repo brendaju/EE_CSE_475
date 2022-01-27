@@ -142,7 +142,7 @@ uint16_t green = 0;
 
 // x is value from 0 to 11
 // y is value from 0 to 15
-void setLEDPixel(uint8_t x, uint8_t, uint16_t red, uint16_t green, uint16_t blue) {
+void setLEDPixel(uint8_t x, uint8_t y, uint16_t red, uint16_t green, uint16_t blue) {
 	uint32_t color = newColor(red, green, blue);
 
 	frameBuffer[(12*x+y)*3 + 0] = color & 0xFF;
