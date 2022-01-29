@@ -80,7 +80,7 @@ void MX_USB_HOST_Process(void);
 /* USER CODE BEGIN 0 */
 void IIC_ByteWrite(uint8_t dev_addr, uint8_t reg_addr, uint8_t data);
 void MPR121_init(uint8_t addr);
-uint8_t* determinePixel(uint16_t* input);
+uint8_t determinePixel(uint16_t* input, uint8_t* pixelSelected);
 /* USER CODE END 0 */
 
 /**
@@ -95,8 +95,10 @@ int main(void)
 	uint8_t bufTouch1[2];
 	uint8_t bufTouch2[2];
 	uint16_t capTouch[3];
+	uint16_t oldCapTouch[3];
+	uint8_t gridLoc[2];
 	//float val0;
-	uint8_t X = 0;
+	uint8_t newTouch = 0;
 	//float tester = 0;
   /* USER CODE END 1 */
 
@@ -154,8 +156,15 @@ int main(void)
 
 		//sprintf((char*)bufTouch0, "%u\r\n", (unsigned int)val0);
 	}
-
-	visHandle(capTouch);
+	if (oldCapTouch[0] != capTouch[0] | oldCapTouch[1] != capTouch[1] | oldCapTouch[2] != capTouch[2]) {
+		newTouch = determinePixel(capTouch, gridLoc);
+		oldCapTouch[0] = capTouch[0];
+		oldCapTouch[1] = capTouch[1];
+		oldCapTouch[2] = capTouch[2];
+	} else {
+		newTouch = 0;
+	}
+	visHandle(capTouch, gridLoc, newTouch);
 	HAL_Delay(50);
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
@@ -613,9 +622,10 @@ void MPR121_init(uint8_t addr) {
 
 // Returns a 2 wide array of which pixel was touched on the board
 // Input is the concatenated version of each capacitive touch board
-uint8_t* determinePixel(uint16_t* input) {
-	uint8_t pixelSelected[2] = {20, 20};
-	uint16_t log2X = log2(input[0]);
+uint8_t determinePixel(uint16_t* input, uint8_t* pixelSelected) {
+	if ((input[0] & 0x0FFF) == 0 | (((input[2] & 0x0FFF)) << 12 | (input[1] & 0x0FFF)) == 0)
+		return 0;
+	uint16_t log2X = log2(input[0] & 0x0FFF);
 	// X is a power of 2
 	if (ceil(log2X) == floor(log2X))
 		pixelSelected[0] = log2X;
@@ -623,7 +633,7 @@ uint8_t* determinePixel(uint16_t* input) {
 	uint16_t log2Y = log2(yInput);
 	if (ceil(log2Y) == floor (log2Y))
 		pixelSelected[1] = log2Y;
-	return pixelSelected;
+	return 1;
 }
 
 /* USER CODE END 4 */

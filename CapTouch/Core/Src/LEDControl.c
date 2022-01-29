@@ -144,10 +144,12 @@ uint16_t green = 0;
 // y is value from 0 to 15
 void setLEDPixel(uint8_t x, uint8_t y, uint16_t red, uint16_t green, uint16_t blue) {
 	uint32_t color = newColor(red, green, blue);
-
-	frameBuffer[(12*x+y)*3 + 0] = color & 0xFF;
-	frameBuffer[(12*x+y)*3 + 1] = color >> 8 & 0xFF;
-	frameBuffer[(12*x+y)*3 + 2] = color >> 16 & 0xFF;
+	uint8_t newY = y;
+	if (x % 2 == 1)
+		newY = 15 - y;
+	frameBuffer[(16*x+newY)*3 + 0] = color & 0xFF;
+	frameBuffer[(16*x+newY)*3 + 1] = color >> 8 & 0xFF;
+	frameBuffer[(16*x+newY)*3 + 2] = color >> 16 & 0xFF;
 }
 
 // Takes a 3D array (2D with array of color values RGB) and sets all the pixels based on this
@@ -156,28 +158,43 @@ void setAllPixelsFromGrid(uint32_t*** colorGrid) {
 
 	for (uint8_t x = 0; x < 12; x++) {
 		for (uint8_t y = 0; y < 16; y++) {
-			color = newColor(colorGrid[x][y][0], colorGrid[x][y][1], colorGrid[x][y][2]);
+			uint8_t newY = y;
+				if (x % 2 == 1)
+					newY = 15 - y;
 
-			frameBuffer[(12*x+y)*3 + 0] = color & 0xFF;
-			frameBuffer[(12*x+y)*3 + 1] = color >> 8 & 0xFF;
-			frameBuffer[(12*x+y)*3 + 2] = color >> 16 & 0xFF;
+			color = newColor(colorGrid[x][newY][0], colorGrid[x][newY][1], colorGrid[x][newY][2]);
+
+			frameBuffer[(16*x+newY)*3 + 0] = color & 0xFF;
+			frameBuffer[(16*x+newY)*3 + 1] = color >> 8 & 0xFF;
+			frameBuffer[(16*x+newY)*3 + 2] = color >> 16 & 0xFF;
 		}
 	}
 }
 
+uint8_t prevGridLoc[2] = {20, 20};
+
+uint16_t colors[5][3] = {
+		{0, 0, 0},
+		{255, 0, 0},
+		{0, 255, 0},
+		{0, 0, 255},
+		{255, 255, 255}
+};
+uint8_t paintBrush = 0;
 // Animate effects
-void visHandle2(uint16_t *input)
+void visHandle2(uint16_t *input, uint8_t* gridLoc, uint8_t* newTouch)
 {
 	static uint32_t timestamp;
 	static uint32_t currentTime;
 	currentTime = HAL_GetTick();
 	if(currentTime - timestamp > 10)
 	{
-		uint32_t color = 0;
+
+		//uint32_t color = 0;
 		timestamp = HAL_GetTick();
 
 
-
+		/*
 		if (input[0] != 0) {
 			blue = input[0];
 		}
@@ -197,6 +214,18 @@ void visHandle2(uint16_t *input)
 			}
 		} else {
 			visRainbow(frameBuffer, sizeof(frameBuffer), 15);
+		}*/
+		if (newTouch == 1) {
+			if (prevGridLoc[0] == gridLoc[0] & prevGridLoc[1] == gridLoc[1]) {
+				paintBrush++;
+				if (paintBrush == 5)
+					paintBrush = 0;
+				}
+			setLEDPixel(gridLoc[0], gridLoc[1], colors[paintBrush][0], colors[paintBrush][1], colors[paintBrush][2]);
+			if (prevGridLoc[0] != gridLoc[0] & prevGridLoc[1] != gridLoc[1]) {
+				prevGridLoc[0] = gridLoc[0];
+				prevGridLoc[1] = gridLoc[1];
+			}
 		}
 		// Animate next frame, each effect into each output RGB framebuffer
 		//visRainbow(frameBuffer, sizeof(frameBuffer), 15);
@@ -205,15 +234,16 @@ void visHandle2(uint16_t *input)
 }
 
 
-void visHandle(uint16_t *input)
+
+void visHandle(uint16_t *input, uint8_t* gridLoc, uint8_t newTouch)
 {
 
 	if(ws2812b.transferComplete)
 	{
 		// Update your framebuffer here or swap buffers
-		visHandle2(input);
+		visHandle2(input, gridLoc, newTouch);
 
-		// Signal that buffer is changed and transfer new data
+				// Signal that buffer is changed and transfer new data
 		ws2812b.startTransfer = 1;
 		ws2812b_handle();
 	}

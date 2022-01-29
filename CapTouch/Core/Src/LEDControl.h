@@ -13,5 +13,5 @@
 #include <stdint.h>
 
 void visInit();
-void visHandle(uint16_t *input);
+void visHandle(uint16_t *input, uint8_t* gridLoc, uint8_t newTouch);
 #endif /* LEDCONTROL_H_ */
