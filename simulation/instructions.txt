@@ -1,0 +1,4 @@
+1. Clone simulation folder
+2. Run python neopixel_neomatrix.py to produce output in new window
+3. Can turn LEDs on/off with matrix.drawPixel(x_loc, y_loc, color) followed by matrix.show() then matrix.delay(time_in_ms)
+4. color takes in (red, green, blue) amounts
