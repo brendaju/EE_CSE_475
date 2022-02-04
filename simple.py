@@ -53,10 +53,11 @@ if __name__ == '__main__':
 
     try:
         while True:
-            colorWipe(strip, Color(255, 0, 0))  # Red wipe
-            print("Testing turn on correct")
-            n = convert(2,2)
-            turn_on_led(strip, n, Color(20, 20, 20), wait_ms=50)
+              print("Convert:", convert(2,2))
+#             colorWipe(strip, Color(255, 0, 0))  # Red wipe
+#             print("Testing turn on correct")
+#             n = convert(2,2)
+#             turn_on_led(strip, n, Color(20, 20, 20), wait_ms=50)
 
 
     except KeyboardInterrupt:
