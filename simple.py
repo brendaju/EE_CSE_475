@@ -71,11 +71,6 @@ if __name__ == '__main__':
             
             n3 = convert(10,13)
             turn_on_led(strip, n3, Color(200, 200, 200))
-            
-            turn_on_led(strip, 1, Color(200, 200, 200))
-            turn_on_led(strip, 34, Color(200, 200, 200))
-            turn_on_led(strip, 68, Color(200, 200, 200))
-            turn_on_led(strip, 173, Color(200, 200, 200))
 
 
     except KeyboardInterrupt:
