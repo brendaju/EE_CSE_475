@@ -17,6 +17,7 @@ LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
+        print(i)
         strip.setPixelColor(i, color)
         strip.show()
         time.sleep(wait_ms / 1000.0)
@@ -58,14 +59,15 @@ if __name__ == '__main__':
     try:
         while True:
 #             print("Testing turn on correct")
-            n = convert(2,2)
-            turn_on_led(strip, n, Color(200, 200, 200), wait_ms=50)
-            n1 = convert(4,4)
-            turn_on_led(strip, n1, Color(200, 200, 200), wait_ms=50)
-            n2 = convert(0,0)
-            turn_on_led(strip, n2, Color(200, 200, 200), wait_ms=50)
-            n3 = convert(10,13)
-            turn_on_led(strip, n3, Color(200, 200, 200), wait_ms=50)
+#             n = convert(2,2)
+#             turn_on_led(strip, n, Color(200, 200, 200), wait_ms=50)
+#             n1 = convert(4,4)
+#             turn_on_led(strip, n1, Color(200, 200, 200), wait_ms=50)
+#             n2 = convert(0,0)
+#             turn_on_led(strip, n2, Color(200, 200, 200), wait_ms=50)
+#             n3 = convert(10,13)
+#             turn_on_led(strip, n3, Color(200, 200, 200), wait_ms=50)
+            colorWipe(strip, Color(255, 0, 0))  # Red wipe
 
 
     except KeyboardInterrupt:
