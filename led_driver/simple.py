@@ -22,6 +22,19 @@ def colorWipe(strip, color, wait_ms=50):
         time.sleep(wait_ms / 1000.0)
 
 
+def turn_on_led(strip, n, color, wait_ms=50):
+    strip.setPixelColor(n, color)
+    strip.show()
+    time.sleep(wait_ms / 1000.0)
+
+
+def convert(x, y):
+    # if in an odd column, reverse the order
+    if (x % 2 != 0):
+        y = 15 - y
+    return (x * 15) + y
+
+
 # Main program logic follows:
 if __name__ == '__main__':
     # Process arguments
@@ -40,7 +53,9 @@ if __name__ == '__main__':
 
     try:
         while True:
-            print('Test Driver')
+            n = convert(2,2)
+            turn_on_led(strip, n, Color(20, 20, 20), wait_ms=50)
+
 
     except KeyboardInterrupt:
         if args.clear:
