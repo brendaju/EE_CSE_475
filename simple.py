@@ -58,16 +58,20 @@ if __name__ == '__main__':
 
     try:
         while True:
-#             print("Testing turn on correct")
-#             n = convert(2,2)
-#             turn_on_led(strip, n, Color(200, 200, 200), wait_ms=50)
-#             n1 = convert(4,4)
-#             turn_on_led(strip, n1, Color(200, 200, 200), wait_ms=50)
-#             n2 = convert(0,0)
-#             turn_on_led(strip, n2, Color(200, 200, 200), wait_ms=50)
-#             n3 = convert(10,13)
-#             turn_on_led(strip, n3, Color(200, 200, 200), wait_ms=50)
-            colorWipe(strip, Color(255, 0, 0))  # Red wipe
+            print("Testing turn on correct")
+            n = convert(2,2)
+            turn_on_led(strip, n, Color(200, 200, 200))
+            n1 = convert(4,4)
+            turn_on_led(strip, n1, Color(200, 200, 200))
+            n2 = convert(0,0)
+            turn_on_led(strip, n2, Color(200, 200, 200))
+            n3 = convert(10,13)
+            turn_on_led(strip, n3, Color(200, 200, 200))
+            
+            turn_on_led(strip, 1, Color(200, 200, 200))
+            turn_on_led(strip, 2, Color(200, 200, 200))
+            turn_on_led(strip, 3, Color(200, 200, 200))
+            turn_on_led(strip, 4, Color(200, 200, 200))
 
 
     except KeyboardInterrupt:
