@@ -61,25 +61,21 @@ if __name__ == '__main__':
             print("Testing turn on correct")
             
             n = convert(2,2)
-            print(n)
             turn_on_led(strip, n, Color(200, 200, 200))
             
             n1 = convert(4,4)
-            print(n1)
             turn_on_led(strip, n1, Color(200, 200, 200))
             
             n2 = convert(0,0)
-            print(n2)
             turn_on_led(strip, n2, Color(200, 200, 200))
             
             n3 = convert(10,13)
-            print(n3)
             turn_on_led(strip, n3, Color(200, 200, 200))
             
             turn_on_led(strip, 1, Color(200, 200, 200))
-            turn_on_led(strip, 2, Color(200, 200, 200))
-            turn_on_led(strip, 3, Color(200, 200, 200))
-            turn_on_led(strip, 4, Color(200, 200, 200))
+            turn_on_led(strip, 34, Color(200, 200, 200))
+            turn_on_led(strip, 68, Color(200, 200, 200))
+            turn_on_led(strip, 173, Color(200, 200, 200))
 
 
     except KeyboardInterrupt:
