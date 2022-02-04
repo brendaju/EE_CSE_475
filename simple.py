@@ -46,15 +46,18 @@ if __name__ == '__main__':
     strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
-
+    
+    print("Convert:", convert(2, 2))
+    print("Convert:", convert(4, 4))
+    print("Convert:", convert(0, 0))
+    print("Convert:", convert(10, 13))
     print('Press Ctrl-C to quit.')
     if not args.clear:
         print('Use "-c" argument to clear LEDs on exit')
 
     try:
         while True:
-              print("Convert:", convert(2,2))
-#             colorWipe(strip, Color(255, 0, 0))  # Red wipe
+            colorWipe(strip, Color(255, 0, 0))  # Red wipe
 #             print("Testing turn on correct")
 #             n = convert(2,2)
 #             turn_on_led(strip, n, Color(20, 20, 20), wait_ms=50)
