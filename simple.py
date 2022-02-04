@@ -32,7 +32,7 @@ def convert(x, y):
     # if in an odd column, reverse the order
     if (x % 2 != 0):
         y = 15 - y
-    return (x * 15) + y
+    return (x * 16) + y
 
 
 # Main program logic follows:
@@ -57,10 +57,15 @@ if __name__ == '__main__':
 
     try:
         while True:
-            colorWipe(strip, Color(255, 0, 0))  # Red wipe
-#             print("Testing turn on correct")
-#             n = convert(2,2)
-#             turn_on_led(strip, n, Color(20, 20, 20), wait_ms=50)
+            print("Testing turn on correct")
+            n = convert(2,2)
+            turn_on_led(strip, n, Color(200, 200, 200), wait_ms=50)
+            n1 = convert(4,4)
+            turn_on_led(strip, n1, Color(200, 200, 200), wait_ms=50)
+            n2 = convert(0,0)
+            turn_on_led(strip, n2, Color(200, 200, 200), wait_ms=50)
+            n3 = convert(10,13)
+            turn_on_led(strip, n3, Color(200, 200, 200), wait_ms=50)
 
 
     except KeyboardInterrupt:
