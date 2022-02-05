@@ -17,7 +17,7 @@ LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 
-json_arr = {"array": touchArr}
+json_array = {"array": touchArr}
 
 def readUART(ser):
     received_data = ser.read()              #read serial port
