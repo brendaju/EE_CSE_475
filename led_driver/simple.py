@@ -1,4 +1,5 @@
 import time
+import serial
 from rpi_ws281x import PixelStrip, Color
 import argparse
 
@@ -12,6 +13,28 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
+
+ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
+arr = [[0 for i in range(cols)] for j in range(rows)]
+
+def readUART(ser):
+    received_data = ser.read()              #read serial port
+    sleep(0.03)
+    data_left = ser.inWaiting()             #check for remaining byte
+    received_data += ser.read(data_left)
+    ser.write(received_data)
+    return received_data
+
+def interpretUART(uartData):
+    gridLocString = uartData.replace(b'\x00',b'')
+    gridLocString = gridLocString.replace(b'\xff',b'')
+    gridLocString = gridLocString.replace(b'\r',b'')
+    gridLocString = gridLocString.replace(b'\n',b'')
+    gridLocString = gridLocString.decode('utf-8')
+    firstValEnd = gridLocString.index(',')
+
+    gridLoc = [int(gridLocString[3:firstValEnd]), int(gridLocString[firstValEnd+5:])]
+    return gridLoc
 
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=50):
