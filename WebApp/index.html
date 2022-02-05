@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.btnContainer {
+	display: grid;
+
+}
+
+/* Style the buttons */
+.btn {
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 20px 36px;
+  cursor: pointer;
+  color: white;
+  background-color: white;
+
+}
+
+.btn:hover {
+  background-color: grey;
+  color: grey;
+}
+
+
+
+.btn.active {
+
+}
+
+</style>
+</head>
+<body>
+
+<h2>List View or Grid View</h2>
+
+<p>Click on a button to choose list view or grid view.</p>
+
+<button type="button" onclick="reset()">Reset</button>
+
+<button type="button" onclick="fill()">Fill</button>
+
+Color picker: <input type="color" id="myColor" value="#ff0080">
+
+
+
+
+
+<div id="btnContainer">
+  <button class="btn 0" onclick="changeColor(0)">Pixl</button> 
+  <button class="btn 1" onclick="changeColor(1)">Pixl</button> 
+  <button class="btn 2" onclick="changeColor(2)">Pixl</button> 
+  <button class="btn 3" onclick="changeColor(3)">Pixl</button> 
+  <button class="btn 4" onclick="changeColor(4)">Pixl</button>
+  <button class="btn 5" onclick="changeColor(5)">Pixl</button> 
+  <button class="btn 6" onclick="changeColor(6)">Pixl</button> 
+  <button class="btn 7" onclick="changeColor(7)">Pixl</button> 
+  <button class="btn 8" onclick="changeColor(8)">Pixl</button> 
+  <button class="btn 9" onclick="changeColor(9)">Pixl</button>
+  <button class="btn 10" onclick="changeColor(10)">Pixl</button> 
+  <button class="btn 11" onclick="changeColor(11)">Pixl</button> 
+
+  <button class="btn 12" onclick="changeColor(12)">Pixl</button> 
+  <button class="btn 13" onclick="changeColor(13)">Pixl</button> 
+  <button class="btn 14" onclick="changeColor(14)">Pixl</button>
+  <button class="btn 15" onclick="changeColor(15)">Pixl</button> 
+  <button class="btn 16" onclick="changeColor(16)">Pixl</button> 
+  <button class="btn 17" onclick="changeColor(17)">Pixl</button> 
+  <button class="btn 18" onclick="changeColor(18)">Pixl</button> 
+  <button class="btn 19" onclick="changeColor(19)">Pixl</button>
+  <button class="btn 20" onclick="changeColor(20)">Pixl</button> 
+  <button class="btn 21" onclick="changeColor(21)">Pixl</button> 
+  <button class="btn 22" onclick="changeColor(22)">Pixl</button> 
+  <button class="btn 23" onclick="changeColor(23)">Pixl</button> 
+
+  <button class="btn 24" onclick="changeColor(24)">Pixl</button> 
+  <button class="btn 25" onclick="changeColor(25)">Pixl</button> 
+  <button class="btn 26" onclick="changeColor(26)">Pixl</button> 
+  <button class="btn 27" onclick="changeColor(27)">Pixl</button> 
+  <button class="btn 28" onclick="changeColor(28)">Pixl</button>
+  <button class="btn 29" onclick="changeColor(29)">Pixl</button> 
+  <button class="btn 30" onclick="changeColor(30)">Pixl</button> 
+  <button class="btn 31" onclick="changeColor(31)">Pixl</button> 
+  <button class="btn 32" onclick="changeColor(32)">Pixl</button> 
+  <button class="btn 33" onclick="changeColor(33)">Pixl</button>
+  <button class="btn 34" onclick="changeColor(34)">Pixl</button> 
+  <button class="btn 35" onclick="changeColor(35)">Pixl</button> 
+
+  <button class="btn 36" onclick="changeColor(36)">Pixl</button> 
+  <button class="btn 37" onclick="changeColor(37)">Pixl</button> 
+  <button class="btn 38" onclick="changeColor(38)">Pixl</button>
+  <button class="btn 39" onclick="changeColor(39)">Pixl</button> 
+  <button class="btn 40" onclick="changeColor(40)">Pixl</button> 
+  <button class="btn 41" onclick="changeColor(41)">Pixl</button> 
+  <button class="btn 42" onclick="changeColor(42)">Pixl</button> 
+  <button class="btn 43" onclick="changeColor(43)">Pixl</button>
+  <button class="btn 44" onclick="changeColor(44)">Pixl</button> 
+  <button class="btn 45" onclick="changeColor(45)">Pixl</button> 
+  <button class="btn 46" onclick="changeColor(46)">Pixl</button> 
+  <button class="btn 47" onclick="changeColor(47)">Pixl</button>
+
+  <button class="btn 48" onclick="changeColor(48)">Pixl</button> 
+  <button class="btn 49" onclick="changeColor(49)">Pixl</button>
+  <button class="btn 50" onclick="changeColor(50)">Pixl</button> 
+  <button class="btn 51" onclick="changeColor(51)">Pixl</button> 
+  <button class="btn 52" onclick="changeColor(52)">Pixl</button> 
+  <button class="btn 53" onclick="changeColor(53)">Pixl</button> 
+  <button class="btn 54" onclick="changeColor(54)">Pixl</button> 
+  <button class="btn 55" onclick="changeColor(55)">Pixl</button> 
+  <button class="btn 56" onclick="changeColor(56)">Pixl</button> 
+  <button class="btn 57" onclick="changeColor(57)">Pixl</button> 
+  <button class="btn 58" onclick="changeColor(58)">Pixl</button>
+  <button class="btn 59" onclick="changeColor(59)">Pixl</button> 
+
+  <button class="btn 60" onclick="changeColor(60)">Pixl</button> 
+  <button class="btn 61" onclick="changeColor(61)">Pixl</button> 
+  <button class="btn 62" onclick="changeColor(62)">Pixl</button> 
+  <button class="btn 63" onclick="changeColor(63)">Pixl</button>
+  <button class="btn 64" onclick="changeColor(64)">Pixl</button> 
+  <button class="btn 65" onclick="changeColor(65)">Pixl</button> 
+  <button class="btn 66" onclick="changeColor(66)">Pixl</button> 
+  <button class="btn 67" onclick="changeColor(67)">Pixl</button> 
+  <button class="btn 68" onclick="changeColor(68)">Pixl</button>
+  <button class="btn 69" onclick="changeColor(69)">Pixl</button> 
+  <button class="btn 70" onclick="changeColor(70)">Pixl</button> 
+  <button class="btn 71" onclick="changeColor(71)">Pixl</button> 
+
+  <button class="btn 72" onclick="changeColor(72)">Pixl</button> 
+  <button class="btn 73" onclick="changeColor(73)">Pixl</button>
+  <button class="btn 74" onclick="changeColor(74)">Pixl</button> 
+  <button class="btn 75" onclick="changeColor(75)">Pixl</button> 
+  <button class="btn 76" onclick="changeColor(76)">Pixl</button> 
+  <button class="btn 77" onclick="changeColor(77)">Pixl</button>
+  <button class="btn 78" onclick="changeColor(78)">Pixl</button> 
+  <button class="btn 79" onclick="changeColor(79)">Pixl</button>
+  <button class="btn 80" onclick="changeColor(80)">Pixl</button> 
+  <button class="btn 81" onclick="changeColor(81)">Pixl</button> 
+  <button class="btn 82" onclick="changeColor(82)">Pixl</button> 
+  <button class="btn 83" onclick="changeColor(83)">Pixl</button>
+
+  <button class="btn 84" onclick="changeColor(84)">Pixl</button> 
+  <button class="btn 85" onclick="changeColor(85)">Pixl</button> 
+  <button class="btn 86" onclick="changeColor(86)">Pixl</button> 
+  <button class="btn 87" onclick="changeColor(87)">Pixl</button> 
+  <button class="btn 88" onclick="changeColor(88)">Pixl</button>
+  <button class="btn 89" onclick="changeColor(89)">Pixl</button> 
+  <button class="btn 90" onclick="changeColor(90)">Pixl</button> 
+  <button class="btn 91" onclick="changeColor(91)">Pixl</button> 
+  <button class="btn 92" onclick="changeColor(92)">Pixl</button> 
+  <button class="btn 93" onclick="changeColor(93)">Pixl</button>
+  <button class="btn 94" onclick="changeColor(94)">Pixl</button> 
+  <button class="btn 95" onclick="changeColor(95)">Pixl</button>
+
+
+</div>
+
+
+<br>
+
+
+
+<script>
+// Get the elements with class="column"
+var elements = document.getElementsByClassName("btn");
+
+
+const on = new Array; //(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+function reset() {
+	let i = 0;
+	let len = elements.length;
+
+	for (; i < len; i++) {
+   		elements[i].style.background = "white";
+		elements[i].style.color = "white";
+		elements[i].style.border = "solid";
+		elements[i].style.borderColor = "black";
+		elements[i].style.outline = "solid";
+		elements[i].style.outlineColor = "black";
+	}
+
+}
+
+
+
+var x = document.getElementById("myColor");
+
+function colorSelect(newColor) {
+	currentColor = newColor;	
+}
+
+let count = 0;
+
+//var colors = new Array ("#FF0080", "#F5E87B", "#0059FF", "#FF0000", "#00FF00");
+
+var colors = {{ color_array }}
+
+function fill() {
+	let i = 0;
+	let len = elements.length;
+	
+	count = count + 1;
+
+	for (; i < len; i++) {
+		if ((count + i) % 5 == 0) {
+   		elements[i].style.background = colors[i];
+		console.log(colors[i]);
+		elements[i].style.color = colors[i];
+		elements[i].style.border = "solid";
+		elements[i].style.borderColor = "black";
+		elements[i].style.outline = "solid";
+		elements[i].style.outlineColor = "black";
+		} 
+
+	}
+
+}
+
+
+function changeColor(spot) {
+	
+	if (on[spot] == 1) {
+   		elements[spot].style.background = x.value;
+		elements[spot].style.color = x.value;
+		elements[spot].style.border = "solid";
+		elements[spot].style.borderColor = "black";
+		elements[spot].style.outline = "solid";
+		elements[spot].style.outlineColor = "black";
+		on[spot] = 0;
+		
+		
+		
+	} else {
+		elements[spot].style.background = x.value;
+		elements[spot].style.color = x.value;
+		elements[spot].style.border = "solid";
+		elements[spot].style.borderColor = "black";
+		elements[spot].style.outline = "solid";
+		elements[spot].style.outlineColor = "black";	
+		on[spot] = 1;
+	}
+}
+
+</script>
+
+</body>
+</html>
