@@ -3,6 +3,7 @@ from rpi_ws281x import PixelStrip, Color
 import argparse
 import serial
 import requests
+import json
 
 # LED strip configuration:
 LED_COUNT = 192        # Number of LED pixels.
@@ -113,7 +114,7 @@ if __name__ == '__main__':
             turn_on_led(strip, n, Color(200, 200, 200))
             
             json_array["array"] = touchArr
-            r = requests.post('http://10.19.80.19:5000/array', json=json_array)
+            r = requests.post('http://10.19.80.19:5000/array', data=json.dumps(json_array))
 
 
     except KeyboardInterrupt:
