@@ -2,6 +2,7 @@ import time
 from rpi_ws281x import PixelStrip, Color
 import argparse
 import serial
+import request
 
 # LED strip configuration:
 LED_COUNT = 192        # Number of LED pixels.
@@ -15,6 +16,8 @@ LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
+
+json_arr = {"array": touchArr}
 
 def readUART(ser):
     received_data = ser.read()              #read serial port
@@ -106,6 +109,9 @@ if __name__ == '__main__':
             n = convert(gridLoc[0], gridLoc[1])
             touchArr[n] = rgbToHex(200,5,10)
             turn_on_led(strip, n, Color(200, 200, 200))
+            
+            json_array[name] = touchArr
+            r = requests.post('http://10.19.80.19/array', json=json_array)
 
 
     except KeyboardInterrupt:
