@@ -112,7 +112,7 @@ if __name__ == '__main__':
             touchArr[n] = rgbToHex(200,5,10)
             turn_on_led(strip, n, Color(200, 200, 200))
             
-            json_array[name] = touchArr
+            json_array["array"] = touchArr
             r = requests.post('http://10.19.80.19:5000/array', json=json_array)
 
 
