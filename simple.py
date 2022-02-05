@@ -114,7 +114,8 @@ if __name__ == '__main__':
             turn_on_led(strip, n, Color(200, 200, 200))
             
             json_array["array"] = touchArr
-            r = requests.post('http://10.19.80.19:5000/array', data=json.dumps(json_array))
+            print(json_array)
+            r = requests.post('http://10.19.80.19:5000/array', json=json_array)
 
 
     except KeyboardInterrupt:
