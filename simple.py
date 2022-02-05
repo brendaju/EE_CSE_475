@@ -15,11 +15,11 @@ LED_INVERT = False    # True to invert the signal (when using NPN transistor lev
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
-arr = [[0 for i in range(cols)] for j in range(rows)]
+touchArr = [[0 for i in range(cols)] for j in range(rows)]
 
 def readUART(ser):
     received_data = ser.read()              #read serial port
-    sleep(0.03)
+    time.sleep(0.03)
     data_left = ser.inWaiting()             #check for remaining byte
     received_data += ser.read(data_left)
     ser.write(received_data)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
             received_data = readUART(ser)
             gridLoc = interpretUART(received_data)
-            arr[gridLoc[0]][gridLoc[1]] = arr[gridLoc[0]][gridLoc[1]] + 1
+            touchArr[gridLoc[0]][gridLoc[1]] = touchArr[gridLoc[0]][gridLoc[1]] + 1
 
             n = convert(gridLoc[0], gridLoc[1])
             turn_on_led(strip, n, Color(200, 200, 200))
