@@ -1,6 +1,8 @@
 import time
 from rpi_ws281x import PixelStrip, Color
 import argparse
+import serial
+rows, cols = (12, 16)
 
 # LED strip configuration:
 LED_COUNT = 192        # Number of LED pixels.
@@ -12,6 +14,27 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
+ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
+arr = [[0 for i in range(cols)] for j in range(rows)]
+
+def readUART(ser):
+    received_data = ser.read()              #read serial port
+    sleep(0.03)
+    data_left = ser.inWaiting()             #check for remaining byte
+    received_data += ser.read(data_left)
+    ser.write(received_data)
+    return received_data
+
+def interpretUART(uartData):
+    gridLocString = uartData.replace(b'\x00',b'')
+    gridLocString = gridLocString.replace(b'\xff',b'')
+    gridLocString = gridLocString.replace(b'\r',b'')
+    gridLocString = gridLocString.replace(b'\n',b'')
+    gridLocString = gridLocString.decode('utf-8')
+    firstValEnd = gridLocString.index(',')
+
+    gridLoc = [int(gridLocString[3:firstValEnd]), int(gridLocString[firstValEnd+5:])]
+    return gridLoc
 
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=50):
@@ -60,17 +83,24 @@ if __name__ == '__main__':
         while True:
             print("Testing turn on correct")
             
-            n = convert(2,2)
+            #n = convert(2,2)
+            #turn_on_led(strip, n, Color(200, 200, 200))
+            
+            # n1 = convert(4,4)
+            # turn_on_led(strip, n1, Color(200, 200, 200))
+            
+            # n2 = convert(0,0)
+            # turn_on_led(strip, n2, Color(200, 200, 200))
+            
+            # n3 = convert(10,13)
+            # turn_on_led(strip, n3, Color(200, 200, 200))
+
+            received_data = readUART(ser)
+            gridLoc = interpretUART(received_data)
+            arr[gridLoc[0]][gridLoc[1]] = arr[gridLoc[0]][gridLoc[1]] + 1
+
+            n = convert(gridLoc[0], gridLoc[1])
             turn_on_led(strip, n, Color(200, 200, 200))
-            
-            n1 = convert(4,4)
-            turn_on_led(strip, n1, Color(200, 200, 200))
-            
-            n2 = convert(0,0)
-            turn_on_led(strip, n2, Color(200, 200, 200))
-            
-            n3 = convert(10,13)
-            turn_on_led(strip, n3, Color(200, 200, 200))
 
 
     except KeyboardInterrupt:
