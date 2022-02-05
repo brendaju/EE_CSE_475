@@ -28,10 +28,12 @@ def readUART(ser):
     return received_data
 
 def interpretUART(uartData):
-    gridLocString = uartData.replace(b'\x00',b'')
-    gridLocString = gridLocString.replace(b'\xff',b'')
-    gridLocString = gridLocString.replace(b'\r',b'')
-    gridLocString = gridLocString.replace(b'\n',b'')
+    dataEnd = uartData.index(b'\r\n')
+    #gridLocString = uartData.replace(b'\x00',b'')
+    #gridLocString = gridLocString.replace(b'\xff',b'')
+    #gridLocString = gridLocString.replace(b'\r',b'')
+    #gridLocString = gridLocString.replace(b'\n',b'')
+    gridLocString = uartData[0:dataEnd]
     gridLocString = gridLocString.decode('utf-8')
     firstValEnd = gridLocString.index(',')
 
@@ -105,7 +107,7 @@ if __name__ == '__main__':
             received_data = readUART(ser)
             gridLoc = interpretUART(received_data)
             
-
+            print(gridLoc)
             n = convert(gridLoc[0], gridLoc[1])
             touchArr[n] = rgbToHex(200,5,10)
             turn_on_led(strip, n, Color(200, 200, 200))
