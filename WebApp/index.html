@@ -40,7 +40,7 @@
 
 </style>
 </head>
-<body>
+<body onload="fill()">
 
 <h2>List View or Grid View</h2>
 
@@ -203,16 +203,20 @@ let count = 0;
 
 //var colors = new Array ("#FF0080", "#F5E87B", "#0059FF", "#FF0000", "#00FF00");
 
-var colors = {{ color_array }}
+//var colors = {{ color_array }}
+
+
 
 function fill() {
+	var colors = {{ color_array | safe }}
+	var color1 = '#FF0080'
 	let i = 0;
 	let len = elements.length;
 	
 	count = count + 1;
 
 	for (; i < len; i++) {
-		if ((count + i) % 5 == 0) {
+
    		elements[i].style.background = colors[i];
 		console.log(colors[i]);
 		elements[i].style.color = colors[i];
@@ -220,7 +224,7 @@ function fill() {
 		elements[i].style.borderColor = "black";
 		elements[i].style.outline = "solid";
 		elements[i].style.outlineColor = "black";
-		} 
+
 
 	}
 
