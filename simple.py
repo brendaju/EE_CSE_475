@@ -58,6 +58,11 @@ def convert(x, y):
         y = 15 - y
     return (x * 16) + y
 
+# https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
+def rgbToHex(r, g, b):
+    numbers = [r, g, b]
+    return '#' + ''.join('{:02X}'.format(a) for a in numbers)
+
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -97,7 +102,7 @@ if __name__ == '__main__':
 
             received_data = readUART(ser)
             gridLoc = interpretUART(received_data)
-            touchArr[gridLoc[0]][gridLoc[1]] = touchArr[gridLoc[0]][gridLoc[1]] + 1
+            touchArr[gridLoc[0]][gridLoc[1]] = rgbToHex(200,5,10)
 
             n = convert(gridLoc[0], gridLoc[1])
             turn_on_led(strip, n, Color(200, 200, 200))
