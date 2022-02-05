@@ -2,7 +2,7 @@ import time
 from rpi_ws281x import PixelStrip, Color
 import argparse
 import serial
-import request
+import requests
 
 # LED strip configuration:
 LED_COUNT = 192        # Number of LED pixels.
