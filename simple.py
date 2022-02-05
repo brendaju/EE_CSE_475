@@ -110,12 +110,12 @@ if __name__ == '__main__':
             
             print(gridLoc)
             n = convert(gridLoc[0], gridLoc[1])
-            touchArr[n] = rgbToHex(200,5,10)
-            turn_on_led(strip, n, Color(200, 200, 200))
+            touchArr[n] = rgbToHex(0,255,0)
+            turn_on_led(strip, n, Color(0,255,0))
             
             json_array["array"] = touchArr
-            print(json_array)
-            r = requests.post('http://10.19.80.19:5000/array', json=json_array)
+            print(json.dumps(json_array))
+            r = requests.post('http://10.19.80.19:5000/array', json=json.dumps(json_array))
 
 
     except KeyboardInterrupt:
