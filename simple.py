@@ -2,7 +2,6 @@ import time
 from rpi_ws281x import PixelStrip, Color
 import argparse
 import serial
-rows, cols = (12, 16)
 
 # LED strip configuration:
 LED_COUNT = 192        # Number of LED pixels.
@@ -15,7 +14,7 @@ LED_INVERT = False    # True to invert the signal (when using NPN transistor lev
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
-touchArr = [[0 for i in range(cols)] for j in range(rows)]
+touchArr = [0]*192
 
 def readUART(ser):
     received_data = ser.read()              #read serial port
@@ -102,9 +101,10 @@ if __name__ == '__main__':
 
             received_data = readUART(ser)
             gridLoc = interpretUART(received_data)
-            touchArr[gridLoc[0]][gridLoc[1]] = rgbToHex(200,5,10)
+            
 
             n = convert(gridLoc[0], gridLoc[1])
+            touchArr[n] = rgbToHex(200,5,10)
             turn_on_led(strip, n, Color(200, 200, 200))
 
 
