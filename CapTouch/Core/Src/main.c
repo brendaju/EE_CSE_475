@@ -97,6 +97,7 @@ int main(void)
 	uint16_t capTouch[3];
 	uint16_t oldCapTouch[3];
 	uint8_t gridLoc[2];
+	uint8_t UART1_rxBuffer[12] = {0};
 	//float val0;
 	uint8_t newTouch = 0;
 	//float tester = 0;
@@ -156,16 +157,18 @@ int main(void)
 
 		//sprintf((char*)bufTouch0, "%u\r\n", (unsigned int)val0);
 	}
-	if (oldCapTouch[0] != capTouch[0] | oldCapTouch[1] != capTouch[1] | oldCapTouch[2] != capTouch[2]) {
-		newTouch = determinePixel(capTouch, gridLoc);
-		oldCapTouch[0] = capTouch[0];
-		oldCapTouch[1] = capTouch[1];
-		oldCapTouch[2] = capTouch[2];
-	} else {
-		newTouch = 0;
+	newTouch = determinePixel(capTouch, gridLoc);
+	//visHandle(capTouch, gridLoc, newTouch);
+	uint8_t data[] = "HELLO WORLD \r\n";
+	//HAL_UART_Transmit (&huart2, data, sizeof (data), 10);
+	//ret0 = HAL_UART_Receive (&huart2, UART1_rxBuffer, 12, 5000);
+
+	if (newTouch == 1) {
+		char buffer[20];
+		sprintf(buffer, "x: %i, y: %i\r\n", gridLoc[0], gridLoc[1]);
+		ret0 = HAL_UART_Transmit(&huart2, buffer, sizeof(buffer), HAL_MAX_DELAY);
 	}
-	visHandle(capTouch, gridLoc, newTouch);
-	HAL_Delay(50);
+	HAL_Delay(250);
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
@@ -624,7 +627,7 @@ void MPR121_init(uint8_t addr) {
 // Input is the concatenated version of each capacitive touch board
 uint8_t determinePixel(uint16_t* input, uint8_t* pixelSelected) {
 	if ((input[0] & 0x0FFF) == 0 | (((input[2] & 0x0FFF)) << 12 | (input[1] & 0x0FFF)) == 0)
-		return 0;
+			return 0;
 	uint16_t log2X = log2(input[0] & 0x0FFF);
 	// X is a power of 2
 	if (ceil(log2X) == floor(log2X))
