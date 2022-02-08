@@ -69,6 +69,38 @@ def rgbToHex(r, g, b):
     return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
 
+storedR = 0
+storedG = 0
+storedB = 0
+storedColor = Color(0, 0, 0)
+
+setColors = [
+            (255, 0, 0),
+            (255, 127, 0),
+            (255, 255, 0),
+            (0, 255, 0),
+            (0, 0, 255),
+            (148, 0, 211),
+            (255, 255, 255),
+            (0, 0, 0)
+]
+
+def setupPainting(strip):
+    turn_on_led(strip, convert(0, 15), Color(255, 0, 0))
+    turn_on_led(strip, convert(1, 15), Color(255, 127, 0))
+    turn_on_led(strip, convert(2, 15), Color(255, 255, 0))
+    turn_on_led(strip, convert(3, 15), Color(0, 255, 0))
+    turn_on_led(strip, convert(4, 15), Color(0, 0, 255))
+    turn_on_led(strip, convert(6, 15), Color(148, 0, 211))
+    turn_on_led(strip, convert(6, 15), Color(255, 255, 255))
+    
+
+    turn_on_led(strip, convert(8,15), Color(0, 0, 255))
+    turn_on_led(strip, convert(9,15), Color(0, 255, 0))
+    turn_on_led(strip, convert(10,15), Color(255, 0, 0))
+
+    turn_on_led(strip, convert(11,15), storedColor)
+
 # Main program logic follows:
 if __name__ == '__main__':
     # Process arguments
@@ -81,6 +113,10 @@ if __name__ == '__main__':
     # Intialize the library (must be called once before other functions).
     strip.begin()
     
+    for i in range(192):
+        turn_on_led(strip, i, Color(0,0,0))
+    setupPainting(strip)
+
     print("Convert:", convert(2, 2))
     print("Convert:", convert(4, 4))
     print("Convert:", convert(0, 0))
@@ -110,12 +146,35 @@ if __name__ == '__main__':
             
             print(gridLoc)
             n = convert(gridLoc[0], gridLoc[1])
-            touchArr[n] = rgbToHex(0,255,0)
-            turn_on_led(strip, n, Color(0,255,0))
+            if gridLoc[1] == 15:
+                if gridLoc[0] < 8:
+                    storedR, storedG, storedB = setColors[gridLoc[0]]
+                elif gridLoc[0] == 8:
+                    storedB = storedB + 10
+                    if storedB == 260:
+                        storedB = 0
+                elif gridLoc[0] == 9:
+                    storedG = storedG + 10
+                    if storedG == 260:
+                        storedG = 0
+                elif gridLoc[0] == 10:
+                    storedR = storedR + 10
+                    if storedR == 260:
+                        storedR = 0
+                storedColor = Color(storedR, storedG, storedB)
+                n = convert(11, 15)
+                turn_on_led(strip, n, storedColor)
+                touchArr[n] = storedColor
+            else:
+                touchArr[n] = storedColor
+                turn_on_led(strip, n, storedColor)
             
             json_array["array"] = touchArr
             print(json.dumps(json_array))
-            r = requests.post('http://10.19.80.19:5000/array', json=json.dumps(json_array))
+            try:
+                r = requests.post('http://10.19.103.196:5000/array', json=json.dumps(json_array))
+            except Exception as ex:
+                print('Error, is flask site on?')
 
 
     except KeyboardInterrupt:
