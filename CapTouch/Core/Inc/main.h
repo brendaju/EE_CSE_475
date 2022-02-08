@@ -126,8 +126,8 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 // Defines for setting up MPR121 - CapTouch
-#define TouchThre 10 //15//30//10
-#define ReleaThre 6 //8//25//8
+#define TouchThre /*10*/ /*15*/ 250 /*10*/
+#define ReleaThre /*6*/ /*8*/ 125 /*8*/
 
 /* USER CODE END Private defines */
 

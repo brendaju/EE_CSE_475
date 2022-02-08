@@ -53,8 +53,8 @@ void visRainbow(uint8_t *frameBuffer, uint32_t frameBufferSize, uint32_t effectL
 
 	for( i = 0; i < frameBufferSize / 3; i++)
 	{
-		uint32_t color = Wheel(((i * 256) / effectLength + x) & 0xFF);
-
+		//uint32_t color = Wheel(((i * 256) / effectLength + x) & 0xFF);
+		uint32_t color = newColor(0, 255, 0);
 		frameBuffer[i*3 + 0] = color & 0xFF;
 		frameBuffer[i*3 + 1] = color >> 8 & 0xFF;
 		frameBuffer[i*3 + 2] = color >> 16 & 0xFF;
@@ -193,6 +193,12 @@ void visHandle2(uint16_t *input, uint8_t* gridLoc, uint8_t* newTouch)
 		//uint32_t color = 0;
 		timestamp = HAL_GetTick();
 
+					if (prevGridLoc[0] != gridLoc[0] | prevGridLoc[1] != gridLoc[1]) {
+						setLEDPixel(gridLoc[0], gridLoc[1], 0, 255, 0);
+						setLEDPixel(prevGridLoc[0], prevGridLoc[1], 0, 0, 0);
+						prevGridLoc[0] = gridLoc[0];
+						prevGridLoc[1] = gridLoc[1];
+					}
 
 		/*
 		if (input[0] != 0) {
@@ -215,7 +221,7 @@ void visHandle2(uint16_t *input, uint8_t* gridLoc, uint8_t* newTouch)
 		} else {
 			visRainbow(frameBuffer, sizeof(frameBuffer), 15);
 		}*/
-		if (newTouch == 1) {
+		/*if (newTouch == 1) {
 			if (prevGridLoc[0] == gridLoc[0] & prevGridLoc[1] == gridLoc[1]) {
 				paintBrush++;
 				if (paintBrush == 5)
@@ -226,7 +232,7 @@ void visHandle2(uint16_t *input, uint8_t* gridLoc, uint8_t* newTouch)
 				prevGridLoc[0] = gridLoc[0];
 				prevGridLoc[1] = gridLoc[1];
 			}
-		}
+		}*/
 		// Animate next frame, each effect into each output RGB framebuffer
 		//visRainbow(frameBuffer, sizeof(frameBuffer), 15);
 		//visDots(frameBuffer2, sizeof(frameBuffer2), 50, 40);
