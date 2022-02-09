@@ -72,8 +72,9 @@ def rgbToHex(r, g, b):
 storedR = 0
 storedG = 0
 storedB = 0
+clearingMode = 1
 storedColor = Color(0, 0, 0)
-
+sendColor = rgbToHex(0,0,0)
 setColors = [
             (255, 0, 0),
             (255, 127, 0),
@@ -85,21 +86,28 @@ setColors = [
             (0, 0, 0)
 ]
 
-def setupPainting(strip):
-    turn_on_led(strip, convert(0, 15), Color(255, 0, 0))
+def setupPainting(strip, touchArr):
+    '''turn_on_led(strip, convert(0, 15), Color(255, 0, 0))
     turn_on_led(strip, convert(1, 15), Color(255, 127, 0))
     turn_on_led(strip, convert(2, 15), Color(255, 255, 0))
     turn_on_led(strip, convert(3, 15), Color(0, 255, 0))
     turn_on_led(strip, convert(4, 15), Color(0, 0, 255))
     turn_on_led(strip, convert(6, 15), Color(148, 0, 211))
-    turn_on_led(strip, convert(6, 15), Color(255, 255, 255))
+    turn_on_led(strip, convert(7, 15), Color(255, 255, 255))'''
     
-
+    for i in range(8):
+        n = convert(i, 15)
+        turn_on_led(strip, n, Color(setColors[i][0], setColors[i][1], setColors[i][2]))
+        touchArr[n] = rgbToHex(setColors[i][0], setColors[i][1], setColors[i][2])
     turn_on_led(strip, convert(8,15), Color(0, 0, 255))
+    touchArr[convert(8, 15)] = rgbToHex(0, 0, 255)
     turn_on_led(strip, convert(9,15), Color(0, 255, 0))
+    touchArr[convert(9, 15)] = rgbToHex(0, 255, 0)
     turn_on_led(strip, convert(10,15), Color(255, 0, 0))
+    touchArr[convert(10, 15)] = rgbToHex(255, 0, 0)
 
     turn_on_led(strip, convert(11,15), storedColor)
+    touchArr[convert(11, 15)] = rgbToHex(storedR, storedG, storedB)
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -115,7 +123,7 @@ if __name__ == '__main__':
     
     for i in range(192):
         turn_on_led(strip, i, Color(0,0,0))
-    setupPainting(strip)
+    setupPainting(strip, touchArr)
 
     print("Convert:", convert(2, 2))
     print("Convert:", convert(4, 4))
@@ -151,24 +159,34 @@ if __name__ == '__main__':
                     storedR, storedG, storedB = setColors[gridLoc[0]]
                 elif gridLoc[0] == 8:
                     storedB = storedB + 10
-                    if storedB == 260:
-                        storedB = 0
+                    if storedB < 50 or storedB == 260:
+                        storedB = 50
                 elif gridLoc[0] == 9:
                     storedG = storedG + 10
-                    if storedG == 260:
-                        storedG = 0
+                    if storedG < 50 or storedG == 260:
+                        storedG = 50
                 elif gridLoc[0] == 10:
                     storedR = storedR + 10
-                    if storedR == 260:
-                        storedR = 0
+                    if storedR < 50 or storedR == 260:
+                        storedR = 50
                 storedColor = Color(storedR, storedG, storedB)
                 n = convert(11, 15)
                 turn_on_led(strip, n, storedColor)
-                touchArr[n] = storedColor
+                clearingMode = (gridLoc[0] == 7)
+                sendColor = rgbToHex(storedR, storedG, storedB)
+                #touchArr[n] = sendColor
             else:
-                touchArr[n] = storedColor
+                #touchArr[n] = rgbToHex(storedR, storedG, storedB)
                 turn_on_led(strip, n, storedColor)
-            
+                
+            if(clearingMode):
+                sendColor = rgbToHex(80, 80, 80)
+            elif (storedR == storedG and storedR == storedB):
+                sendColor = rgbToHex(255, 255, 255)
+            else:
+                sendColor = rgbToHex(storedR, storedG, storedB)
+            touchArr[n] = sendColor
+
             json_array["array"] = touchArr
             print(json.dumps(json_array))
             try:
