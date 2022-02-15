@@ -4,6 +4,8 @@ import argparse
 import serial
 import requests
 import json
+import socketio
+import asyncio
 
 # LED strip configuration:
 LED_COUNT = 192        # Number of LED pixels.
@@ -17,6 +19,13 @@ LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
+sio = socketio.AsyncClient()
+
+ip = 'http://10.19.148.197:5000'
+
+async def connectToServer():    
+    await sio.connect(ip)
+    await sio.sleep(1)
 
 json_array = {"array": touchArr}
 
@@ -56,7 +65,6 @@ def turn_on_led(strip, n, color, wait_ms=50):
     strip.show()
     time.sleep(wait_ms / 1000.0)
 
-
 def convert(x, y):
     # if in an odd column, reverse the order
     if (x % 2 != 0):
@@ -86,6 +94,52 @@ setColors = [
             (0, 0, 0)
 ]
 
+async def mainProgram(strip, touchArr, storedColor, storedR, storedG, storedB, clearingMode, sendColor, setColors):
+    while True:
+        loop = asyncio.get_event_loop()
+        received_data = await loop.run_in_executor(None, readUART, ser)
+        gridLoc = await loop.run_in_executor(None, interpretUART, received_data)
+            
+        #print(gridLoc)
+        n = await loop.run_in_executor(None, convert, gridLoc[0], gridLoc[1])
+        if gridLoc[1] == 15:
+            if gridLoc[0] < 8:
+                storedR, storedG, storedB = setColors[gridLoc[0]]
+            elif gridLoc[0] == 8:
+                storedB = storedB + 10
+                if storedB < 50 or storedB == 260:
+                    storedB = 50
+            elif gridLoc[0] == 9:
+                storedG = storedG + 10
+                if storedG < 50 or storedG == 260:
+                    storedG = 50
+            elif gridLoc[0] == 10:
+                storedR = storedR + 10
+            if storedR < 50 or storedR == 260:
+                storedR = 50
+            storedColor = Color(storedR, storedG, storedB)
+            n = await loop.run_in_executor(None, convert, 11, 15)
+            await loop.run_in_executor(None, turn_on_led, strip, n, storedColor)
+            clearingMode = (gridLoc[0] == 7)
+            sendColor = await loop.run_in_executor(None, rgbToHex, storedR, storedG, storedB)
+            #touchArr[n] = sendColor
+        else:
+            #touchArr[n] = rgbToHex(storedR, storedG, storedB)
+            await loop.run_in_executor(None, turn_on_led, strip, n, storedColor)
+                    
+            if(clearingMode):
+                sendColor = await loop.run_in_executor(None, rgbToHex, 80, 80, 80)
+            elif (storedR == storedG and storedR == storedB):
+                sendColor = await loop.run_in_executor(None, rgbToHex, 255, 255, 255)
+            else:
+                sendColor = await loop.run_in_executor(None, rgbToHex, storedR, storedG, storedB)
+        touchArr[n] = sendColor
+
+        json_array["array"] = touchArr
+        #print(json.dumps(json_array))
+        r = requests.post(ip + '/array', json=json.dumps(json_array))
+        await asyncio.sleep(1)
+
 def setupPainting(strip, touchArr):
     '''turn_on_led(strip, convert(0, 15), Color(255, 0, 0))
     turn_on_led(strip, convert(1, 15), Color(255, 127, 0))
@@ -108,6 +162,19 @@ def setupPainting(strip, touchArr):
 
     turn_on_led(strip, convert(11,15), storedColor)
     touchArr[convert(11, 15)] = rgbToHex(storedR, storedG, storedB)
+
+async def main(strip, touchArr, storedColor, storedR, storedG, storedB, clearingMode, sendColor, setColors):
+    await connectToServer()
+    asyncio.create_task(mainProgram(strip, touchArr, storedColor, storedR, storedG, storedB, clearingMode, sendColor, setColors))
+
+strip = 0
+
+@sio.on('my_response')
+async def catch_all(data):
+    readFrom = data['data']
+    readColor = readFrom['color']
+    newColor = Color(int(readColor[1:2], 16), int(readColor[3:4], 16), int(readColor[5:6], 16))
+    turn_on_led(strip, readFrom['index'], newColor)
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -134,8 +201,11 @@ if __name__ == '__main__':
         print('Use "-c" argument to clear LEDs on exit')
 
     try:
-        while True:
-            print("Testing turn on correct")
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(strip, touchArr, storedColor, storedR, storedG, storedB, clearingMode, sendColor, setColors))
+        loop.run_forever()
+        #while True:
+            #print("Testing turn on correct")
             
             #n = convert(2,2)
             #turn_on_led(strip, n, Color(200, 200, 200))
@@ -149,50 +219,7 @@ if __name__ == '__main__':
             # n3 = convert(10,13)
             # turn_on_led(strip, n3, Color(200, 200, 200))
 
-            received_data = readUART(ser)
-            gridLoc = interpretUART(received_data)
             
-            print(gridLoc)
-            n = convert(gridLoc[0], gridLoc[1])
-            if gridLoc[1] == 15:
-                if gridLoc[0] < 8:
-                    storedR, storedG, storedB = setColors[gridLoc[0]]
-                elif gridLoc[0] == 8:
-                    storedB = storedB + 10
-                    if storedB < 50 or storedB == 260:
-                        storedB = 50
-                elif gridLoc[0] == 9:
-                    storedG = storedG + 10
-                    if storedG < 50 or storedG == 260:
-                        storedG = 50
-                elif gridLoc[0] == 10:
-                    storedR = storedR + 10
-                    if storedR < 50 or storedR == 260:
-                        storedR = 50
-                storedColor = Color(storedR, storedG, storedB)
-                n = convert(11, 15)
-                turn_on_led(strip, n, storedColor)
-                clearingMode = (gridLoc[0] == 7)
-                sendColor = rgbToHex(storedR, storedG, storedB)
-                #touchArr[n] = sendColor
-            else:
-                #touchArr[n] = rgbToHex(storedR, storedG, storedB)
-                turn_on_led(strip, n, storedColor)
-                
-            if(clearingMode):
-                sendColor = rgbToHex(80, 80, 80)
-            elif (storedR == storedG and storedR == storedB):
-                sendColor = rgbToHex(255, 255, 255)
-            else:
-                sendColor = rgbToHex(storedR, storedG, storedB)
-            touchArr[n] = sendColor
-
-            json_array["array"] = touchArr
-            print(json.dumps(json_array))
-            try:
-                r = requests.post('http://10.18.227.28:5000/array', json=json.dumps(json_array))
-            except Exception as ex:
-                print('Error, is flask site on?')
 
 
     except KeyboardInterrupt:
