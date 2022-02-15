@@ -23,8 +23,8 @@
   outline-color: black;
   padding: 12px 24px;
   cursor: pointer;
-  color: white;
-  background-color: white;
+  color: #505050;
+  background-color: #505050;
 
 }
 
@@ -327,8 +327,11 @@ function fill() {
 
 	let x = 0;
 	let len1 = elements.length;
-	
+	console.log(len1)
 	for (; x < len1; x++) {
+		if (colors[x] == 0) {
+			colors[x] = '#505050'
+		}
 		console.log(colors[x])
 		if ((x % 32) > 15) {
 			arranged_colors[x + 15 - 2 * (x % 16)] = colors[x];
