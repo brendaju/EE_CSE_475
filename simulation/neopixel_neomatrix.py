@@ -16,6 +16,8 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         self.pin = pin
         self.matrix_type = matrix_type
         self.pixels = Adafruit_NeoPixel(self.width*self.height,self.pin,"NEO_GRB + NEO_KHZ800")
+        self.new_touch = 0
+        self.new_touch_cord = []
 
 
     def delay(self, ms):
@@ -38,6 +40,8 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
 
     def show(self):
         self.pixels.gui.render()
+        self.new_touch = self.pixels.gui.new_touch
+        self.new_touch_cord = self.pixels.gui.new_touch_cord
         event = self.pixels.gui.dispatch_events()
 
 
@@ -86,7 +90,15 @@ if __name__ == "__main__":
     # matrix.drawBitmap(0,0,bitmap_array,8,8,(0,0,0),background_color=(200,200,200))
     matrix.show()
     matrix.drawPixel(0,0,(200, 0, 0))
+    matrix.drawPixel(5,5,(200, 0, 100))
     matrix.drawPixel(0,1,(0, 200, 0))
     matrix.drawPixel(0,2,(0, 0, 200))
     matrix.show()
     matrix.delay(6000)
+    while True:
+        matrix.show()
+        matrix.delay(10)
+        if (matrix.new_touch == 1):
+            print(matrix.new_touch_cord[0], matrix.new_touch_cord[1])
+            matrix.drawPixel(matrix.new_touch_cord[0], matrix.new_touch_cord[1], (200, 0, 0))
+            matrix.pixels.gui.new_touch = 0

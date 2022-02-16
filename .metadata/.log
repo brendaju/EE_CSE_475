@@ -1,0 +1,41 @@
+!SESSION 2022-02-09 15:44:18.207 -----------------------------------------------
+eclipse.buildId=Version 1.8.0
+java.version=11.0.11
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/bavier/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/bavier/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-02-09 15:44:32.770
+!MESSAGE Log4j initialized with config file /Users/bavier/Desktop/EE_CSE_475/.metadata/.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-02-09 15:44:39.428
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-02-09 15:45:12.237
+!MESSAGE Indexed 'CapTouch' (39 sources, 121 headers) in 8.99 sec: 12,463 declarations; 79,442 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.16%)
+!SESSION 2022-02-14 16:31:35.982 -----------------------------------------------
+eclipse.buildId=Version 1.8.0
+java.version=11.0.11
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/bavier/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/bavier/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-02-14 16:32:35.307
+!MESSAGE Log4j initialized with config file /Users/bavier/Desktop/EE_CSE_475/.metadata/.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-02-14 16:32:48.224
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 2 2 2022-02-14 16:39:26.576
+!MESSAGE ST-LINK firmware verification, Check required failed
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 2 2 2022-02-14 16:39:26.581
+!MESSAGE ST-LINK firmware verification, No latest info found: -1
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 2 2 2022-02-14 16:41:37.243
+!MESSAGE ST-LINK firmware verification, Check required failed
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 2 2 2022-02-14 16:41:37.248
+!MESSAGE ST-LINK firmware verification, No latest info found: -1

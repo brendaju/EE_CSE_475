@@ -64,8 +64,8 @@ all: main-build
 main-build: CapTouch.elf secondary-outputs
 
 # Tool invocations
-CapTouch.elf: $(OBJS) $(USER_OBJS) /Users/bavier/STM32CubeIDE/workspace_1.8.0/CapTouch/STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "CapTouch.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/bavier/STM32CubeIDE/workspace_1.8.0/CapTouch/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CapTouch.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+CapTouch.elf: $(OBJS) $(USER_OBJS) /Users/bavier/Desktop/EE_CSE_475/CapTouch/STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "CapTouch.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/bavier/Desktop/EE_CSE_475/CapTouch/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CapTouch.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
