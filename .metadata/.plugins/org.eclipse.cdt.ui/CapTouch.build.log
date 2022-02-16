@@ -1,0 +1,81 @@
+17:28:49 **** Incremental Build of configuration Debug for project CapTouch ****
+make -j7 all 
+arm-none-eabi-gcc "../USB_HOST/Target/usbh_conf.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"USB_HOST/Target/usbh_conf.d" -MT"USB_HOST/Target/usbh_conf.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_HOST/Target/usbh_conf.o"
+arm-none-eabi-gcc "../USB_HOST/App/usb_host.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"USB_HOST/App/usb_host.d" -MT"USB_HOST/App/usb_host.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_HOST/App/usb_host.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_core.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_core.d" -MT"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_core.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ioreq.d" -MT"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ioreq.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.d" -MT"Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Src/usbh_cdc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Src/usbh_cdc.d" -MT"Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Src/usbh_cdc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Src/usbh_cdc.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/stm32f4xx_hal_msp.d" -MT"Core/Src/stm32f4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/stm32f4xx_it.d" -MT"Core/Src/stm32f4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_it.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:169:37: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  169 |   ret0 = HAL_UART_Transmit(&huart2, buffer, sizeof(buffer), HAL_MAX_DELAY);
+      |                                     ^~~~~~
+      |                                     |
+      |                                     char *
+In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:30,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:723:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+  723 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c:162:10: warning: unused variable 'data' [-Wunused-variable]
+  162 |  uint8_t data[] = "HELLO WORLD \r\n";
+      |          ^~~~
+../Core/Src/main.c:100:10: warning: unused variable 'UART1_rxBuffer' [-Wunused-variable]
+  100 |  uint8_t UART1_rxBuffer[12] = {0};
+      |          ^~~~~~~~~~~~~~
+../Core/Src/main.c:98:11: warning: unused variable 'oldCapTouch' [-Wunused-variable]
+   98 |  uint16_t oldCapTouch[3];
+      |           ^~~~~~~~~~~
+../Core/Src/main.c: In function 'determinePixel':
+../Core/Src/main.c:629:26: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+  629 |  if ((input[0] & 0x0FFF) == 0 | (((input[2] & 0x0FFF)) << 12 | (input[1] & 0x0FFF)) == 0)
+      |      ~~~~~~~~~~~~~~~~~~~~^~~~
+../Core/Src/main.c:631:19: warning: implicit declaration of function 'log2' [-Wimplicit-function-declaration]
+  631 |  uint16_t log2X = log2(input[0] & 0x0FFF);
+      |                   ^~~~
+../Core/Src/main.c:631:19: warning: incompatible implicit declaration of built-in function 'log2'
+../Core/Src/main.c:28:1: note: include '<math.h>' or provide a declaration of 'log2'
+   27 | #include "LEDControl.h"
+  +++ |+#include <math.h>
+   28 | /* USER CODE END Includes */
+../Core/Src/main.c:633:6: warning: implicit declaration of function 'ceil' [-Wimplicit-function-declaration]
+  633 |  if (ceil(log2X) == floor(log2X))
+      |      ^~~~
+../Core/Src/main.c:633:6: warning: incompatible implicit declaration of built-in function 'ceil'
+../Core/Src/main.c:633:6: note: include '<math.h>' or provide a declaration of 'ceil'
+../Core/Src/main.c:633:21: warning: implicit declaration of function 'floor' [-Wimplicit-function-declaration]
+  633 |  if (ceil(log2X) == floor(log2X))
+      |                     ^~~~~
+../Core/Src/main.c:633:21: warning: incompatible implicit declaration of built-in function 'floor'
+../Core/Src/main.c:633:21: note: include '<math.h>' or provide a declaration of 'floor'
+../Core/Src/main.c:637:6: warning: incompatible implicit declaration of built-in function 'ceil'
+  637 |  if (ceil(log2Y) == floor (log2Y))
+      |      ^~~~
+../Core/Src/main.c:637:6: note: include '<math.h>' or provide a declaration of 'ceil'
+../Core/Src/main.c:637:21: warning: incompatible implicit declaration of built-in function 'floor'
+  637 |  if (ceil(log2Y) == floor (log2Y))
+      |                     ^~~~~
+../Core/Src/main.c:637:21: note: include '<math.h>' or provide a declaration of 'floor'
+arm-none-eabi-gcc -o "CapTouch.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/bavier/Desktop/EE_CSE_475/CapTouch/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CapTouch.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: CapTouch.elf
+ 
+arm-none-eabi-size   CapTouch.elf 
+arm-none-eabi-objdump -h -S  CapTouch.elf  > "CapTouch.list"
+arm-none-eabi-objcopy  -O binary  CapTouch.elf  "CapTouch.bin"
+   text	   data	    bss	    dec	    hex	filename
+  52528	    164	   5028	  57720	   e178	CapTouch.elf
+Finished building: default.size.stdout
+ 
+Finished building: CapTouch.bin
+ 
+Finished building: CapTouch.list
+ 
+
+17:28:51 Build Finished. 0 errors, 13 warnings. (took 1s.598ms)
+

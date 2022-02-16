@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, redirect, url_for
 import json
 import requests
 
@@ -14,10 +14,11 @@ color_array1 = []
 def load_array():
 	array_json = json.loads(request.get_json())
 	#print(array_json)	
-	#color_array1 = array_json
+	color_array1 = array_json
 	with open("test.txt", "w") as fo:
 		fo.write(json.dumps(array_json))
-	return array_json
+	return redirect(request.url)
+
 
 @app.route('/')
 def index():
@@ -28,7 +29,11 @@ def index():
    return render_template('index.html', color_array=color_array1["array"])
 
 
-
+@app.route('/test.txt')
+def textpage():
+   with open("test.txt", "r") as fo:
+      color_array1 = json.loads(fo.read())
+   return color_array1
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

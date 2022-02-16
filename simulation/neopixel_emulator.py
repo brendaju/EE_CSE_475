@@ -10,6 +10,8 @@ class NeoPixel_Emulator(pyglet.window.Window):
         self.led_group = pyglet.graphics.OrderedGroup(0)
         self.color_group = pyglet.graphics.OrderedGroup(1)
         self.alive = 1
+        self.new_touch = 0
+        self.new_touch_cord = []
 
 
     def draw_LEDs(self, led_number):
@@ -58,3 +60,7 @@ class NeoPixel_Emulator(pyglet.window.Window):
         self.batch.draw()
         event = self.dispatch_events()
         self.flip()
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        self.new_touch = 1
+        self.new_touch_cord = [int(x/35), 15 -int(y/35)]
