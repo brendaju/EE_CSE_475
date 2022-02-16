@@ -4,7 +4,7 @@ import requests
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 color_array1 = []
 
@@ -26,7 +26,14 @@ def index():
       color_array1 = json.loads(fo.read())
 
    #print(color_array1["array"][0])
-   return render_template('index.html', color_array=color_array1["array"])
+   return render_template('welcome.html')
+
+@app.route('/painting')
+def painting():
+
+   with open("test.txt", "r") as fo:
+      color_array1 = json.loads(fo.read())
+   return render_template('painting.html', color_array=color_array1["array"])
 
 
 @app.route('/test.txt')
