@@ -49,7 +49,7 @@ class led_strip:
 
         for i in range(self.num_pixels):
             self.turn_on_led(i, Color(0,0,0))
-        self.setup_painting()
+       # self.setup_painting()
 
     # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
@@ -77,7 +77,7 @@ class led_strip:
             y = 15 - y
         return (x * 16) + y
 
-    def setup_painting(self):
+    '''def setup_painting(self):
         for i in range(8):
             n = self.convert(i, 15)
             self.turn_on_led(n, Color(setColors[i][0], setColors[i][1], setColors[i][2]))
@@ -90,5 +90,5 @@ class led_strip:
         self.touch_array[self.convert(10, 15)] = self.rgbToHex(255, 0, 0)
         self.turn_on_led(self.convert(11,15), self.stored_color)
         self.touch_array[self.convert(11, 15)] = self.rgbToHex(self.stored_R, self.stored_G, self.stored_B)
-
+'''
 
