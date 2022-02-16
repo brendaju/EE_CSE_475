@@ -71,6 +71,17 @@ class led_strip:
         self.strip.show()
         #time.sleep(wait_ms / 1000.0)
 
+    async def update_buffer(self, grid):
+        for i in range(0, len(grid)):
+            R = grid[i][0]
+            G = grid[i][1]
+            B = grid[i][2]
+            color = Color(R, G, B)
+            self.strip.setPixelColor(i, color)
+            self.send_color = self.rgbToHex(R, G, B)
+            self.touch_array[i] = self.send_color
+        self.strip.show()
+
     def convert(self, x, y):
         # if in an odd column, reverse the order
         if (x % 2 != 0):
