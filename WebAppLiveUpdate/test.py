@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, ro
 
 async_mode = None
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
@@ -32,7 +32,12 @@ def load_array():
 
 @app.route('/')
 def index():
-	return render_template('index.html', async_mode=socketio.async_mode)
+	return render_template('welcome.html')
+
+@app.route('/painting')
+def painting():
+	return render_template('painting.html', async_mode=socketio.async_mode)
+	
 
 @socketio.event
 def connect():
