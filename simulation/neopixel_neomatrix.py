@@ -2,11 +2,35 @@ from emulator_backend import Adafruit_NeoPixel
 from neopixel_gfx import Adafruit_GFX
 from time import sleep
 
+setColors = [
+    (255, 0, 0),
+    (255, 127, 0),
+    (255, 255, 0),
+    (0, 255, 0),
+    (0, 0, 255),
+    (148, 0, 211),
+    (255, 255, 255),
+    (0, 0, 0)
+]
+
 class Adafruit_NeoMatrix(Adafruit_GFX):
     positions = {"NEO_MATRIX_TOP":0,"NEO_MATRIX_BOTTOM":1,"NEO_MATRIX_LEFT":0,"NEO_MATRIX_RIGHT":2,\
         "NEO_MATRIX_CORNER":3,"NEO_MATRIX_ROWS":0,"NEO_MATRIX_COLUMNS":4,"NEO_MATRIX_AXIS":4,\
         "NEO_MATRIX_PROGRESSIVE":0,"NEO_MATRIX_ZIGZAG":8,"NEO_MATRIX_SEQUENCE":8}
 
+    def convert(self, x, y):
+        # if in an odd column, reverse the order
+        if (x % 2 != 0):
+            y = 15 - y
+        return (x * 16) + y
+
+    def rgbToHex(self, r, g, b):
+        numbers = [r, g, b]
+        return '#' + ''.join('{:02X}'.format(a) for a in numbers)
+
+    def turn_on_led(self, n, color, wait_ms=50):
+        self.pixels.setPixelColor(n,color)
+        self.show()
 
     def create_matrix(self, width, height, pin, matrix_type):
         self.width = width

@@ -118,15 +118,9 @@ async def mainProgram(matrix, clearingMode, setColors):
         show(matrix)
         await asyncio.sleep(0.1)
 
-async def showMatrix(matrix):
-    matrix.show()
-    matrix.delay(10)
-    #await asyncio.sleep(0.1)
-
-async def main(matrix, clearingMode, setColors):
+async def main(strip, clearingMode, setColors):
     await connectToServer()
-    #asyncio.create_task(showMatrix(matrix))
-    asyncio.create_task(mainProgram(matrix, clearingMode, setColors))
+    asyncio.create_task(mainProgram(strip, clearingMode, setColors))
 
 strip = 0
 
@@ -176,26 +170,22 @@ if __name__ == '__main__':
 
     # Create led_strip object with appropriate configuration.
     #strip = led_strip()
-    matrix = neopixel_neomatrix.Adafruit_NeoMatrix()
-    matrix.create_matrix(12,16,6,matrix.positions["NEO_MATRIX_TOP"]+matrix.positions["NEO_MATRIX_LEFT"]+\
-        matrix.positions["NEO_MATRIX_COLUMNS"]+matrix.positions["NEO_MATRIX_PROGRESSIVE"])
-    matrix.begin()
-    matrix.show()
-    matrix.drawPixel(0,0,(200, 0, 0))
-    matrix.drawPixel(5,5,(200, 0, 100))
-    matrix.drawPixel(0,1,(0, 200, 0))
-    matrix.drawPixel(0,2,(0, 0, 200))
-    matrix.setRotation(0)
-    matrix.setBrightness(90)
-    matrix.show()
-    matrix.delay(10)
-    print(matrix.new_touch_cord)
-    setup_painting(matrix)
+    strip = neopixel_neomatrix.Adafruit_NeoMatrix()
+    strip.create_matrix(12,16,6,strip.positions["NEO_MATRIX_TOP"]+strip.positions["NEO_MATRIX_LEFT"]+\
+        strip.positions["NEO_MATRIX_COLUMNS"]+strip.positions["NEO_MATRIX_PROGRESSIVE"])
+    strip.begin()
+    strip.show()
+    strip.setRotation(0)
+    strip.setBrightness(90)
+    strip.show()
+    strip.delay(10)
+    print(strip.new_touch_cord)
+    setup_painting(strip)
 
     try:
         loop = asyncio.get_event_loop()
         #loop.add_reader(ser, readUART)
-        loop.run_until_complete(main(matrix, clearingMode, setColors))
+        loop.run_until_complete(main(strip, clearingMode, setColors))
         loop.run_forever()
     except:
         print("closing")
