@@ -124,7 +124,7 @@ async def mainProgram(strip, pApp):
             strip.touch_array[i] = strip.send_color
         '''
         await strip.update_buffer(selectedGrid)
-        strip.json_array["array"] = strip.touch_array
+        strip.json_array["array"] = arrayConvert(strip.touch_array)
         r = requests.post(ip + '/array', json=json.dumps(strip.json_array))
         await asyncio.sleep(0.1)
 

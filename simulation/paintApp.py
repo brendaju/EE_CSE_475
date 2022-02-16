@@ -1,4 +1,5 @@
 import asyncio
+#from rpi_ws281x import Color
 
 setColors = [
     (255, 0, 0),
@@ -48,6 +49,13 @@ class paintingApp:
     async def getGrid(self):
         return self.touchGrid
 
+    def webPaint(self, n, webColor):
+        x = int(n/16)
+        y = int(n-x*16)
+        print(x,y)
+        print(self.convert(x,y))
+        self.touchGrid[self.convert(x,y)] = webColor
+
     def paint(self, x, y):
         if y == 15:
             if x < 8:
@@ -64,10 +72,10 @@ class paintingApp:
                 self.stored_R = self.stored_R + 10
                 if self.stored_R < 50 or self.stored_R > 255:
                     self.stored_R = 50
-
             self.touchGrid[176] = (self.stored_R, self.stored_G, self.stored_B)
             self.clearingMode = (x == 7)
             self.send_color = self.rgbToHex(self.stored_R, self.stored_G, self.stored_B)
+            print(self.stored_R, self.stored_G, self.stored_B)
             #touchArr[n] = sendColor
         else:
             #touchArr[n] = rgbToHex(storedR, storedG, storedB)
@@ -79,7 +87,6 @@ class paintingApp:
                 self.send_color = '#FFFFFF'
             else:
                 self.send_color = self.rgbToHex(self.stored_R, self.stored_G, self.stored_B)
-
         #json_array["array"] = touchArr
         #print(json.dumps(json_array))
         #global lastPressedIndex
