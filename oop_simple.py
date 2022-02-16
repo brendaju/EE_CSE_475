@@ -21,20 +21,29 @@ LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
+ip = 'http://10.19.148.197:5000'
 
-
+received_data = "0"
+gridLoc = [0,0]
+lastPressedIndex = -1
+pressedIndex = -1
 async def connectToServer():
-    await sio.connect('http://10.18.227.28:5000')
+    await sio.connect(ip)
     await sio.sleep(1)
 
 json_array = {"array": touchArr}
 
-def readUART(ser):
+def readUART():
     received_data = ser.read()              #read serial port
     time.sleep(0.03)
     data_left = ser.inWaiting()             #check for remaining byte
     received_data += ser.read(data_left)
     ser.write(received_data)
+    #print(received_data)
+    global gridLoc
+    gridLoc = interpretUART(received_data)
+    global pressedIndex
+    pressedIndex = convert(gridLoc[0],gridLoc[1])
     return received_data
 
 def interpretUART(uartData):
@@ -77,11 +86,11 @@ setColors = [
 async def mainProgram(strip, clearingMode, setColors):
     while True:
         loop = asyncio.get_event_loop()
-        received_data = await loop.run_in_executor(None, readUART, ser)
-        gridLoc = await loop.run_in_executor(None, interpretUART, received_data)
-
+        global pressedIndex
+        #received_data = await loop.run_in_executor(None, readUART, ser)
+        #gridLoc = await loop.run_in_executor(None, interpretUART, received_data)
         #print(gridLoc)
-        n = await loop.run_in_executor(None, convert, gridLoc[0], gridLoc[1])
+        #n = await loop.run_in_executor(None, convert, gridLoc[0], gridLoc[1])
         if gridLoc[1] == 15:
             if gridLoc[0] < 8:
                 strip.stored_R, strip.stored_G, strip.stored_B = setColors[gridLoc[0]]
@@ -95,30 +104,34 @@ async def mainProgram(strip, clearingMode, setColors):
                     strip.stored_G = 50
             elif gridLoc[0] == 10:
                 strip.stored_R = strip.stored_R + 10
-            if strip.stored_R < 50 or strip.stored_R == 260:
-                strip.stored_R = 50
+                if strip.stored_R < 50 or strip.stored_R == 260:
+                    strip.stored_R = 50
             strip.stored_color = Color(strip.stored_R, strip.stored_G, strip.stored_B)
-            n = await loop.run_in_executor(None, convert, 11, 15)
-            await loop.run_in_executor(None, strip.turn_on_led, n, strip.stored_color)
+            await loop.run_in_executor(None, strip.turn_on_led, 176, strip.stored_color)
+            pressedIndex = 176
             clearingMode = (gridLoc[0] == 7)
+            print(gridLoc[0])
             strip.send_color = await loop.run_in_executor(None, rgbToHex, strip.stored_R, strip.stored_G, strip.stored_B)
             #touchArr[n] = sendColor
         else:
             #touchArr[n] = rgbToHex(storedR, storedG, storedB)
-            await loop.run_in_executor(None, strip.turn_on_led, n, strip.stored_color)
+            await loop.run_in_executor(None, strip.turn_on_led, pressedIndex, strip.stored_color)
 
             if(clearingMode):
-                strip.send_color = await loop.run_in_executor(None, rgbToHex, 80, 80, 80)
+                strip.send_color = '#505050'
             elif (strip.stored_R == strip.stored_G and strip.stored_R == strip.stored_B):
-                strip.send_color = await loop.run_in_executor(None, rgbToHex, 255, 255, 255)
+                strip.send_color = '#FFFFFF'
             else:
                 strip.send_color = await loop.run_in_executor(None, rgbToHex, strip.stored_R, strip.stored_G, strip.stored_B)
-        strip.touch_array[n] = strip.send_color
+        strip.touch_array[pressedIndex] = strip.send_color
 
         strip.json_array["array"] = strip.touch_array
         #print(json.dumps(json_array))
-        r = requests.post('http://10.18.227.28:5000/array', json=json.dumps(strip.json_array))
-        await asyncio.sleep(1)
+        global lastPressedIndex
+        if (pressedIndex != lastPressedIndex):
+            r = requests.post(ip + '/array', json=json.dumps(strip.json_array))
+            lastPressedIndex = pressedIndex
+        await asyncio.sleep(0.1)
 
 
 async def main(strip, clearingMode, setColors):
@@ -128,11 +141,14 @@ async def main(strip, clearingMode, setColors):
 strip = 0
 
 @sio.on('my_response')
-async def catch_all(data, strip):
+async def catch_all(data):
+    print("Okay: ", data)
     readFrom = data['data']
+    print("okay 2: ", readFrom)
     readColor = readFrom['color']
-    newColor = Color(int(readColor[1:2], 16), int(readColor[3:4], 16), int(readColor[5:6], 16))
+    newColor = Color(int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
     strip.turn_on_led(readFrom['index'], newColor)
+    strip.touch_array[readFrom['index']] = newColor
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -149,6 +165,7 @@ if __name__ == '__main__':
         print('Use "-c" argument to clear LEDs on exit')
     try:
         loop = asyncio.get_event_loop()
+        loop.add_reader(ser, readUART)
         loop.run_until_complete(main(strip, clearingMode, setColors))
         loop.run_forever()
 
