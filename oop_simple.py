@@ -148,7 +148,9 @@ async def catch_all(data):
     readColor = readFrom['color']
     newColor = Color(int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
     strip.turn_on_led(readFrom['index'], newColor)
-    strip.touch_array[readFrom['index']] = newColor
+    x = int(readFrom['index']/16)
+    y = int(readFrom['index'] - x * 16)
+    strip.touch_array[(x * 16) + (15 - y if (x % 2 != 0) else y)] = newColor
 
 # Main program logic follows:
 if __name__ == '__main__':

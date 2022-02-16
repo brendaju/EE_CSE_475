@@ -142,7 +142,7 @@ async def catch_all(data):
     y = int(readFrom['index'] - x * 16)
     #print(x, y)
     await loop.run_in_executor(None, matrix.drawPixel, x, y, (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16)))
-    touchArr[readFrom['index']] = readColor
+    touchArr[(x * 16) + (15 - y if (x % 2 != 0) else y)] = readColor
 
 setColors = [
     (255, 0, 0),
