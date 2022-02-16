@@ -76,9 +76,11 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
     async def update_buffer(self, grid):
         newGrid = self.arrayConvert(grid)
         for i in range(0, len(grid)):
+            
             R = newGrid[i][0]
             G = newGrid[i][1]
             B = newGrid[i][2]
+            print(R, G, B)
             color = (R, G, B)
             self.pixels.setPixelColor(i, color)
             self.send_color = self.rgbToHex(R, G, B)

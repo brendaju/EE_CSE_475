@@ -113,15 +113,16 @@ DRAWING = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,
            [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
            [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]
 
-
+storedGrid = []
 async def mainProgram(strip, pApp):
     while True:
-        global gridSelect
+        global gridSelect, storedGrid
         if (gridSelect == 1):
             selectedGrid = pApp.touchGrid
         elif (gridSelect == 0):
             selectedGrid = data_array
         loop = asyncio.get_event_loop()
+        print(storedGrid == selectedGrid)
         '''for i in range(0, len(selectedGrid)):
             R = selectedGrid[i][0]
             G = selectedGrid[i][1]
@@ -131,15 +132,17 @@ async def mainProgram(strip, pApp):
             strip.send_color = await loop.run_in_executor(None, rgbToHex, R, G, B)
             strip.touch_array[i] = strip.send_color
         '''
-        await strip.update_buffer(selectedGrid)
-        strip.json_array["array"] = arrayConvert(strip.touch_array)
-        r = requests.post(ip + '/array', json=json.dumps(strip.json_array))
+        if (storedGrid != selectedGrid):
+            await strip.update_buffer(selectedGrid)
+            strip.json_array["array"] = arrayConvert(strip.touch_array)
+            r = requests.post(ip + '/array', json=json.dumps(strip.json_array))
+            storedGrid = selectedGrid.copy()
         await asyncio.sleep(0.1)
 
 async def updateSim(strip):
-    strip.show()
-    strip.delay(10)
-    await asyncio.sleep(0.1)
+    while True:
+        strip.show()
+        await asyncio.sleep(0.1)
 
 async def main(strip, pApp):
     await connectToServer()

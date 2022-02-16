@@ -75,12 +75,12 @@ class paintingApp:
             self.touchGrid[176] = (self.stored_R, self.stored_G, self.stored_B)
             self.clearingMode = (x == 7)
             self.send_color = self.rgbToHex(self.stored_R, self.stored_G, self.stored_B)
-            print(self.stored_R, self.stored_G, self.stored_B)
+            
             #touchArr[n] = sendColor
         else:
             #touchArr[n] = rgbToHex(storedR, storedG, storedB)
             self.touchGrid[self.convert(x,y)] = (self.stored_R, self.stored_G, self.stored_B)
-
+            print(self.stored_R, self.stored_G, self.stored_B)
             if(self.clearingMode):
                 self.send_color = '#505050'
             elif (self.stored_R == self.stored_G and self.stored_R == self.stored_B):
