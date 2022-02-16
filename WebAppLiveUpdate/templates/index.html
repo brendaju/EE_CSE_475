@@ -23,8 +23,8 @@
   outline-color: black;
   padding: 12px 24px;
   cursor: pointer;
-  color: #505050;
-  background-color: #505050;
+  color: white;
+  background-color: white;
 
 }
 
@@ -281,9 +281,10 @@ const on = new Array; //(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 var colors = new Array (0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-socket.on('my_response', function(msg, cb) {
+socket.on('update_led', function(msg, cb) {
   for (var i = 0; i < 192; i++)
     colors[i] = msg.data[i];
+  console.log("ran")
   fill()
   if (cb)
 	cb();
@@ -327,11 +328,8 @@ function fill() {
 
 	let x = 0;
 	let len1 = elements.length;
-	console.log(len1)
+	
 	for (; x < len1; x++) {
-		if (colors[x] == 0) {
-			colors[x] = '#505050'
-		}
 		console.log(colors[x])
 		if ((x % 32) > 15) {
 			arranged_colors[x + 15 - 2 * (x % 16)] = colors[x];
@@ -397,6 +395,7 @@ function changeColor(spot) {
 		elements[spot].style.outlineColor = "black";	
 		on[spot] = 1;
 	}
+	socket.emit('buttonPressed', {index: spot, color: x.value})
 }
 
 </script>
