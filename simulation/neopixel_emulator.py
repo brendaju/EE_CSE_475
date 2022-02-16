@@ -11,7 +11,7 @@ class NeoPixel_Emulator(pyglet.window.Window):
         self.color_group = pyglet.graphics.OrderedGroup(1)
         self.alive = 1
         self.new_touch = 0
-        self.new_touch_cord = []
+        self.new_touch_cord = [0]*2
 
 
     def draw_LEDs(self, led_number):

@@ -17,7 +17,7 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         self.matrix_type = matrix_type
         self.pixels = Adafruit_NeoPixel(self.width*self.height,self.pin,"NEO_GRB + NEO_KHZ800")
         self.new_touch = 0
-        self.new_touch_cord = []
+        self.new_touch_cord = [0]*2
 
 
     def delay(self, ms):
@@ -25,6 +25,7 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
 
 
     def begin(self):
+        self.new_touch_cord = [0]*2
         needed_w = self.width*35
         needed_h = self.height*34+4
         self.pixels.begin(draw_matrix=True,width=self.width,height=self.height, window_w=needed_w, window_h=needed_h)

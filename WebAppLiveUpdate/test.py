@@ -15,14 +15,17 @@ thread_lock = Lock()
 
 color_array1 = []
 
-
+@socketio.event
+def buttonPressed(message):
+	print(message)
+	socketio.emit('my_response', {'data':message})
 
 @app.route('/array',methods=['POST'])
 def load_array():
 	array_json = json.loads(request.get_json())
 	#print(array_json)	
 	#color_array1 = array_json
-	socketio.emit('my_response',
+	socketio.emit('update_led',
 		{'data':array_json['array']})
 	print(array_json)
 	return array_json
@@ -31,8 +34,10 @@ def load_array():
 def index():
 	return render_template('index.html', async_mode=socketio.async_mode)
 
-
-
+@socketio.event
+def connect():
+	print('User Connected')
+    #emit('my_response', {'data': 'Connected', 'count': 0})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
