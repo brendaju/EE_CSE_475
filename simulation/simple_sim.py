@@ -137,7 +137,11 @@ async def catch_all(data):
     print("okay 2: ", readFrom)
     readColor = readFrom['color']
     #newColor = Color(int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
-    await loop.run_in_executor(None, matrix.drawPixel, readFrom['index'][0], readFrom['index'][1], (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16)))
+    #gridLoc[0] * 16) + (15 - gridLoc[1] if (gridLoc[0] % 2 != 0) else gridLoc[1]
+    x = int(readFrom['index']/16)
+    y = int(readFrom['index'] - x * 16)
+    #print(x, y)
+    await loop.run_in_executor(None, matrix.drawPixel, x, y, (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16)))
     touchArr[readFrom['index']] = readColor
 
 setColors = [

@@ -409,7 +409,7 @@ function fill() {
 function changeColor(spot) {
 	
    elements[spot].style.background = x.value;
-
+   socket.emit('buttonPressed', {index: spot, color: x.value})
 }
 
 </script>
