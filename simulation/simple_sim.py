@@ -122,16 +122,6 @@ async def mainProgram(strip, pApp):
         elif (gridSelect == 0):
             selectedGrid = data_array
         loop = asyncio.get_event_loop()
-        print(storedGrid == selectedGrid)
-        '''for i in range(0, len(selectedGrid)):
-            R = selectedGrid[i][0]
-            G = selectedGrid[i][1]
-            B = selectedGrid[i][2]
-            color = Color(R, G, B)
-            await loop.run_in_executor(None, strip.turn_on_led, i, color)
-            strip.send_color = await loop.run_in_executor(None, rgbToHex, R, G, B)
-            strip.touch_array[i] = strip.send_color
-        '''
         if (storedGrid != selectedGrid):
             await strip.update_buffer(selectedGrid)
             strip.json_array["array"] = arrayConvert(strip.touch_array)
