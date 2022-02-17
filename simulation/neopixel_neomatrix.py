@@ -80,7 +80,6 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
             R = newGrid[i][0]
             G = newGrid[i][1]
             B = newGrid[i][2]
-            print(R, G, B)
             color = (R, G, B)
             self.pixels.setPixelColor(i, color)
             self.send_color = self.rgbToHex(R, G, B)

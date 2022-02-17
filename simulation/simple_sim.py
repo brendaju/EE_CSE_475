@@ -8,6 +8,7 @@ import socketio
 import asyncio
 #from led_strip import led_strip
 from paintApp import paintingApp
+from tictactoeApp import tictactoeApp
 import numpy as np
 from PIL import Image
 from neopixel_neomatrix import Adafruit_NeoMatrix
@@ -155,7 +156,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
-    pApp = paintingApp()
+    pApp = tictactoeApp()
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
