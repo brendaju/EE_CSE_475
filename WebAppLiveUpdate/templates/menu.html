@@ -27,66 +27,6 @@ h1 {
 
 }
 
-.btnContainer {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-
-}
-/* ACTUAL VERSION */
-/* Style the buttons */
-.btn {
-
-  border: solid;
-  border-color: black;
-  outline: solid;
-  outline-color: black;
-  padding: 12px 24px;
-  cursor: pointer;
-  color: white;
-  background-color: white;
-
-}
-
-.btn:hover {
-  background-color: grey;
-
-}
-
-.grid-surround {
-  position: relative;
-  top: -30px;
-  padding: 10px;
-  background-color:#2196F3;
-  width: 860px;
-  margin: auto;
-}
-
-.grid-container {
-  width: 860px;
-  display: grid;
-
-  grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
-  
-
-  padding: 0px;
-}
-.grid-item {
-  border: solid;
-  border-color: black;
-  outline: solid;
-  outline-color: black;
-  padding: 10px 24px;
-  cursor: pointer;
-  color: white;
-  background-color: white;
-  height: 10px;
-
-}
-
-.grid-item:hover {
-  background-color: grey;
-}
-
 .color-container {
   background-color: #AD08FF;
   width: 200px;
@@ -127,7 +67,7 @@ h1 {
 
 <h1>Menu Page</h1>
 
-<div class="color-container" onclick="submit_pro_id()">
+<div class="color-container" onclick="gotopainting()">
 Painting
 </div>
 
@@ -139,7 +79,7 @@ Art
 
 <script> 
 
-function submit_pro_id() {
+function gotopainting() {
         window.location.replace('/painting');
 }
 
