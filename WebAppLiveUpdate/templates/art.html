@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<style>
+
+body {
+    height: 750px;
+    background-image: linear-gradient(to bottom right, rgba(255,0,0,0.3),
+    rgba(255,165,0,1));
+}
+
+header
+* {
+  box-sizing: border-box;
+}
+
+color {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  font-size: 50px;
+
+}
+
+
+.menubtn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
+
+
+</style>
+
+    </head>
+    <body>
+
+<h1>Art Page</h1>
+
+<div class="logoutbtn" onclick="gotowelcome()">Logout</div>
+
+<div class="menubtn" onclick="gotomenu()">Back to Menu</div>
+
+<script> 
+
+function gotopainting() {
+        window.location.replace('/painting');
+}
+
+function gotoart() {
+        window.location.replace('/art');
+}
+
+function gotomenu() {
+        window.location.replace('/menu');
+}
+
+function gotowelcome() {
+        window.location.replace('/');
+}
+
+</script>
+    </body>
+</html>

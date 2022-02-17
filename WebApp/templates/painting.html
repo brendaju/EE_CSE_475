@@ -49,6 +49,21 @@ h1 {
 
 }
 
+.menubtn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
 .grid-surround {
   position: relative;
   top: -30px;
@@ -101,11 +116,30 @@ h1 {
   outline-color: black;
 }
 
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
 </style>
 </head>
 <body>
 
 <h1>Painting</h1>
+
+<div class="menubtn" onclick="gotomenu()">Back to Menu</div>
+
+<div class="logoutbtn" onclick="gotowelcome()">Logout</div>
 
 <div class="color-container">
 Color Select: <input type="color" id="myColor" value="#ff0080">
@@ -328,7 +362,13 @@ function changeColor(spot) {
 }
 
 
+function gotomenu() {
+        window.location.replace('/menu');
+}
 
+function gotowelcome() {
+        window.location.replace('/');
+}
 
 </script>
 

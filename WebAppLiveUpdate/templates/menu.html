@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<style>
+
+body {
+    height: 750px;
+    background-image: linear-gradient(to bottom right, rgba(255,0,0,0.3),
+    rgba(255,165,0,1));
+}
+
+header
+* {
+  box-sizing: border-box;
+}
+
+color {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  font-size: 50px;
+
+}
+
+.color-container {
+  background-color: #AD08FF;
+  width: 200px;
+  height: 20px;
+  text-align: center;
+  padding: 20px 0;
+  color: white;
+  position: relative;
+  left: 186px;
+  top: -20px;
+  //margin: auto;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  cursor: pointer;
+}
+
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
+</style>
+
+    </head>
+    <body>
+
+<h1>Menu Page</h1>
+
+<div class="color-container" onclick="gotopainting()">
+Painting
+</div>
+
+<div class="logoutbtn" onclick="gotowelcome()">Logout</div>
+
+<div class="color-container" onclick="gotoart()">
+Art
+</div>
+
+<script> 
+
+function gotopainting() {
+        window.location.replace('/painting');
+}
+
+function gotoart() {
+        window.location.replace('/art');
+}
+
+function gotowelcome() {
+        window.location.replace('/');
+}
+
+</script>
+    </body>
+</html>

@@ -28,6 +28,36 @@ h1 {
 
 }
 
+.menubtn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
 .btnContainer {
   display: grid;
   grid-template-columns: 33% 33% 33%;
@@ -107,9 +137,14 @@ h1 {
 
 </style>
 </head>
-<body onload="fill()">
+<body onload="reset()">
 
 <h1>Painting</h1>
+
+<div class="logoutbtn" onclick="gotowelcome()">Logout</div>
+
+<div class="menubtn" onclick="gotomenu()">Back to Menu</div>
+
 
 <div class="color-container">
 Color Select: <input type="color" id="myColor" value="#ff0080">
@@ -410,6 +445,22 @@ function changeColor(spot) {
 	
    elements[spot].style.background = x.value;
    socket.emit('buttonPressed', {index: spot, color: x.value})
+}
+
+function submit_pro_id() {
+        window.location.replace('/painting');
+}
+
+function gotoart() {
+        window.location.replace('/art');
+}
+
+function gotomenu() {
+        window.location.replace('/menu');
+}
+
+function gotowelcome() {
+        window.location.replace('/');
 }
 
 </script>

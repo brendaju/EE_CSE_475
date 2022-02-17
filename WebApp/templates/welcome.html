@@ -62,6 +62,20 @@ body {
     -ms-transform: translate(-50%, -50%);
 }
 
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
 
 </style>
 
@@ -82,8 +96,8 @@ body {
 
 function submit_pro_id() {
     var product_id=document.getElementById('product_id').value;
-    if (product_id==="000000000000") {
-        window.location.replace('/painting');
+    if (product_id==="00") {
+        window.location.replace('/menu');
 
     } else {
         alert("Wrong id, try it again! :(")
