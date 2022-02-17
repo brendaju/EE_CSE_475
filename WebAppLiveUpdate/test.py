@@ -38,6 +38,13 @@ def index():
 def painting():
 	return render_template('painting.html', async_mode=socketio.async_mode)
 	
+@app.route('/menu')
+def menu():
+	return render_template('menu.html')
+
+@app.route('/art')
+def art():
+	return render_template('art.html')
 
 @socketio.event
 def connect():

@@ -35,6 +35,13 @@ def painting():
       color_array1 = json.loads(fo.read())
    return render_template('painting.html', color_array=color_array1["array"])
 
+@app.route('/menu')
+def menu():
+   return render_template('menu.html');
+
+@app.route('/art')
+def art():
+   return render_template('art.html');
 
 @app.route('/test.txt')
 def textpage():
