@@ -15,7 +15,7 @@ from neopixel_neomatrix import Adafruit_NeoMatrix
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://192.168.0.11:5000/'
+ip = 'https://led-canvas.herokuapp.com/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
