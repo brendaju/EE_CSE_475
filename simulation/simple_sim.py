@@ -73,7 +73,7 @@ def arrayConvert(grid):
 
 def gridMake():
     global data_array, data_rotate
-    image = Image.open('../pixel.png')
+    image = Image.open('../images/pixel.png')
     image = image.rotate(180)
     # convert image to numpy array
     image = image.convert('RGB')
