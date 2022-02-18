@@ -41,7 +41,7 @@ class tictactoeApp:
             gameY = 2
         else:
             return -1, -1, -1
-            
+
         if (x >= 1 and x <= 3):
             gameIndex = gameIndex
             gameX = 0
@@ -53,7 +53,7 @@ class tictactoeApp:
             gameX = 2
         else:
             return -1, -1, -1
-        
+
         return gameIndex, gameX, gameY
 
 
@@ -121,7 +121,7 @@ class tictactoeApp:
             return
 
         self.gameGrid[gameIndex] = self.currentPlayer
-        
+
         if (self.currentPlayer == 'X'):
             self.touchGrid[self.convert((gameX*4+1), (gameY*4+3))] = (255, 255, 255)
             self.touchGrid[self.convert((gameX*4+3), (gameY*4+3))] = (255, 255, 255)
@@ -133,7 +133,7 @@ class tictactoeApp:
             self.touchGrid[self.convert((gameX*4+1), (gameY*4+4))] = (255, 255, 255)
             self.touchGrid[self.convert((gameX*4+3), (gameY*4+4))] = (255, 255, 255)
             self.touchGrid[self.convert((gameX*4+2), (gameY*4+5))] = (255, 255, 255)
-        
+
         self.gameOver = self.boardCheck()
 
         if (self.currentPlayer == 'X'):
