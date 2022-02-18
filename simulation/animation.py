@@ -21,8 +21,8 @@ def Color(red, green, blue):
 class animation_app:
     def __init__(self):
         self.touchGrid = [(0,0,0)]*192
-        self.x_loc = 0
-        self.y_loc = 0
+        self.x_loc = 15
+        self.y_loc = 10
         self.setup()
 
     def convert(self, x, y):
@@ -38,7 +38,8 @@ class animation_app:
 
     def setup(self):
         # convert (column, row)
-        self.touchGrid[self.convert(0, 0)] = (255,255,255)
+        # self.touchGrid[self.convert(0, 0)] = (255,255,255)
+        pass
 
     async def getGrid(self):
         return self.touchGrid
@@ -49,11 +50,11 @@ class animation_app:
         y = int(n-x*16)
         self.paint(x, y)
 
-    def paint(self, x, y):
+    def paint(self, x=0, y=0):
         self.touchGrid[self.convert(self.y_loc, self.x_loc)] = (0, 0, 0)
-        self.x_loc += 1
-        self.y_loc += 1
+        self.x_loc -= 1
+        # self.y_loc += 1
         if self.x_loc == X_MAX or self.y_loc == Y_MAX:
             self.x_loc = 0
-            self.y_loc = 0
+            # self.y_loc = 0
         self.touchGrid[self.convert(self.y_loc, self.x_loc)] = (255,255,255)

@@ -51,15 +51,16 @@ def readUART(pApp):
     return received_data
 
 IS_TIMER_BASED = True
+SPEED = 0.1
 
 async def simulationInput(strip, pApp):
     while True:
-        if (strip.new_touch == 1):
+        if (IS_TIMER_BASED):
+            pApp.paint()
+            await asyncio.sleep(SPEED)
+        elif (strip.new_touch == 1):
             pApp.paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
-        elif (IS_TIMER_BASED):
-            pApp.paint(0, 0)
-            await asyncio.sleep(0.1)
         await asyncio.sleep(0.1)
 
 
