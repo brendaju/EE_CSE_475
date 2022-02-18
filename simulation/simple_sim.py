@@ -58,8 +58,8 @@ async def simulationInput(strip, pApp):
             pApp.paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
         elif (IS_TIMER_BASED):
-            timer = threading.Timer(5.0, pApp.paint(0, 0))
-            timer.start()
+            pApp.paint(0, 0)
+            await asyncio.sleep(0.1)
         await asyncio.sleep(0.1)
 
 
