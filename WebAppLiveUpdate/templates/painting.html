@@ -367,14 +367,19 @@ var elements = document.getElementsByClassName("grid-item");
 
 var socket = io();
 
+var deviceID = {{deviceID}}
+var redirect = '?id='+ deviceID;
 
 var colors = new Array (0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 socket.on('update_led', function(msg, cb) {
-  for (var i = 0; i < 192; i++)
-    colors[i] = msg.data[i];
-  console.log("ran")
-  fill()
+  console.log(msg)
+  if (msg.userId == deviceID) {
+    for (var i = 0; i < 192; i++)
+      colors[i] = msg.data[i];
+    console.log("ran")
+    fill()
+  }
   if (cb)
 	cb();
 });
@@ -444,19 +449,19 @@ function fill() {
 function changeColor(spot) {
 	
    elements[spot].style.background = x.value;
-   socket.emit('buttonPressed', {index: spot, color: x.value})
+   socket.emit('buttonPressed', {index: spot, color: x.value, deviceID: deviceID})
 }
 
 function submit_pro_id() {
-        window.location.replace('/painting');
+        window.location.replace('/painting'+redirect);
 }
 
 function gotoart() {
-        window.location.replace('/art');
+        window.location.replace('/art'+redirect);
 }
 
 function gotomenu() {
-        window.location.replace('/menu');
+        window.location.replace('/menu'+redirect);
 }
 
 function gotowelcome() {

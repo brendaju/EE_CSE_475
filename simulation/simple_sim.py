@@ -9,15 +9,16 @@ import asyncio
 #from led_strip import led_strip
 from paintApp import paintingApp
 from tictactoeApp import tictactoeApp
+from chessApp import chessApp
 import numpy as np
 from PIL import Image
 from neopixel_neomatrix import Adafruit_NeoMatrix
 
+deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://18.237.16.91:5000/'
-received_data = "0"
+ip = 'http://192.168.0.11:5000/'
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
@@ -31,36 +32,12 @@ json_array = {"array": touchArr}
 
 gridSelect = 1
 
-def readUART(pApp):
-    received_data = ser.read()              #read serial port
-    time.sleep(0.03)
-    data_left = ser.inWaiting()             #check for remaining byte
-    received_data += ser.read(data_left)
-    ser.write(received_data)
-    global gridLoc
-    gridLoc = interpretUART(received_data)
-    global pressedIndex
-    global gridSelect
-    if (gridSelect == 1):
-        pApp.paint(gridLoc[0], gridLoc[1])
-    pressedIndex = convert(gridLoc[0],gridLoc[1])
-    return received_data
-
 async def simulationInput(strip, pApp):
     while True:
         if (strip.new_touch == 1):
             pApp.paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
         await asyncio.sleep(0.1)
-
-
-def interpretUART(uartData):
-    dataEnd = uartData.index(b'\r\n')
-    gridLocString = uartData[0:dataEnd]
-    gridLocString = gridLocString.decode('utf-8')
-    firstValEnd = gridLocString.index(',')
-    gridLoc = [int(gridLocString[3:firstValEnd]), int(gridLocString[firstValEnd+5:])]
-    return gridLoc
 
 data_array = []
 
@@ -126,7 +103,7 @@ async def mainProgram(strip, pApp):
         if (storedGrid != selectedGrid):
             await strip.update_buffer(selectedGrid)
             strip.json_array["array"] = arrayConvert(strip.touch_array)
-            r = requests.post(ip + '/array', json=json.dumps(strip.json_array))
+            r = requests.post(ip + '/array?id='+str(deviceID), json=json.dumps(strip.json_array))
             storedGrid = selectedGrid.copy()
         await asyncio.sleep(0.1)
 
@@ -143,12 +120,19 @@ async def main(strip, pApp):
 
 @sio.on('my_response')
 async def catch_all(data):
-    print("Okay: ", data)
-    readFrom = data['data']
-    print("okay 2: ", readFrom)
-    readColor = readFrom['color']
-    newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
-    pApp.webPaint(readFrom['index'], newColor)
+    if (data['data']['deviceID'] == deviceID):
+        print("Okay: ", data)
+        readFrom = data['data']
+        print("okay 2: ", readFrom)
+        readColor = readFrom['color']
+        newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
+        pApp.webPaint(readFrom['index'], newColor)
+
+@sio.on('connected')
+async def onConnected(data):
+    global deviceID
+    print(data)
+    deviceID = data['deviceID']
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -156,7 +140,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
-    pApp = tictactoeApp()
+    pApp = paintingApp()
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()

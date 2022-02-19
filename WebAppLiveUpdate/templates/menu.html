@@ -78,13 +78,13 @@ Art
 </div>
 
 <script> 
-
+var redirect = '?id='+ {{deviceID}};
 function gotopainting() {
-        window.location.replace('/painting');
+        window.location.replace('/painting'+redirect);
 }
 
 function gotoart() {
-        window.location.replace('/art');
+        window.location.replace('/art'+redirect);
 }
 
 function gotowelcome() {

@@ -22,11 +22,13 @@ def buttonPressed(message):
 
 @app.route('/array',methods=['POST'])
 def load_array():
+	id = request.args['id']
 	array_json = json.loads(request.get_json())
 	#print(array_json)	
 	#color_array1 = array_json
 	socketio.emit('update_led',
-		{'data':array_json['array']})
+		{'data':array_json['array'],
+		 'userId':id})
 	print(array_json)
 	return array_json
 
@@ -36,19 +38,26 @@ def index():
 
 @app.route('/painting')
 def painting():
-	return render_template('painting.html', async_mode=socketio.async_mode)
+	id = request.args['id']
+	return render_template('painting.html', deviceID = id, idasync_mode=socketio.async_mode)
 	
 @app.route('/menu')
 def menu():
-	return render_template('menu.html')
+	id = request.args['id']
+	return render_template('menu.html', deviceID = id)
 
 @app.route('/art')
 def art():
-	return render_template('art.html')
+	id = request.args['id']
+	return render_template('art.html', deviceID = id)
 
+deviceID = 0
 @socketio.event
 def connect():
+	global deviceID
 	print('User Connected')
+	emit('connected', {'data': 'Connected', 'deviceID': deviceID})
+	deviceID = deviceID + 1
     #emit('my_response', {'data': 'Connected', 'count': 0})
 
 if __name__ == '__main__':
