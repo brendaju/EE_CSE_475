@@ -13,12 +13,21 @@ from chessApp import chessApp
 import numpy as np
 from PIL import Image
 from neopixel_neomatrix import Adafruit_NeoMatrix
+from animation import animation_app
+import time
+import threading
+
 
 deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
+<<<<<<< HEAD
 ip = 'http://192.168.0.11:5000/'
+=======
+ip = 'http://10.0.0.235:5000/'
+received_data = "0"
+>>>>>>> main
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
@@ -32,9 +41,33 @@ json_array = {"array": touchArr}
 
 gridSelect = 1
 
+<<<<<<< HEAD
+=======
+def readUART(pApp):
+    received_data = ser.read()              #read serial port
+    time.sleep(0.03)
+    data_left = ser.inWaiting()             #check for remaining byte
+    received_data += ser.read(data_left)
+    ser.write(received_data)
+    global gridLoc
+    gridLoc = interpretUART(received_data)
+    global pressedIndex
+    global gridSelect
+    if (gridSelect == 1):
+        pApp.paint(gridLoc[0], gridLoc[1])
+    pressedIndex = convert(gridLoc[0],gridLoc[1])
+    return received_data
+
+IS_TIMER_BASED = True
+SPEED = 0.1
+
+>>>>>>> main
 async def simulationInput(strip, pApp):
     while True:
-        if (strip.new_touch == 1):
+        if (IS_TIMER_BASED):
+            pApp.paint()
+            await asyncio.sleep(SPEED)
+        elif (strip.new_touch == 1):
             pApp.paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
         await asyncio.sleep(0.1)
@@ -73,23 +106,6 @@ def convert(x, y):
 def rgbToHex(r, g, b):
     numbers = [r, g, b]
     return '#' + ''.join('{:02X}'.format(a) for a in numbers)
-
-DRAWING = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[200,200,200],[200,200,200],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[200,200,200],[200,200,200],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],
-           [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]
 
 storedGrid = []
 async def mainProgram(strip, pApp):
@@ -140,7 +156,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
+<<<<<<< HEAD
     pApp = paintingApp()
+=======
+    # pApp = tictactoeApp()
+    pApp = animation_app()
+>>>>>>> main
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
