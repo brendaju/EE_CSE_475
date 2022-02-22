@@ -2,6 +2,10 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
 
 <style>
 
@@ -73,23 +77,51 @@ Painting
 
 <div class="logoutbtn" onclick="gotowelcome()">Logout</div>
 
-<div class="color-container" onclick="gotoart()">
-Art
+<div class="color-container" onclick="gototictactoe()">
+Tic-Tac-Toe
 </div>
 
+<div class="color-container" onclick="gotochess()">
+Chess
+</div>
+
+<div class="color-container" onclick="gotoanimation()">
+Animation
+</div>
+
+
 <script> 
+var socket = io();
+
+var deviceID = {{deviceID}}
 var redirect = '?id='+ {{deviceID}};
+
 function gotopainting() {
-        window.location.replace('/painting'+redirect);
+  console.log('Done')
+  socket.emit('changeApp', {appName: "Painting", deviceID: deviceID})
+  window.location.replace('/painting'+redirect)
+	
 }
 
-function gotoart() {
-        window.location.replace('/art'+redirect);
+function gototictactoe() {
+	socket.emit('changeApp', {appName: "tictactoe", deviceID: deviceID})
+        window.location.replace('/tictactoe'+redirect);
 }
 
 function gotowelcome() {
         window.location.replace('/');
 }
+
+function gotochess() {
+	socket.emit('changeApp', {appName: "chess", deviceID: deviceID})
+        window.location.replace('/chess'+redirect);
+}
+
+function gotoanimation() {
+	socket.emit('animation', {appName: "animation", deviceID: deviceID})
+        window.location.replace('/animation'+redirect);
+}
+
 
 </script>
     </body>

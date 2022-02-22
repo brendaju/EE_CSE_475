@@ -22,12 +22,17 @@ deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://10.0.0.235:5000/'
+ip = 'http://10.19.148.197:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
+apps = {}
+currentApp = 'Painting'
+simIndex = 0
+simArray = ['Painting', 'Tic-Tac-Toe', 'Chess', 'Animation']
+
 
 async def connectToServer():
     await sio.connect(ip)
@@ -37,32 +42,39 @@ json_array = {"array": touchArr}
 
 gridSelect = 1
 
-def readUART(pApp):
+def readUART():
+    global gridLoc, pressedIndex, gridSelect, apps, currentApp
     received_data = ser.read()              #read serial port
     time.sleep(0.03)
     data_left = ser.inWaiting()             #check for remaining byte
     received_data += ser.read(data_left)
     ser.write(received_data)
-    global gridLoc
     gridLoc = interpretUART(received_data)
     global pressedIndex
     global gridSelect
     if (gridSelect == 1):
-        pApp.paint(gridLoc[0], gridLoc[1])
+        apps[currentApp].paint(gridLoc[0], gridLoc[1])
     pressedIndex = convert(gridLoc[0],gridLoc[1])
     return received_data
 
-IS_TIMER_BASED = True
+IS_TIMER_BASED = False
 SPEED = 0.1
 
-async def simulationInput(strip, pApp):
+async def simulationInput(strip):
+    global apps, currentApp, simIndex
     while True:
         if (IS_TIMER_BASED):
-            pApp.paint()
+            apps[currentApp].paint()
             await asyncio.sleep(SPEED)
         elif (strip.new_touch == 1):
-            pApp.paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
+            apps[currentApp].paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
+            if (strip.was_right_click):
+                simIndex = simIndex + 1
+                if (simIndex > 3):
+                    simIndex = 0
+                currentApp = simArray[simIndex]
+                strip.pixels.gui.was_right_click = False
         await asyncio.sleep(0.1)
 
 data_array = []
@@ -101,11 +113,11 @@ def rgbToHex(r, g, b):
     return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
 storedGrid = []
-async def mainProgram(strip, pApp):
+async def mainProgram(strip):
     while True:
-        global gridSelect, storedGrid
+        global gridSelect, storedGrid, apps, currentApp
         if (gridSelect == 1):
-            selectedGrid = pApp.touchGrid
+            selectedGrid = apps[currentApp].touchGrid
         elif (gridSelect == 0):
             selectedGrid = data_array
         loop = asyncio.get_event_loop()
@@ -121,21 +133,28 @@ async def updateSim(strip):
         strip.show()
         await asyncio.sleep(0.1)
 
-async def main(strip, pApp):
+async def main(strip):
     await connectToServer()
-    asyncio.create_task(mainProgram(strip, pApp))
+    asyncio.create_task(mainProgram(strip))
     asyncio.create_task(updateSim(strip))
-    asyncio.create_task(simulationInput(strip, pApp))
+    asyncio.create_task(simulationInput(strip))
 
 @sio.on('my_response')
 async def catch_all(data):
     if (data['data']['deviceID'] == deviceID):
-        #print("Okay: ", data)
+        global apps, currentApp
         readFrom = data['data']
         #print("okay 2: ", readFrom)
         readColor = readFrom['color']
         newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
-        pApp.webPaint(readFrom['index'], newColor)
+        apps[currentApp].webPaint(readFrom['index'], newColor)
+
+@sio.on('appChange')
+async def changeApp(data):
+    print(data)
+    global currentApp
+    if (data['data']['deviceID'] == deviceID):
+        currentApp = data['data']['appName']
 
 @sio.on('connected')
 async def onConnected(data):
@@ -150,7 +169,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    pApp = animation_app()
+    apps = {'Painting': paintingApp(), 'Tic-Tac-Toe': tictactoeApp(), 'Chess': chessApp(), 'Animation': animation_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
@@ -161,7 +180,7 @@ if __name__ == '__main__':
     try:
         loop = asyncio.get_event_loop()
         #loop.add_reader(ser, readUART, pApp)
-        loop.run_until_complete(main(strip, pApp))
+        loop.run_until_complete(main(strip))
         loop.run_forever()
 
 

@@ -72,17 +72,19 @@ h1 {
 <div class="menubtn" onclick="gotomenu()">Back to Menu</div>
 
 <script> 
+var deviceID = {{deviceID}}
+var redirect = '?id='+ deviceID;
 
 function gotopainting() {
-        window.location.replace('/painting');
+        window.location.replace('/painting' + redirect);
 }
 
 function gotoart() {
-        window.location.replace('/art');
+        window.location.replace('/art' + redirect);
 }
 
 function gotomenu() {
-        window.location.replace('/menu');
+        window.location.replace('/menu' + redirect);
 }
 
 function gotowelcome() {
