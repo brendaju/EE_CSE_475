@@ -8,18 +8,29 @@ import socketio
 import asyncio
 from led_strip import led_strip
 from paintApp import paintingApp
+from tictactoeApp import tictactoeApp
+from chessApp import chessApp
 import numpy as np
 from PIL import Image
+from animation import animation_app
+import time
+import threading
+from brick_shooter import brick_shooter_app
 
+deviceID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://10.19.148.197:5000'
+ip = 'http://192.168.0.11:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
+apps = {}
+currentApp = 'Brick Shooter'
+simIndex = 0
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter']
 
 async def connectToServer():
     await sio.connect(ip)
@@ -29,21 +40,20 @@ json_array = {"array": touchArr}
 
 gridSelect = 0
 
-def readUART(pApp):
+def readUART():
+    global gridLoc, pressedIndex, gridSelect, apps, currentApp
     received_data = ser.read()              #read serial port
     time.sleep(0.03)
     data_left = ser.inWaiting()             #check for remaining byte
     received_data += ser.read(data_left)
     ser.write(received_data)
-    global gridLoc
     gridLoc = interpretUART(received_data)
     global pressedIndex
     global gridSelect
     if (gridSelect == 1):
-        pApp.paint(gridLoc[0], gridLoc[1])
+        apps[currentApp].paint(gridLoc[0], gridLoc[1])
     pressedIndex = convert(gridLoc[0],gridLoc[1])
     return received_data
-
 
 def interpretUART(uartData):
     dataEnd = uartData.index(b'\r\n')
@@ -106,42 +116,52 @@ DRAWING = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,
            [0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]
 
 
-async def mainProgram(strip, pApp):
+storedGrid = []
+async def mainProgram(strip):
     while True:
-        global gridSelect
+        global gridSelect, storedGrid, apps, currentApp
         if (gridSelect == 1):
-            selectedGrid = pApp.touchGrid
+            selectedGrid = apps[currentApp].touchGrid
         elif (gridSelect == 0):
             selectedGrid = data_array
         loop = asyncio.get_event_loop()
-        '''for i in range(0, len(selectedGrid)):
-            R = selectedGrid[i][0]
-            G = selectedGrid[i][1]
-            B = selectedGrid[i][2]
-            color = Color(R, G, B)
-            await loop.run_in_executor(None, strip.turn_on_led, i, color)
-            strip.send_color = await loop.run_in_executor(None, rgbToHex, R, G, B)
-            strip.touch_array[i] = strip.send_color
-        '''
-        await strip.update_buffer(selectedGrid)
-        strip.json_array["array"] = arrayConvert(strip.touch_array)
-        r = requests.post(ip + '/array', json=json.dumps(strip.json_array))
+        if (storedGrid != selectedGrid):
+            await strip.update_buffer(selectedGrid)
+            strip.json_array["array"] = arrayConvert(strip.touch_array)
+            r = requests.post(ip + '/array?id='+str(deviceID), json=json.dumps(strip.json_array))
+            storedGrid = selectedGrid.copy()
         await asyncio.sleep(0.1)
 
 
 async def main(strip, pApp):
     await connectToServer()
-    asyncio.create_task(mainProgram(strip, pApp))
+    asyncio.create_task(mainProgram(strip))
 
 @sio.on('my_response')
 async def catch_all(data):
-    print("Okay: ", data)
-    readFrom = data['data']
-    print("okay 2: ", readFrom)
-    readColor = readFrom['color']
-    newColor = Color(int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
-    strip.turn_on_led(readFrom['index'], newColor)
-    strip.touch_array[readFrom['index']] = newColor
+    if (data['data']['deviceID'] == deviceID):
+        global apps, currentApp
+        readFrom = data['data']
+        #print("okay 2: ", readFrom)
+        readColor = readFrom['color']
+        newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
+        apps[currentApp].webPaint(readFrom['index'], newColor)
+
+@sio.on('appChange')
+async def changeApp(data):
+    print(data)
+    global currentApp
+    if (data['data']['deviceID'] == deviceID):
+        currentApp = data['data']['appName']
+
+@sio.on('connected')
+async def onConnected(data):
+    global deviceID
+    print(data['deviceID'])
+    #await sio.emit('deviceConnected', {'foo': 'bar'})
+    deviceID = data['deviceID']
+
+
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -149,18 +169,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
-    pApp = paintingApp()
+    # pApp = tictactoeApp()
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
     # Create led_strip object with appropriate configuration.
     strip = led_strip()
     gridMake()
-
+    strip.show()
     print('Press Ctrl-C to quit.')
     if not args.clear:
         print('Use "-c" argument to clear LEDs on exit')
     try:
         loop = asyncio.get_event_loop()
-        loop.add_reader(ser, readUART, pApp)
-        loop.run_until_complete(main(strip, pApp))
+        loop.add_reader(ser, readUART, apps[currentApp])
+        loop.run_until_complete(main(strip))
         loop.run_forever()
 
 
