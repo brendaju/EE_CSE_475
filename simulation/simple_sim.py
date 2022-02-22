@@ -137,14 +137,26 @@ async def main(strip):
 
 @sio.on('my_response')
 async def catch_all(data):
+    print(data)
     if (data['data']['deviceID'] == deviceID):
         global apps, currentApp
-        #print("Okay: ", data)
+        print(data)
         readFrom = data['data']
         #print("okay 2: ", readFrom)
         readColor = readFrom['color']
         newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
         apps[currentApp].webPaint(readFrom['index'], newColor)
+
+@sio.on('appChange')
+async def changeApp(data):
+    print(data)
+    global currentApp
+    if (data['data']['deviceID'] == deviceID):
+        if (data['data']['appName'] == 'Painting'):
+            currentApp = 0
+            print("Changing")
+        elif (data['data']['appName'] == 'Art'):
+            currentApp = 1
 
 @sio.on('connected')
 async def onConnected(data):

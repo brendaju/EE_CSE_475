@@ -82,10 +82,17 @@ Art
 </div>
 
 <script> 
+var socket = io();
+
+var deviceID = {{deviceID}}
 var redirect = '?id='+ {{deviceID}};
+
 function gotopainting() {
-        window.location.replace('/painting'+redirect);
-	socket.emit('changeApp', {appName: "Painting", deviceID: deviceID})
+  console.log('Done')
+  socket.emit('changeApp', {appName: "Painting", deviceID: deviceID})
+  window.location.replace('/painting'+redirect);
+	
+  
 	
 }
 

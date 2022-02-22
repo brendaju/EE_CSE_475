@@ -20,10 +20,10 @@ def buttonPressed(message):
 	print(message)
 	socketio.emit('my_response', {'data':message})
 
-@socketio.event
-def changeApp(appName):
-	print(appName)
-	socketio.emit('my_response', {'data':appName})
+#@socketio.event
+#def changeApp(appName):
+#	print(appName)
+#	socketio.emit('my_response', {'data':appName})
 
 @app.route('/array',methods=['POST'])
 def load_array():
@@ -68,7 +68,7 @@ def connect():
 @socketio.event
 def changeApp(appName):
 	print(appName)
-	socketio.emit('my_response', {'data':appName})
+	socketio.emit('appChange', {'data':appName})
 
 
 if __name__ == '__main__':
