@@ -59,6 +59,7 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         self.pixels = Adafruit_NeoPixel(self.width*self.height,self.pin,"NEO_GRB + NEO_KHZ800")
         self.new_touch = 0
         self.new_touch_cord = [0]*2
+        self.was_right_click = False
 
     def convert(self, x, y):
         # if in an odd column, reverse the order
@@ -109,6 +110,7 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         self.pixels.gui.render()
         self.new_touch = self.pixels.gui.new_touch
         self.new_touch_cord = self.pixels.gui.new_touch_cord
+        self.was_right_click = self.pixels.gui.was_right_click
         event = self.pixels.gui.dispatch_events()
         
 
