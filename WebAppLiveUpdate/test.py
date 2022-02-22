@@ -56,6 +56,21 @@ def art():
 	id = request.args['id']
 	return render_template('art.html', deviceID = id)
 
+@app.route('/chess')
+def chess():
+	id = request.args['id']
+	return render_template('chess.html', deviceID = id)
+
+@app.route('/tictactoe')
+def tictactoe():
+	id = request.args['id']
+	return render_template('tictactoe.html', deviceID = id)
+
+@app.route('/animation')
+def animation():
+	id = request.args['id']
+	return render_template('animation.html', deviceID = id)
+
 deviceID = 0
 @socketio.event
 def connect():

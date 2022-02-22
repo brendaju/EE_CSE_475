@@ -77,9 +77,18 @@ Painting
 
 <div class="logoutbtn" onclick="gotowelcome()">Logout</div>
 
-<div class="color-container" onclick="gotoart()">
-Art
+<div class="color-container" onclick="gototictactoe()">
+Tic-Tac-Toe
 </div>
+
+<div class="color-container" onclick="gotochess()">
+Chess
+</div>
+
+<div class="color-container" onclick="gotoanimation()">
+Animation
+</div>
+
 
 <script> 
 var socket = io();
@@ -90,20 +99,29 @@ var redirect = '?id='+ {{deviceID}};
 function gotopainting() {
   console.log('Done')
   socket.emit('changeApp', {appName: "Painting", deviceID: deviceID})
-  window.location.replace('/painting'+redirect);
-	
-  
+  window.location.replace('/painting'+redirect)
 	
 }
 
-function gotoart() {
-        window.location.replace('/art'+redirect);
-	socket.emit('changeApp', {appName: "Art", deviceID: deviceID})
+function gototictactoe() {
+	socket.emit('changeApp', {appName: "tictactoe", deviceID: deviceID})
+        window.location.replace('/tictactoe'+redirect);
 }
 
 function gotowelcome() {
         window.location.replace('/');
 }
+
+function gotochess() {
+	socket.emit('changeApp', {appName: "chess", deviceID: deviceID})
+        window.location.replace('/chess'+redirect);
+}
+
+function gotoanimation() {
+	socket.emit('animation', {appName: "animation", deviceID: deviceID})
+        window.location.replace('/animation'+redirect);
+}
+
 
 </script>
     </body>
