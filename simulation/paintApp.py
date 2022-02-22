@@ -24,6 +24,8 @@ class paintingApp:
         self.stored_G = 0
         self.stored_B = 0
         self.touchGrid = [(0,0,0)]*192
+        self.IS_TIMER_BASED = False
+        self.SPEED = 0
         self.setup_painting()
 
     def convert(self, x, y):

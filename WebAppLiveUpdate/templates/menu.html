@@ -118,7 +118,7 @@ function gotochess() {
 }
 
 function gotoanimation() {
-	socket.emit('animation', {appName: "animation", deviceID: deviceID})
+	socket.emit('changeApp', {appName: "animation", deviceID: deviceID})
         window.location.replace('/animation'+redirect);
 }
 

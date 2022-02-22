@@ -20,11 +20,6 @@ def buttonPressed(message):
 	print(message)
 	socketio.emit('my_response', {'data':message})
 
-#@socketio.event
-#def changeApp(appName):
-#	print(appName)
-#	socketio.emit('my_response', {'data':appName})
-
 @app.route('/array',methods=['POST'])
 def load_array():
 	id = request.args['id']
@@ -78,7 +73,6 @@ def connect():
 	print('User Connected')
 	emit('connected', {'data': 'Connected', 'deviceID': deviceID})
 	deviceID = deviceID + 1
-    #emit('my_response', {'data': 'Connected', 'count': 0})
 
 @socketio.event
 def changeApp(appName):

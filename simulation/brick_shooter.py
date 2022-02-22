@@ -54,6 +54,8 @@ class brick_shooter_app:
         self.ball = ball()
         self.targets = []
         self.target_locations = set()
+        self.IS_TIMER_BASED = True
+        self.SPEED = 0.1
         self.setup()
 
     def convert(self, x, y):

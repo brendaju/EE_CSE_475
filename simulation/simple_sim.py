@@ -18,12 +18,11 @@ import time
 import threading
 from brick_shooter import brick_shooter_app
 
-
 deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://10.0.0.235:5000/'
+ip = 'http://192.168.0.11:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
@@ -32,11 +31,12 @@ strip = 0
 apps = {}
 currentApp = 'Brick Shooter'
 simIndex = 0
-simArray = ['Painting', 'Tic-Tac-Toe', 'Chess', 'Animation', 'Brick Shooter']
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter']
 
 
 async def connectToServer():
     await sio.connect(ip)
+    print(sio.sid)
     await sio.sleep(1)
 
 json_array = {"array": touchArr}
@@ -58,15 +58,15 @@ def readUART():
     pressedIndex = convert(gridLoc[0],gridLoc[1])
     return received_data
 
-IS_TIMER_BASED = True
-SPEED = 0.1
+#IS_TIMER_BASED = True
+#SPEED = 0.1
 
 async def simulationInput(strip):
     global apps, currentApp, simIndex
     while True:
-        if (IS_TIMER_BASED):
+        if (apps[currentApp].IS_TIMER_BASED):
             apps[currentApp].move()
-            await asyncio.sleep(SPEED)
+            await asyncio.sleep(apps[currentApp].SPEED)
         if (strip.new_touch == 1):
             apps[currentApp].paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
@@ -161,6 +161,7 @@ async def changeApp(data):
 async def onConnected(data):
     global deviceID
     print(data['deviceID'])
+    #await sio.emit('deviceConnected', {'foo': 'bar'})
     deviceID = data['deviceID']
 
 # Main program logic follows:
@@ -170,7 +171,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'Tic-Tac-Toe': tictactoeApp(), 'Chess': chessApp(), 'Animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()

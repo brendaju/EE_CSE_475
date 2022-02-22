@@ -21,6 +21,8 @@ class tictactoeApp:
         self.touchGrid = [(0,0,0)]*192
         self.gameGrid = ['-']*10
         self.gameOver = 0
+        self.IS_TIMER_BASED = False
+        self.SPEED = 0
         self.setup_tictactoe()
 
     def convert(self, x, y):

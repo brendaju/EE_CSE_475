@@ -31,6 +31,8 @@ class chessApp:
         self.selectedPiece = 0
         self.checkMate = 0
         self.boardState = []
+        self.IS_TIMER_BASED = False
+        self.SPEED = 0
         self.setup_chess()
 
     def convert(self, x, y):
