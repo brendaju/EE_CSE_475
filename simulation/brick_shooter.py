@@ -47,7 +47,7 @@ class target:
         self.height = 2
 
 
-class animation_app:
+class brick_shooter_app:
     def __init__(self):
         self.touchGrid = [(0,0,0)]*192
         self.slider = slider()
