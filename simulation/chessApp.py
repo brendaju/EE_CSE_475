@@ -59,7 +59,7 @@ class chessApp:
         for x in range(1,9):
             for y in range(8):
                 self.touchGrid[self.convert(x-1,y)] = pieceColors[self.boardState[(8-x)*8+y]]
-        print(self.boardState)
+        #print(self.boardState)
 
     async def getGrid(self):
         return self.touchGrid
@@ -85,17 +85,17 @@ class chessApp:
             self.moveState = 1
         if (self.moveState == 0):
             for i, x in enumerate(list(self.board.legal_moves)):
-                print(x)
+                #print(x)
                 if (str(x)[0:2] == locationCode):
                     newX, newY = self.chessConvertToIndex(str(x)[2:4])
                     self.touchGrid[self.convert(newX,newY)] = (0,255,255)
                     self.moveOptions.append(str(x)[2:4])
         if (self.moveState == 1):
             move = chess.Move.from_uci(str(self.selectedPiece) + str(locationCode))
-            print(move)
+            #print(move)
             self.board.push(move)
             self.updateBoard()
             self.selectedPiece = 0
             self.moveOptions = []
             self.moveState = 0
-        print(self.moveOptions)
+        #print(self.moveOptions)

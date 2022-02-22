@@ -83,10 +83,10 @@ def gridMake():
     image = image.convert('RGB')
     data = image.getdata()
     data_array = list(data)
-    print(data_array)
+    #print(data_array)
     data_array = arrayConvert(data_array)
     image = image.save("mario.png")
-    print(data_array)
+    #print(data_array)
 
 
 def convert(x, y):
@@ -130,9 +130,9 @@ async def main(strip, pApp):
 @sio.on('my_response')
 async def catch_all(data):
     if (data['data']['deviceID'] == deviceID):
-        print("Okay: ", data)
+        #print("Okay: ", data)
         readFrom = data['data']
-        print("okay 2: ", readFrom)
+        #print("okay 2: ", readFrom)
         readColor = readFrom['color']
         newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
         pApp.webPaint(readFrom['index'], newColor)
@@ -140,7 +140,7 @@ async def catch_all(data):
 @sio.on('connected')
 async def onConnected(data):
     global deviceID
-    print(data)
+    print(data['deviceID'])
     deviceID = data['deviceID']
 
 # Main program logic follows:
