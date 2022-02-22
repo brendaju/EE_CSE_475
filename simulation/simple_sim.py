@@ -22,12 +22,8 @@ deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-<<<<<<< HEAD
-ip = 'http://192.168.0.11:5000/'
-=======
 ip = 'http://10.0.0.235:5000/'
 received_data = "0"
->>>>>>> main
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
@@ -41,8 +37,6 @@ json_array = {"array": touchArr}
 
 gridSelect = 1
 
-<<<<<<< HEAD
-=======
 def readUART(pApp):
     received_data = ser.read()              #read serial port
     time.sleep(0.03)
@@ -61,7 +55,6 @@ def readUART(pApp):
 IS_TIMER_BASED = True
 SPEED = 0.1
 
->>>>>>> main
 async def simulationInput(strip, pApp):
     while True:
         if (IS_TIMER_BASED):
@@ -156,12 +149,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
-<<<<<<< HEAD
-    pApp = paintingApp()
-=======
     # pApp = tictactoeApp()
     pApp = animation_app()
->>>>>>> main
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
