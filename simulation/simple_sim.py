@@ -28,8 +28,11 @@ gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
-apps = []
-currentApp = 2
+apps = {}
+currentApp = 'Painting'
+simIndex = 0
+simArray = ['Painting', 'Tic-Tac-Toe', 'Chess', 'Animation']
+
 
 async def connectToServer():
     await sio.connect(ip)
@@ -58,7 +61,7 @@ IS_TIMER_BASED = False
 SPEED = 0.1
 
 async def simulationInput(strip):
-    global apps, currentApp
+    global apps, currentApp, simIndex
     while True:
         if (IS_TIMER_BASED):
             apps[currentApp].paint()
@@ -67,9 +70,10 @@ async def simulationInput(strip):
             apps[currentApp].paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
             if (strip.was_right_click):
-                currentApp = currentApp + 1
-                if (currentApp > 3):
-                    currentApp = 0
+                simIndex = simIndex + 1
+                if (simIndex > 3):
+                    simIndex = 0
+                currentApp = simArray[simIndex]
                 strip.pixels.gui.was_right_click = False
         await asyncio.sleep(0.1)
 
@@ -137,10 +141,8 @@ async def main(strip):
 
 @sio.on('my_response')
 async def catch_all(data):
-    print(data)
     if (data['data']['deviceID'] == deviceID):
         global apps, currentApp
-        print(data)
         readFrom = data['data']
         #print("okay 2: ", readFrom)
         readColor = readFrom['color']
@@ -152,11 +154,7 @@ async def changeApp(data):
     print(data)
     global currentApp
     if (data['data']['deviceID'] == deviceID):
-        if (data['data']['appName'] == 'Painting'):
-            currentApp = 0
-            print("Changing")
-        elif (data['data']['appName'] == 'Art'):
-            currentApp = 1
+        currentApp = data['data']['appName']
 
 @sio.on('connected')
 async def onConnected(data):
@@ -171,7 +169,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = [paintingApp(), tictactoeApp(), chessApp(), animation_app()]
+    apps = {'Painting': paintingApp(), 'Tic-Tac-Toe': tictactoeApp(), 'Chess': chessApp(), 'Animation': animation_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
