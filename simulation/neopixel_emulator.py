@@ -11,6 +11,7 @@ class NeoPixel_Emulator(pyglet.window.Window):
         self.color_group = pyglet.graphics.OrderedGroup(1)
         self.alive = 1
         self.new_touch = 0
+        self.was_right_click = False
         self.new_touch_cord = [0]*2
 
 
@@ -64,3 +65,4 @@ class NeoPixel_Emulator(pyglet.window.Window):
     def on_mouse_press(self, x, y, button, modifiers):
         self.new_touch = 1
         self.new_touch_cord = [int(x/35), 15 -int(y/35)]
+        self.was_right_click = button == pyglet.window.mouse.RIGHT
