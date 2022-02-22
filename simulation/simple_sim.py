@@ -16,22 +16,23 @@ from neopixel_neomatrix import Adafruit_NeoMatrix
 from animation import animation_app
 import time
 import threading
+from brick_shooter import brick_shooter_app
 
 
 deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://10.19.148.197:5000/'
+ip = 'http://10.0.0.235:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Painting'
+currentApp = 'Brick Shooter'
 simIndex = 0
-simArray = ['Painting', 'Tic-Tac-Toe', 'Chess', 'Animation']
+simArray = ['Painting', 'Tic-Tac-Toe', 'Chess', 'Animation', 'Brick Shooter']
 
 
 async def connectToServer():
@@ -57,16 +58,16 @@ def readUART():
     pressedIndex = convert(gridLoc[0],gridLoc[1])
     return received_data
 
-IS_TIMER_BASED = False
+IS_TIMER_BASED = True
 SPEED = 0.1
 
 async def simulationInput(strip):
     global apps, currentApp, simIndex
     while True:
         if (IS_TIMER_BASED):
-            apps[currentApp].paint()
+            apps[currentApp].move()
             await asyncio.sleep(SPEED)
-        elif (strip.new_touch == 1):
+        if (strip.new_touch == 1):
             apps[currentApp].paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
             if (strip.was_right_click):
@@ -169,7 +170,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'Tic-Tac-Toe': tictactoeApp(), 'Chess': chessApp(), 'Animation': animation_app()}
+    apps = {'Painting': paintingApp(), 'Tic-Tac-Toe': tictactoeApp(), 'Chess': chessApp(), 'Animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
