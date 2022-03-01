@@ -85,8 +85,8 @@ Tic-Tac-Toe
 Chess
 </div>
 
-<div class="color-container" onclick="gotoanimation()">
-Animation
+<div class="color-container" onclick="gotobrickshooter()">
+Brick Shooter
 </div>
 
 
@@ -120,6 +120,11 @@ function gotochess() {
 function gotoanimation() {
 	socket.emit('changeApp', {appName: "animation", deviceID: deviceID})
         window.location.replace('/animation'+redirect);
+}
+
+function gotobrickshooter() {
+	socket.emit('changeApp', {appName: "Brick Shooter", deviceID: deviceID})
+        window.location.replace('/brickshooter'+redirect);
 }
 
 

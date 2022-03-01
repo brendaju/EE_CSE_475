@@ -66,6 +66,11 @@ def animation():
 	id = request.args['id']
 	return render_template('animation.html', deviceID = id)
 
+@app.route('/brickshooter')
+def brickshooter():
+	id = request.args['id']
+	return render_template('brickshooter.html', deviceID = id)
+
 deviceID = 0
 @socketio.event
 def connect():
