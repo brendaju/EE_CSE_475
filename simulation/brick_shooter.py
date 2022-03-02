@@ -116,6 +116,7 @@ class brick_shooter_app:
         # if we're at the end of the screen or have collision
         if self.ball.y_loc == 0 or location in self.target_locations:
             self.ball.y_loc = 14
+            self.ball.x_loc = self.slider.x_loc + 1
             self.ball.is_moving = False
             self.target_locations.discard(location)
         if self.ball.is_moving:
@@ -156,19 +157,27 @@ class brick_shooter_app:
         if move_left:
             if at_left_edge:
                 self.slider.x_loc = self.slider.x_max
-                self.ball.x_loc = 10
+                if not self.ball.is_moving:
+                    self.ball.x_loc = 10
             else:
                 self.slider.x_loc -= 1
-                self.ball.x_loc -= 1
+                if not self.ball.is_moving:
+                    self.ball.x_loc -= 1
         elif move_right:
             if at_right_edge:
                 self.slider.x_loc = 0
-                self.ball.x_loc = 1
+                if not self.ball.is_moving:
+                    self.ball.x_loc = 1
             else:
                 self.slider.x_loc += 1
-                self.ball.x_loc += 1
+                if not self.ball.is_moving:
+                    self.ball.x_loc += 1
+
 
         # update slider location
         self.draw_slider()
+
+        # display ball location
+        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
 
 
