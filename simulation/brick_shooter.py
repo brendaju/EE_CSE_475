@@ -115,7 +115,7 @@ class brick_shooter_app:
         # check if ball should move
         location = (self.ball.x_loc, self.ball.y_loc)
 
-        # if we're at bottom of the screen
+        # if we're at bottom of the screen reset ball to paddle
         if self.ball.y_loc == 15:
             self.ball.y_loc = 14
             self.ball.x_loc = self.slider.x_loc + 1
@@ -150,11 +150,10 @@ class brick_shooter_app:
                 self.ball.x_velocity = 1
                 self.ball.y_velocity = -1
 
-
+        # update ball location based on velocity
         if self.ball.is_moving:
             self.ball.y_loc += self.ball.y_velocity
             self.ball.x_loc += self.ball.x_velocity
-
 
         # display ball location
         self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
@@ -181,8 +180,8 @@ class brick_shooter_app:
             self.touchGrid[self.convert(self.ball.x_loc+i, self.ball.y_loc)] = (0,0,0)
 
         # define slider movement
-        move_left = (y == 15) and (x < slider_center)
-        move_right = (y == 15) and (x > slider_center)
+        move_left = (y == self.slider.y_loc) and (x < slider_center)
+        move_right = (y == self.slider.y_loc) and (x > slider_center)
         at_left_edge = self.slider.x_loc == 0
         at_right_edge = self.slider.x_loc == self.slider.x_max
         shoot_ball = slider_center == x
@@ -211,7 +210,6 @@ class brick_shooter_app:
                 self.slider.x_loc += 1
                 if not self.ball.is_moving:
                     self.ball.x_loc += 1
-
 
         # update slider location
         self.draw_slider()
