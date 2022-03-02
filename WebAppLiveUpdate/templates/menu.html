@@ -97,6 +97,9 @@ Tug of War
 Simon Says
 </div>
 
+<div class="color-container" onclick="gotopong()">
+Pong
+</div>
 
 <script> 
 var socket = io();
@@ -143,6 +146,11 @@ function gototugofwar() {
 function gotosimonsays() {
 	socket.emit('changeApp', {appName: "Simon Says", deviceID: deviceID})
         window.location.replace('/simonsays'+redirect);
+}
+
+function gotopong() {
+	socket.emit('changeApp', {appName: "Pong", deviceID: deviceID})
+        window.location.replace('/pong'+redirect);
 }
 
 </script>

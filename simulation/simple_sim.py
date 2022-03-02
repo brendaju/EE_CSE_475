@@ -25,14 +25,14 @@ deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://10.0.0.196:5000/'
+ip = 'http://10.19.226.183:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Tug of War'
+currentApp = 'Pong'
 simIndex = 0
 simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
 

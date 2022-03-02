@@ -81,6 +81,12 @@ def simonsays():
 	id = request.args['id']
 	return render_template('simonsays.html', deviceID = id)
 
+@app.route('/pong')
+def pong():
+	id = request.args['id']
+	return render_template('pong.html', deviceID = id)
+
+
 deviceID = 0
 @socketio.event
 def connect():
