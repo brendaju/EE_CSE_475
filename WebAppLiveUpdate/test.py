@@ -71,6 +71,16 @@ def brickshooter():
 	id = request.args['id']
 	return render_template('brickshooter.html', deviceID = id)
 
+@app.route('/tugofwar')
+def tugofwar():
+	id = request.args['id']
+	return render_template('tugofwar.html', deviceID = id)
+
+@app.route('/simonsays')
+def simonsays():
+	id = request.args['id']
+	return render_template('simonsays.html', deviceID = id)
+
 deviceID = 0
 @socketio.event
 def connect():
