@@ -1,4 +1,4 @@
-17:28:49 **** Incremental Build of configuration Debug for project CapTouch ****
+18:15:42 **** Incremental Build of configuration Debug for project CapTouch ****
 make -j7 all 
 arm-none-eabi-gcc "../USB_HOST/Target/usbh_conf.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"USB_HOST/Target/usbh_conf.d" -MT"USB_HOST/Target/usbh_conf.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_HOST/Target/usbh_conf.o"
 arm-none-eabi-gcc "../USB_HOST/App/usb_host.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"USB_HOST/App/usb_host.d" -MT"USB_HOST/App/usb_host.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_HOST/App/usb_host.o"
@@ -45,23 +45,23 @@ In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
   +++ |+#include <math.h>
    28 | /* USER CODE END Includes */
 ../Core/Src/main.c:633:6: warning: implicit declaration of function 'ceil' [-Wimplicit-function-declaration]
-  633 |  if (ceil(log2X) == floor(log2X))
+  633 |  if (ceil(log2X) == floor(log2X)) {
       |      ^~~~
 ../Core/Src/main.c:633:6: warning: incompatible implicit declaration of built-in function 'ceil'
 ../Core/Src/main.c:633:6: note: include '<math.h>' or provide a declaration of 'ceil'
 ../Core/Src/main.c:633:21: warning: implicit declaration of function 'floor' [-Wimplicit-function-declaration]
-  633 |  if (ceil(log2X) == floor(log2X))
+  633 |  if (ceil(log2X) == floor(log2X)) {
       |                     ^~~~~
 ../Core/Src/main.c:633:21: warning: incompatible implicit declaration of built-in function 'floor'
 ../Core/Src/main.c:633:21: note: include '<math.h>' or provide a declaration of 'floor'
-../Core/Src/main.c:637:6: warning: incompatible implicit declaration of built-in function 'ceil'
-  637 |  if (ceil(log2Y) == floor (log2Y))
+../Core/Src/main.c:639:6: warning: incompatible implicit declaration of built-in function 'ceil'
+  639 |  if (ceil(log2Y) == floor (log2Y))  {
       |      ^~~~
-../Core/Src/main.c:637:6: note: include '<math.h>' or provide a declaration of 'ceil'
-../Core/Src/main.c:637:21: warning: incompatible implicit declaration of built-in function 'floor'
-  637 |  if (ceil(log2Y) == floor (log2Y))
+../Core/Src/main.c:639:6: note: include '<math.h>' or provide a declaration of 'ceil'
+../Core/Src/main.c:639:21: warning: incompatible implicit declaration of built-in function 'floor'
+  639 |  if (ceil(log2Y) == floor (log2Y))  {
       |                     ^~~~~
-../Core/Src/main.c:637:21: note: include '<math.h>' or provide a declaration of 'floor'
+../Core/Src/main.c:639:21: note: include '<math.h>' or provide a declaration of 'floor'
 arm-none-eabi-gcc -o "CapTouch.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/bavier/Desktop/EE_CSE_475/CapTouch/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CapTouch.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: CapTouch.elf
  
@@ -69,7 +69,7 @@ arm-none-eabi-size   CapTouch.elf
 arm-none-eabi-objdump -h -S  CapTouch.elf  > "CapTouch.list"
 arm-none-eabi-objcopy  -O binary  CapTouch.elf  "CapTouch.bin"
    text	   data	    bss	    dec	    hex	filename
-  52528	    164	   5028	  57720	   e178	CapTouch.elf
+  53336	    164	   5028	  58528	   e4a0	CapTouch.elf
 Finished building: default.size.stdout
  
 Finished building: CapTouch.bin
@@ -77,5 +77,5 @@ Finished building: CapTouch.bin
 Finished building: CapTouch.list
  
 
-17:28:51 Build Finished. 0 errors, 13 warnings. (took 1s.598ms)
+18:15:43 Build Finished. 0 errors, 13 warnings. (took 1s.752ms)
 
