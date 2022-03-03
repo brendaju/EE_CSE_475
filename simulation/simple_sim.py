@@ -17,6 +17,9 @@ from animation import animation_app
 import time
 import threading
 from brick_shooter import brick_shooter_app
+from tugofwarApp import tugofwarApp
+from simonsaysApp import simonsaysApp
+from pong import pong_app
 
 deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
@@ -29,9 +32,9 @@ lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Brick Shooter'
+currentApp = 'Pong'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter']
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
 
 
 async def connectToServer():
@@ -171,7 +174,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()

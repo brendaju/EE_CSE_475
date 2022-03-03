@@ -395,7 +395,7 @@ var elements = document.getElementsByClassName("grid-item");
 
 var socket = io();
 
-var deviceID = {{deviceID}}
+var deviceID = {{deviceID}};
 var redirect = '?id='+ deviceID;
 
 var colors = new Array (0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -473,7 +473,7 @@ function fill() {
 
 
 function changeColor(spot) {
-	
+  
    elements[spot].style.background = x.value;
    socket.emit('buttonPressed', {index: spot, color: x.value, deviceID: deviceID})
 }

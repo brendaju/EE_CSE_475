@@ -10,12 +10,16 @@ from led_strip import led_strip
 from paintApp import paintingApp
 from tictactoeApp import tictactoeApp
 from chessApp import chessApp
+from simonsaysApp import simonsaysApp
 import numpy as np
 from PIL import Image
 from animation import animation_app
 import time
 import threading
 from brick_shooter import brick_shooter_app
+from tugofwarApp import tugofwarApp
+from simonsaysApp import simonsaysApp
+from pong import pong_app
 
 deviceID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
@@ -28,9 +32,9 @@ lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Brick Shooter'
+currentApp = 'Simon Says'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter']
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
 
 async def connectToServer():
     await sio.connect(ip)
@@ -48,9 +52,6 @@ def readUART():
     received_data += ser.read(data_left)
     ser.write(received_data)
     gridLoc = interpretUART(received_data)
-    print(gridLoc)
-
-    
     global pressedIndex
     global gridSelect
     if (gridSelect == 1):
@@ -142,7 +143,6 @@ async def mainProgram(strip):
             storedGrid = selectedGrid.copy()
         await asyncio.sleep(0.1)
 
-
 async def main(strip):
     await connectToServer()
     asyncio.create_task(mainProgram(strip))
@@ -165,7 +165,6 @@ async def changeApp(data):
     global currentApp
     if (data['data']['deviceID'] == deviceID):
         currentApp = data['data']['appName']
-    print("done")
 
 @sio.on('connected')
 async def onConnected(data):
@@ -183,11 +182,10 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
     # Create led_strip object with appropriate configuration.
     strip = led_strip()
     gridMake()
-    #strip.update_buffer()
     print('Press Ctrl-C to quit.')
     if not args.clear:
         print('Use "-c" argument to clear LEDs on exit')

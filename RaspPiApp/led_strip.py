@@ -56,7 +56,6 @@ class led_strip:
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
-
     def color_wipe(self, color, wait_ms=50):
         """
         Wipe color across display a pixel at a time.

@@ -146,9 +146,10 @@ h1 {
 <div class="menubtn" onclick="gotomenu()">Back to Menu</div>
 
 
-<div class="color-container">
-Color Select: <input type="color" id="myColor" value="#ff0080">
-</div>
+<!-- <div class="color-container"> -->
+<!-- Color Select: <input type="color" id="myColor" value="#ff0080"> --> 
+<!-- </div> -->
+
 
 <br>
 
@@ -398,7 +399,7 @@ function reset() {
 
 
 
-var x = document.getElementById("myColor");
+// var x = document.getElementById("myColor");
 
 function colorSelect(newColor) {
 	currentColor = newColor;	
@@ -442,11 +443,12 @@ function fill() {
 
 }
 
+var x = "#000000";
 
 function changeColor(spot) {
 	
-   elements[spot].style.background = x.value;
-   socket.emit('buttonPressed', {index: spot, color: x.value, deviceID: deviceID})
+   elements[spot].style.background = x;
+   socket.emit('buttonPressed', {index: spot, color: x, deviceID: deviceID})
 }
 
 function submit_pro_id() {
