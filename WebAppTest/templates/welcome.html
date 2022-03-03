@@ -62,13 +62,27 @@ body {
     -ms-transform: translate(-50%, -50%);
 }
 
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
 
 </style>
 
     </head>
     <body>
         <div class="container">
-            <img src="static/images/PIXELPAL.png">
+            <img src="static/images/PIXELPAL.png"> // alt="logo">
             <div class="overlay">
                 <div class="text">Be happy!</div>
                 <form class="form" autocomplete="off">
@@ -78,11 +92,16 @@ body {
                 </form>
             </div>
         </div>
-<script>
+<script> 
 
 function submit_pro_id() {
     var product_id=document.getElementById('product_id').value;
-    window.location.replace('/menu?id='+product_id);
+    if (product_id==="00") {
+        window.location.replace('/menu');
+
+    } else {
+        alert("Wrong id, try it again! :(")
+    }
 }
 
 </script>

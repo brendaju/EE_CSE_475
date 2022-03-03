@@ -1,45 +1,106 @@
 import time
-import neopixel_neomatrix
+#from rpi_ws281x import PixelStrip, Color
 import argparse
+#import serial
 import requests
 import json
 import socketio
 import asyncio
+#from led_strip import led_strip
+from paintApp import paintingApp
+from tictactoeApp import tictactoeApp
+from chessApp import chessApp
+import numpy as np
+from PIL import Image
+from neopixel_neomatrix import Adafruit_NeoMatrix
+from animation import animation_app
+import time
+import threading
+from brick_shooter import brick_shooter_app
 
-# LED strip configuration:
-LED_COUNT = 192        # Number of LED pixels.
-#LED_PIN = 18          # GPIO pin connected to the pixels (18 uses PWM!).
-# LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
-LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
-LED_DMA = 10          # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
-LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
-LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
-
+deviceID = 0
+#ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
-json_array = {"array": touchArr}
-
 sio = socketio.AsyncClient()
-ip = 'http://10.19.148.197:5000'
-
+ip = 'http://192.168.0.11:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
-stored_R, stored_G, stored_B = (0, 0, 0)
-send_color = 0
+strip = 0
+apps = {}
+currentApp = 'Brick Shooter'
+simIndex = 0
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter']
+
 
 async def connectToServer():
     await sio.connect(ip)
+    print(sio.sid)
     await sio.sleep(1)
 
 json_array = {"array": touchArr}
 
-def show(matrix):
-        matrix.pixels.gui.render()
-        matrix.new_touch = matrix.pixels.gui.new_touch
-        matrix.new_touch_cord = matrix.pixels.gui.new_touch_cord
-        event = matrix.pixels.gui.dispatch_events()
+gridSelect = 1
+
+def readUART():
+    global gridLoc, pressedIndex, gridSelect, apps, currentApp
+    received_data = ser.read()              #read serial port
+    time.sleep(0.03)
+    data_left = ser.inWaiting()             #check for remaining byte
+    received_data += ser.read(data_left)
+    ser.write(received_data)
+    gridLoc = interpretUART(received_data)
+    global pressedIndex
+    global gridSelect
+    if (gridSelect == 1):
+        apps[currentApp].paint(gridLoc[0], gridLoc[1])
+    pressedIndex = convert(gridLoc[0],gridLoc[1])
+    return received_data
+
+#IS_TIMER_BASED = True
+#SPEED = 0.1
+
+async def simulationInput(strip):
+    global apps, currentApp, simIndex
+    while True:
+        if (apps[currentApp].IS_TIMER_BASED):
+            apps[currentApp].move()
+            await asyncio.sleep(apps[currentApp].SPEED)
+        if (strip.new_touch == 1):
+            apps[currentApp].paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
+            strip.pixels.gui.new_touch = 0
+            if (strip.was_right_click):
+                simIndex = simIndex + 1
+                if (simIndex > 3):
+                    simIndex = 0
+                currentApp = simArray[simIndex]
+                strip.pixels.gui.was_right_click = False
+        await asyncio.sleep(0.1)
+
+data_array = []
+
+def arrayConvert(grid):
+    blankArray = [(0,0,0)]*192
+    for i in range(12):
+        for j in range(16):
+            blankArray[convert(i,j)] = grid[i+j*12]
+    return blankArray
+    #return [[m[j][i] for j in range(len(m))] for i in range(len(m[0])-1,-1,-1)]
+
+def gridMake():
+    global data_array, data_rotate
+    image = Image.open('../images/pixel.png')
+    image = image.rotate(180)
+    # convert image to numpy array
+    image = image.convert('RGB')
+    data = image.getdata()
+    data_array = list(data)
+    #print(data_array)
+    data_array = arrayConvert(data_array)
+    image = image.save("mario.png")
+    #print(data_array)
+
 
 def convert(x, y):
     # if in an odd column, reverse the order
@@ -52,140 +113,79 @@ def rgbToHex(r, g, b):
     numbers = [r, g, b]
     return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
-
-clearingMode = 1
-setColors = [
-    (255, 0, 0),
-    (255, 127, 0),
-    (255, 255, 0),
-    (0, 255, 0),
-    (0, 0, 255),
-    (148, 0, 211),
-    (255, 255, 255),
-    (0, 0, 0)
-]
-
-async def mainProgram(matrix, clearingMode, setColors):
+storedGrid = []
+async def mainProgram(strip):
     while True:
+        global gridSelect, storedGrid, apps, currentApp
+        if (gridSelect == 1):
+            selectedGrid = apps[currentApp].touchGrid
+        elif (gridSelect == 0):
+            selectedGrid = data_array
         loop = asyncio.get_event_loop()
-        global gridLoc, stored_R, stored_G, stored_B, send_color, touchArr, json_array, pressedIndex
-        gridLoc[0] = matrix.new_touch_cord[0]
-        gridLoc[1] = matrix.new_touch_cord[1]
-
-        pressedIndex = (gridLoc[0] * 16) + (15 - gridLoc[1] if (gridLoc[0] % 2 != 0) else gridLoc[1])
-        #received_data = await loop.run_in_executor(None, readUART, ser)
-        #gridLoc = await loop.run_in_executor(None, interpretUART, received_data)
-        #print(gridLoc)
-        #n = await loop.run_in_executor(None, convert, gridLoc[0], gridLoc[1])
-        if gridLoc[1] == 15:
-            if gridLoc[0] < 8:
-                stored_R, stored_G, stored_B = setColors[gridLoc[0]]
-            elif gridLoc[0] == 8:
-                stored_B = stored_B + 10
-                if stored_B < 50 or stored_B == 260:
-                    stored_B = 50
-            elif gridLoc[0] == 9:
-                stored_G = stored_G + 10
-                if stored_G < 50 or stored_G == 260:
-                    stored_G = 50
-            elif gridLoc[0] == 10:
-                stored_R = stored_R + 10
-                if stored_R < 50 or stored_R == 260:
-                    stored_R = 50
-            await loop.run_in_executor(None, matrix.drawPixel, 11, 15, (stored_R, stored_G, stored_B))
-            clearingMode = (gridLoc[0] == 7)
-            send_color = await loop.run_in_executor(None, rgbToHex, stored_R, stored_G, stored_B)
-            #touchArr[n] = sendColor
-        else:
-            #touchArr[n] = rgbToHex(storedR, storedG, storedB)
-            await loop.run_in_executor(None, matrix.drawPixel, gridLoc[0], gridLoc[1], (stored_R, stored_G, stored_B))
-
-            if(clearingMode):
-                send_color = '#505050'
-            elif (stored_R == stored_G and stored_R == stored_B):
-                send_color = '#FFFFFF'
-            else:
-                send_color = await loop.run_in_executor(None, rgbToHex, stored_R, stored_G, stored_B)
-        touchArr[pressedIndex] = send_color
-
-        json_array["array"] = touchArr
-        #print(json.dumps(json_array))
-        global lastPressedIndex
-        if (pressedIndex != lastPressedIndex):
-            r = requests.post(ip + '/array', json=json.dumps(json_array))
-            lastPressedIndex = pressedIndex
-        #await loop.run_in_executor(None, show, matrix)
-        show(matrix)
+        if (storedGrid != selectedGrid):
+            await strip.update_buffer(selectedGrid)
+            strip.json_array["array"] = arrayConvert(strip.touch_array)
+            r = requests.post(ip + '/array?id='+str(deviceID), json=json.dumps(strip.json_array))
+            storedGrid = selectedGrid.copy()
         await asyncio.sleep(0.1)
 
-async def main(strip, clearingMode, setColors):
-    await connectToServer()
-    asyncio.create_task(mainProgram(strip, clearingMode, setColors))
+async def updateSim(strip):
+    while True:
+        strip.show()
+        await asyncio.sleep(0.1)
 
-strip = 0
+async def main(strip):
+    await connectToServer()
+    asyncio.create_task(mainProgram(strip))
+    asyncio.create_task(updateSim(strip))
+    asyncio.create_task(simulationInput(strip))
 
 @sio.on('my_response')
 async def catch_all(data):
-    print("Okay: ", data)
-    readFrom = data['data']
-    print("okay 2: ", readFrom)
-    readColor = readFrom['color']
-    #newColor = Color(int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
-    #gridLoc[0] * 16) + (15 - gridLoc[1] if (gridLoc[0] % 2 != 0) else gridLoc[1]
-    x = int(readFrom['index']/16)
-    y = int(readFrom['index'] - x * 16)
-    #print(x, y)
-    await loop.run_in_executor(None, matrix.drawPixel, x, y, (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16)))
-    touchArr[(x * 16) + (15 - y if (x % 2 != 0) else y)] = readColor
+    if (data['data']['deviceID'] == deviceID):
+        global apps, currentApp
+        readFrom = data['data']
+        #print("okay 2: ", readFrom)
+        readColor = readFrom['color']
+        newColor = (int(readColor[1:3], 16), int(readColor[3:5], 16), int(readColor[5:7], 16))
+        apps[currentApp].webPaint(readFrom['index'], newColor)
 
-setColors = [
-    (255, 0, 0),
-    (255, 127, 0),
-    (255, 255, 0),
-    (0, 255, 0),
-    (0, 0, 255),
-    (148, 0, 211),
-    (255, 255, 255),
-    (0, 0, 0)
-]
+@sio.on('appChange')
+async def changeApp(data):
+    print(data)
+    global currentApp
+    if (data['data']['deviceID'] == deviceID):
+        currentApp = data['data']['appName']
 
-def setup_painting(matrix):
-        for i in range(8):
-            matrix.drawPixel(i, 15, setColors[i])
-            touchArr[(i * 16) + (15 - 15 if (i % 2 != 0) else 15)] = rgbToHex(setColors[i][0], setColors[i][1], setColors[i][2])
-        
-        matrix.drawPixel(8, 15, (0, 0, 255))
-        touchArr[(8 * 16) + (15 - 15 if (8 % 2 != 0) else 15)] = rgbToHex(0,0,255)
-        touchArr[(9 * 16) + (15 - 15 if (9 % 2 != 0) else 15)] = rgbToHex(0,255,0)
-        touchArr[(10 * 16) + (15 - 15 if (10 % 2 != 0) else 15)] = rgbToHex(255,0,0)
-        matrix.drawPixel(9, 15, (0, 255, 0))
-        matrix.drawPixel(10, 15, (255, 0 ,0))
+@sio.on('connected')
+async def onConnected(data):
+    global deviceID
+    print(data['deviceID'])
+    #await sio.emit('deviceConnected', {'foo': 'bar'})
+    deviceID = data['deviceID']
 
 # Main program logic follows:
 if __name__ == '__main__':
     # Process arguments
-    #parser = argparse.ArgumentParser()
-    #parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
-    #args = parser.parse_args()
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
+    args = parser.parse_args()
+    # pApp = tictactoeApp()
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
     # Create led_strip object with appropriate configuration.
-    #strip = led_strip()
-    strip = neopixel_neomatrix.Adafruit_NeoMatrix()
-    strip.create_matrix(12,16,6,strip.positions["NEO_MATRIX_TOP"]+strip.positions["NEO_MATRIX_LEFT"]+\
-        strip.positions["NEO_MATRIX_COLUMNS"]+strip.positions["NEO_MATRIX_PROGRESSIVE"])
-    strip.begin()
+    strip = Adafruit_NeoMatrix()
+    gridMake()
     strip.show()
-    strip.setRotation(0)
-    strip.setBrightness(90)
-    strip.show()
-    strip.delay(10)
-    print(strip.new_touch_cord)
-    setup_painting(strip)
-
+    print('Press Ctrl-C to quit.')
+    if not args.clear:
+        print('Use "-c" argument to clear LEDs on exit')
     try:
         loop = asyncio.get_event_loop()
-        #loop.add_reader(ser, readUART)
-        loop.run_until_complete(main(strip, clearingMode, setColors))
+        #loop.add_reader(ser, readUART, pApp)
+        loop.run_until_complete(main(strip))
         loop.run_forever()
-    except:
-        print("closing")
+
+
+    except KeyboardInterrupt:
+        if args.clear:
+            strip.color_wipe(strip, Color(0, 0, 0))

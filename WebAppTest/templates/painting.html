@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+
 <style>
 body {
     height: 750px;
@@ -25,36 +21,6 @@ h1 {
   text-align: center;
   color: white;
   font-size: 50px;
-
-}
-
-.menubtn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  border: solid;
-  border-color: black;
-  outline: solid;
-  outline-color: black;
-  padding: 12px 24px;
-  color: white;
-  background-color: blue;
-  cursor: pointer;
-
-}
-
-.logoutbtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border: solid;
-  border-color: black;
-  outline: solid;
-  outline-color: black;
-  padding: 12px 24px;
-  color: white;
-  background-color: blue;
-  cursor: pointer;
 
 }
 
@@ -80,6 +46,21 @@ h1 {
 
 .btn:hover {
   background-color: grey;
+
+}
+
+.menubtn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
 
 }
 
@@ -135,27 +116,38 @@ h1 {
   outline-color: black;
 }
 
+.logoutbtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: solid;
+  border-color: black;
+  outline: solid;
+  outline-color: black;
+  padding: 12px 24px;
+  color: white;
+  background-color: blue;
+  cursor: pointer;
+
+}
+
 </style>
 </head>
-<body onload="reset()">
+<body>
 
 <h1>Painting</h1>
 
-<div class="logoutbtn" onclick="gotowelcome()">Logout</div>
-
 <div class="menubtn" onclick="gotomenu()">Back to Menu</div>
 
+<div class="logoutbtn" onclick="gotowelcome()">Logout</div>
 
 <div class="color-container">
 Color Select: <input type="color" id="myColor" value="#ff0080">
 </div>
 
-<button type="button" onclick="reset()">Reset</button>
-<button type="button" onclick="fill()">Fill</button>
 
 <br>
 
-<canvas hidden id="paintingCanvas" width="120" height="160"></canvas>
 <div class="grid-surround">
 
 <div class="grid-container">
@@ -174,7 +166,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(12)"></div>  
   <div class="grid-item" onclick="changeColor(13)"></div>
   <div class="grid-item" onclick="changeColor(14)"></div>
-  <div class="grid-item"></div>  
+  <div class="grid-item" onclick="changeColor(15)"></div>  
   <div class="grid-item" onclick="changeColor(16)"></div>
   <div class="grid-item" onclick="changeColor(17)"></div>
   <div class="grid-item" onclick="changeColor(18)"></div>  
@@ -190,7 +182,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(28)"></div>  
   <div class="grid-item" onclick="changeColor(29)"></div>
   <div class="grid-item" onclick="changeColor(30)"></div>
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(31)"></div>
   <div class="grid-item" onclick="changeColor(32)"></div>  
   <div class="grid-item" onclick="changeColor(33)"></div>
   <div class="grid-item" onclick="changeColor(34)"></div>
@@ -206,7 +198,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(44)"></div>
   <div class="grid-item" onclick="changeColor(45)"></div>  
   <div class="grid-item" onclick="changeColor(46)"></div>
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(47)"></div>
   <div class="grid-item" onclick="changeColor(48)"></div>  
   <div class="grid-item" onclick="changeColor(49)"></div>
   <div class="grid-item" onclick="changeColor(50)"></div>
@@ -222,7 +214,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(60)"></div>
   <div class="grid-item" onclick="changeColor(61)"></div>
   <div class="grid-item" onclick="changeColor(62)"></div>  
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(63)"></div>
   <div class="grid-item" onclick="changeColor(64)"></div>
   <div class="grid-item" onclick="changeColor(65)"></div>  
   <div class="grid-item" onclick="changeColor(66)"></div>
@@ -238,7 +230,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(76)"></div>
   <div class="grid-item" onclick="changeColor(77)"></div>
   <div class="grid-item" onclick="changeColor(78)"></div>  
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(79)"></div>
   <div class="grid-item" onclick="changeColor(80)"></div>
   <div class="grid-item" onclick="changeColor(81)"></div>
   <div class="grid-item" onclick="changeColor(82)"></div>  
@@ -254,7 +246,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(92)"></div>  
   <div class="grid-item" onclick="changeColor(93)"></div>
   <div class="grid-item" onclick="changeColor(94)"></div>
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(95)"></div>
   <div class="grid-item" onclick="changeColor(96)"></div>
   <div class="grid-item" onclick="changeColor(97)"></div>
   <div class="grid-item" onclick="changeColor(98)"></div>  
@@ -271,7 +263,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(109)"></div>
 
   <div class="grid-item" onclick="changeColor(110)"></div>
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(111)"></div>
   <div class="grid-item" onclick="changeColor(112)"></div>  
   <div class="grid-item" onclick="changeColor(113)"></div>
   <div class="grid-item" onclick="changeColor(114)"></div>
@@ -287,7 +279,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(124)"></div>
   <div class="grid-item" onclick="changeColor(125)"></div>  
   <div class="grid-item" onclick="changeColor(126)"></div>
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(127)"></div>
   <div class="grid-item" onclick="changeColor(128)"></div>  
   <div class="grid-item" onclick="changeColor(129)"></div>
   <div class="grid-item" onclick="changeColor(130)"></div>
@@ -303,7 +295,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(140)"></div>
   <div class="grid-item" onclick="changeColor(141)"></div>
   <div class="grid-item" onclick="changeColor(142)"></div>  
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(143)"></div>
   <div class="grid-item" onclick="changeColor(144)"></div>
   <div class="grid-item" onclick="changeColor(145)"></div>  
   <div class="grid-item" onclick="changeColor(146)"></div>
@@ -319,7 +311,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(156)"></div>
   <div class="grid-item" onclick="changeColor(157)"></div>
   <div class="grid-item" onclick="changeColor(158)"></div>  
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(159)"></div>
   <div class="grid-item" onclick="changeColor(160)"></div>
   <div class="grid-item" onclick="changeColor(161)"></div>
   <div class="grid-item" onclick="changeColor(162)"></div>  
@@ -335,7 +327,7 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(172)"></div>  
   <div class="grid-item" onclick="changeColor(173)"></div>
   <div class="grid-item" onclick="changeColor(174)"></div>
-  <div class="grid-item"></div>  
+  <div class="grid-item" onclick="changeColor(175)"></div>  
   <div class="grid-item" onclick="changeColor(176)"></div>
   <div class="grid-item" onclick="changeColor(177)"></div>
   <div class="grid-item" onclick="changeColor(178)"></div>  
@@ -351,143 +343,27 @@ Color Select: <input type="color" id="myColor" value="#ff0080">
   <div class="grid-item" onclick="changeColor(188)"></div>  
   <div class="grid-item" onclick="changeColor(189)"></div>
   <div class="grid-item" onclick="changeColor(190)"></div>
-  <div class="grid-item"></div>
+  <div class="grid-item" onclick="changeColor(191)"></div>
 
 
 </div>
-<button onclick="downloadCanvas()">Download Me!</button>
-<script>
 
 
-
-function downloadCanvas(){  
-  
-    var canvas = document.getElementById('paintingCanvas')
-    var ctx = canvas.getContext("2d");
-    let row = 0;
-    for (; row < 12; row++) {
-      let column = 0;
-      for (; column < 16; column++) {
-        ctx.fillStyle = arranged_colors[row*16+column];
-        //arranged_colors[row*16+column];
-        ctx.fillRect(row*10, column*10, 10, 10);
-      }
-    }
-
-    // get canvas data  
-    var image = canvas.toDataURL();  
-  
-    // create temporary link  
-    var tmpLink = document.createElement( 'a' );  
-    tmpLink.download = 'image.png'; // set the name of the download file 
-    tmpLink.href = image;  
-  
-    // temporarily add link to body and initiate the download  
-    document.body.appendChild( tmpLink );  
-    tmpLink.click();  
-    document.body.removeChild( tmpLink );  
-}
+</div>
 
 
-
+<script> 
 
 var elements = document.getElementsByClassName("grid-item");
-
-var socket = io();
-
-var deviceID = {{deviceID}}
-var redirect = '?id='+ deviceID;
-
-var colors = new Array (0, 0, 0, 0, 0, 0, 0, 0, 0)
-
-socket.on('update_led', function(msg, cb) {
-  console.log(msg)
-  if (msg.userId == deviceID) {
-    for (var i = 0; i < 192; i++)
-      colors[i] = msg.data[i];
-    console.log("ran")
-    fill()
-  }
-  if (cb)
-	cb();
-});
-
-function reset() {
-	let i = 0;
-	let len = elements.length;
-
-	for (; i < len; i++) {
-   		elements[i].style.background = "grey";
-		elements[i].style.color = "grey";
-		elements[i].style.border = "solid";
-		elements[i].style.borderColor = "black";
-		elements[i].style.outline = "solid";
-		elements[i].style.outlineColor = "black";
-	}
-
-}
-
-
-
 var x = document.getElementById("myColor");
-
-function colorSelect(newColor) {
-	currentColor = newColor;	
-}
-
-let count = 0;
-
-//var colors = new Array ("#FF0080", "#F5E87B", "#0059FF", "#FF0000", "#00FF00");
-
-//var colors = {{ color_array }}
-
-var arranged_colors = new Array;
-
-function fill() {
-	// LoadFile();
-	//var colors = {{ color_array | safe }}
-	var color1 = '#FF0080'
-
-	let x = 0;
-	let len1 = elements.length;
-	
-	for (; x < len1; x++) {
-		console.log(colors[x])
-		if ((x % 32) > 15) {
-			arranged_colors[x + 15 - 2 * (x % 16)] = colors[x];
-		} else {
-			arranged_colors[x] = colors[x];
-		}
-	}
-
-	let i = 0;
-  let j = 0;
-	let len = elements.length;
-	
-	count = count + 1;
-
-	for (; i < len; i++) {
-   		elements[i].style.background = arranged_colors[i];
-	}
-}
-
-
 function changeColor(spot) {
-	
-   elements[spot].style.background = x.value;
-   socket.emit('buttonPressed', {index: spot, color: x.value, deviceID: deviceID})
+
+  	elements[spot].style.background = x.value;	
 }
 
-function submit_pro_id() {
-        window.location.replace('/painting'+redirect);
-}
-
-function gotoart() {
-        window.location.replace('/art'+redirect);
-}
 
 function gotomenu() {
-        window.location.replace('/menu'+redirect);
+        window.location.replace('/menu');
 }
 
 function gotowelcome() {
@@ -497,4 +373,4 @@ function gotowelcome() {
 </script>
 
 </body>
-</html>
+<html>
