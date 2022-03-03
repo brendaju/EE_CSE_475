@@ -40,7 +40,7 @@ class imageshowApp:
         blankArray = [(0,0,0)]*192
         for i in range(12):
             for j in range(16):
-                blankArray[self.convert(i,j)] = tuple(grid[j,i]) # haven't tested
+                blankArray[self.convert(i,j)] = tuple(grid[j,i]) 
         return blankArray
 
     def image_processing(self):
