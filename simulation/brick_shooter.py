@@ -115,16 +115,6 @@ class brick_shooter_app:
         # check if ball should move
         location = (self.ball.x_loc, self.ball.y_loc)
 
-<<<<<<< HEAD
-        # if we're at the end of the screen or have collision
-        if self.ball.y_loc == 0 or location in self.target_locations:
-            self.ball.y_loc = 14
-            self.ball.is_moving = False
-            self.target_locations.discard(location)
-        if self.ball.is_moving:
-            self.ball.y_loc -= 1
-
-=======
         # if we're at bottom of the screen reset ball to paddle
         if self.ball.y_loc == 15:
             self.ball.y_loc = 14
@@ -164,15 +154,10 @@ class brick_shooter_app:
         if self.ball.is_moving:
             self.ball.y_loc += self.ball.y_velocity
             self.ball.x_loc += self.ball.x_velocity
->>>>>>> e9e5e0d957764dcef23146e362d781dd62eafb1b
 
         # display ball location
         self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
 
-<<<<<<< HEAD
-        # see if gameover
-        if len(self.target_locations) == 0:
-=======
         #  gameover
         if len(self.target_locations) == 0:
             self.ball.y_loc = 14
@@ -180,7 +165,6 @@ class brick_shooter_app:
             self.ball.is_moving = False
             self.ball.x_velocity = 0
             self.ball.y_velocity = 0
->>>>>>> e9e5e0d957764dcef23146e362d781dd62eafb1b
             self.setup()
 
 
@@ -196,42 +180,21 @@ class brick_shooter_app:
             self.touchGrid[self.convert(self.ball.x_loc+i, self.ball.y_loc)] = (0,0,0)
 
         # define slider movement
-<<<<<<< HEAD
-        move_left = (y == 15) and (x < slider_center)
-        move_right = (y == 15) and (x > slider_center)
-=======
         move_left = (y == self.slider.y_loc) and (x < slider_center)
         move_right = (y == self.slider.y_loc) and (x > slider_center)
->>>>>>> e9e5e0d957764dcef23146e362d781dd62eafb1b
         at_left_edge = self.slider.x_loc == 0
         at_right_edge = self.slider.x_loc == self.slider.x_max
         shoot_ball = slider_center == x
 
         # check if ball should move
         if shoot_ball and self.ball.is_moving == False:
-<<<<<<< HEAD
-=======
             self.ball.y_velocity = -1
->>>>>>> e9e5e0d957764dcef23146e362d781dd62eafb1b
             self.ball.is_moving = True
 
         # calculate slider location
         if move_left:
             if at_left_edge:
                 self.slider.x_loc = self.slider.x_max
-<<<<<<< HEAD
-                self.ball.x_loc = 10
-            else:
-                self.slider.x_loc -= 1
-                self.ball.x_loc -= 1
-        elif move_right:
-            if at_right_edge:
-                self.slider.x_loc = 0
-                self.ball.x_loc = 1
-            else:
-                self.slider.x_loc += 1
-                self.ball.x_loc += 1
-=======
                 if not self.ball.is_moving:
                     self.ball.x_loc = 10
             else:
@@ -247,15 +210,11 @@ class brick_shooter_app:
                 self.slider.x_loc += 1
                 if not self.ball.is_moving:
                     self.ball.x_loc += 1
->>>>>>> e9e5e0d957764dcef23146e362d781dd62eafb1b
 
         # update slider location
         self.draw_slider()
 
-<<<<<<< HEAD
-=======
         # display ball location
         self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
 
->>>>>>> e9e5e0d957764dcef23146e362d781dd62eafb1b
 

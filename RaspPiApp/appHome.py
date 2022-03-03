@@ -32,7 +32,7 @@ lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Simon Says'
+currentApp = 'Painting'
 simIndex = 0
 simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
 
