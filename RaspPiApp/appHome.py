@@ -17,6 +17,9 @@ from animation import animation_app
 import time
 import threading
 from brick_shooter import brick_shooter_app
+from tugofwarApp import tugofwarApp
+from simonsaysApp import simonsaysApp
+from pong import pong_app
 
 deviceID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
@@ -31,7 +34,7 @@ strip = 0
 apps = {}
 currentApp = 'Simon Says'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Simon Says']
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
 
 async def connectToServer():
     await sio.connect(ip)
@@ -161,6 +164,9 @@ async def onConnected(data):
     print(data['deviceID'])
     #await sio.emit('deviceConnected', {'foo': 'bar'})
     deviceID = data['deviceID']
+    strip.turn_on_led(deviceID, Color(255, 255, 255))
+    await sio.sleep(1000)
+    strip.turn_on_led(deviceID, Color(0, 0, 0))
 
 
 
@@ -171,7 +177,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp()}
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
     # Create led_strip object with appropriate configuration.
     strip = led_strip()
     gridMake()
