@@ -10,6 +10,7 @@ from led_strip import led_strip
 from paintApp import paintingApp
 from tictactoeApp import tictactoeApp
 from chessApp import chessApp
+from simonsaysApp import simonsaysApp
 import numpy as np
 from PIL import Image
 from animation import animation_app
@@ -28,9 +29,9 @@ lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Brick Shooter'
+currentApp = 'Simon Says'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter']
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Simon Says']
 
 async def connectToServer():
     await sio.connect(ip)
@@ -170,7 +171,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app()}
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp()}
     # Create led_strip object with appropriate configuration.
     strip = led_strip()
     gridMake()
