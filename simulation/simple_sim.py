@@ -25,11 +25,7 @@ deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-<<<<<<< HEAD
 ip = 'http://10.19.148.197:5000/'
-=======
-ip = 'http://10.19.226.183:5000/'
->>>>>>> 8f8b84fdd6e87c893d4848c3460f6fb77412ea87
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
