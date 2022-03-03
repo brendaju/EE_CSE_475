@@ -54,9 +54,9 @@ DMA_HandleTypeDef hdma_tim1_ch1_ch2_ch3;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-static const uint8_t MPR121_ADDR0 = 0x5A << 1;
-static const uint8_t MPR121_ADDR1 = 0x5C << 1;
-static const uint8_t MPR121_ADDR2 = 0x5D << 1;
+static const uint8_t MPR121_ADDR0 = 0x5C << 1;
+static const uint8_t MPR121_ADDR1 = 0x5B << 1;
+static const uint8_t MPR121_ADDR2 = 0x5A << 1;
 static const uint8_t REG_TOUCH0 = 0x00;
 //static const uint8_t REG_TOUCH1 = 0x01;
 /* USER CODE END PV */
@@ -143,7 +143,7 @@ int main(void)
   {
 
 	//bufTouch0[0] = REG_TOUCH0;
-	//ret0 = HAL_I2C_Master_Transmit(&hi2c1, MPR121_ADDR0, bufTouch0, 1, HAL_MAX_DELAY);
+	ret0 = HAL_I2C_Master_Transmit(&hi2c1, MPR121_ADDR0, bufTouch0, 1, HAL_MAX_DELAY);
 	ret0 = HAL_I2C_Mem_Read(&hi2c1, MPR121_ADDR0, REG_TOUCH0, I2C_MEMADD_SIZE_8BIT, bufTouch0, 2, HAL_MAX_DELAY);
 	ret0 = HAL_I2C_Mem_Read(&hi2c1, MPR121_ADDR1, REG_TOUCH0, I2C_MEMADD_SIZE_8BIT, bufTouch1, 2, HAL_MAX_DELAY);
 	ret0 = HAL_I2C_Mem_Read(&hi2c1, MPR121_ADDR2, REG_TOUCH0, I2C_MEMADD_SIZE_8BIT, bufTouch2, 2, HAL_MAX_DELAY);
@@ -630,12 +630,16 @@ uint8_t determinePixel(uint16_t* input, uint8_t* pixelSelected) {
 			return 0;
 	uint16_t log2X = log2(input[0] & 0x0FFF);
 	// X is a power of 2
-	if (ceil(log2X) == floor(log2X))
+	if (ceil(log2X) == floor(log2X)) {
 		pixelSelected[0] = log2X;
+	} else
+		return 0;
 	uint32_t yInput = ((input[2] & 0x0FFF)) << 12 | (input[1] & 0x0FFF);
 	uint16_t log2Y = log2(yInput);
-	if (ceil(log2Y) == floor (log2Y))
+	if (ceil(log2Y) == floor (log2Y))  {
 		pixelSelected[1] = log2Y;
+	} else
+		return 0;
 	return 1;
 }
 
