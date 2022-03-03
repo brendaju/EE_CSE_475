@@ -21,20 +21,22 @@ from tugofwarApp import tugofwarApp
 from simonsaysApp import simonsaysApp
 from pong import pong_app
 
+from imageshowApp import imageshowApp
+
 deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://192.168.0.11:5000/'
+ip = 'http://192.168.1.21:5000/'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Pong'
+currentApp = 'Image Show'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
+simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show']
 
 
 async def connectToServer():
@@ -79,6 +81,8 @@ async def simulationInput(strip):
                     simIndex = 0
                 currentApp = simArray[simIndex]
                 strip.pixels.gui.was_right_click = False
+        if (apps[currentApp].showimage):
+            apps[currentApp].display()
         await asyncio.sleep(0.1)
 
 data_array = []
@@ -167,6 +171,11 @@ async def onConnected(data):
     #await sio.emit('deviceConnected', {'foo': 'bar'})
     deviceID = data['deviceID']
 
+@sio.on('sendimg')
+async def receive(file):
+    if (currentApp == 'Image Show'):
+        apps[currentApp].read_new(file)
+
 # Main program logic follows:
 if __name__ == '__main__':
     # Process arguments
@@ -174,7 +183,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
+    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick_Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app(), 'Image Show': imageshowApp()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
