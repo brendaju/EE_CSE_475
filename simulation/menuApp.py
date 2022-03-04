@@ -8,7 +8,7 @@ class menuApp:
     def __init__(self, deviceID):
         self.deviceID = deviceID
         self.nextApp = ''
-        self.appArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
+        self.appArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show']
         self.newAppSelected = 0
         self.touchGrid = [(0,0,0)]*192
         self.IS_TIMER_BASED = False
@@ -77,6 +77,7 @@ class menuApp:
         self.touchGrid[self.convert(7, 10)] = (0, 255, 255)
         self.touchGrid[self.convert(8, 10)] = (0, 255, 170)
         self.touchGrid[self.convert(9, 10)] = (255, 120, 0)
+        self.touchGrid[self.convert(2, 11)] = (255, 0, 120)
         
     
     async def getGrid(self):
@@ -89,8 +90,13 @@ class menuApp:
         print(self.convert(x,y))
 
     def paint(self, x, y):
+        print(x, y)
         if y == 10:
-            if (x-2 < len(self.appArray) and x-2 >= 0):
+            if (x >= 2 and x <= 9):
                 self.nextApp = self.appArray[x-2]
-                print(self.nextApp)
                 self.newAppSelected = 1
+        if y == 11:
+            if (x >= 2 and x <= 2):
+                self.nextApp = self.appArray[x+6]
+                self.newAppSelected = 1
+        print(self.nextApp)
