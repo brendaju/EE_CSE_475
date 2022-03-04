@@ -23,6 +23,8 @@ class animation_app:
         self.touchGrid = [(0,0,0)]*192
         self.x_loc = 15
         self.y_loc = 10
+        self.IS_TIMER_BASED = True
+        self.SPEED = 0.1
         self.setup()
 
     def convert(self, x, y):

@@ -19,22 +19,23 @@ import threading
 from brick_shooter import brick_shooter_app
 from tugofwarApp import tugofwarApp
 from simonsaysApp import simonsaysApp
+from menuApp import menuApp
 from pong import pong_app
 
 deviceID = 0
 #ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://192.168.0.11:5000/'
+ip = 'http://192.168.0.11:5000'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Pong'
+currentApp = 'Menu'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
+simArray = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
 
 
 async def connectToServer():
@@ -64,8 +65,11 @@ def readUART():
 #IS_TIMER_BASED = True
 #SPEED = 0.1
 
+lastFourUniqueInputs = [(-1, -1)]*4
+touchIndex = 0
+
 async def simulationInput(strip):
-    global apps, currentApp, simIndex
+    global apps, currentApp, simIndex, lastFourUniqueInputs, touchIndex
     while True:
         if (apps[currentApp].IS_TIMER_BASED):
             apps[currentApp].move()
@@ -73,12 +77,23 @@ async def simulationInput(strip):
         if (strip.new_touch == 1):
             apps[currentApp].paint(strip.new_touch_cord[0], strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
+            if ((strip.new_touch_cord[0], strip.new_touch_cord[1]) != lastFourUniqueInputs[touchIndex]):
+                if (touchIndex >= 3):
+                    touchIndex = 0
+                else:
+                    touchIndex = touchIndex + 1
+                lastFourUniqueInputs[touchIndex] = (strip.new_touch_cord[0], strip.new_touch_cord[1])
+                if ((0,0) in lastFourUniqueInputs and (11, 0) in lastFourUniqueInputs and (0, 15) in lastFourUniqueInputs and (11, 15) in lastFourUniqueInputs):
+                    currentApp = 'Menu'
+                    apps['Menu'].setup_menu()
+            '''
             if (strip.was_right_click):
                 simIndex = simIndex + 1
                 if (simIndex > 3):
                     simIndex = 0
                 currentApp = simArray[simIndex]
                 strip.pixels.gui.was_right_click = False
+            '''
         await asyncio.sleep(0.1)
 
 data_array = []
@@ -120,6 +135,8 @@ storedGrid = []
 async def mainProgram(strip):
     while True:
         global gridSelect, storedGrid, apps, currentApp
+        if (currentApp == 'Menu' and apps['Menu'].newAppSelected == 1):
+            currentApp = apps['Menu'].nextApp
         if (gridSelect == 1):
             selectedGrid = apps[currentApp].touchGrid
         elif (gridSelect == 0):
@@ -166,6 +183,8 @@ async def onConnected(data):
     print(data['deviceID'])
     #await sio.emit('deviceConnected', {'foo': 'bar'})
     deviceID = data['deviceID']
+    apps['Menu'].deviceID = deviceID
+    apps['Menu'].setup_menu()
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -174,7 +193,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
+    apps = {'Menu': menuApp(0), 'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()
