@@ -93,6 +93,10 @@ Brick Shooter
 Tug of War
 </div>
 
+<div class="color-container" onclick="gotostacker()">
+Stacker
+</div>
+
 <div class="color-container" onclick="gotosimonsays()">
 Simon Says
 </div>
@@ -145,6 +149,11 @@ function gotobrickshooter() {
 function gototugofwar() {
 	socket.emit('changeApp', {appName: "Tug of War", deviceID: deviceID})
         window.location.replace('/tugofwar'+redirect);
+}
+
+function gotostacker() {
+	socket.emit('changeApp', {appName: "Stacker", deviceID: deviceID})
+        window.location.replace('/stacker'+redirect);
 }
 
 function gotosimonsays() {

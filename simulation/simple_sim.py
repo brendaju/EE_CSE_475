@@ -21,7 +21,7 @@ from tugofwarApp import tugofwarApp
 from simonsaysApp import simonsaysApp
 from menuApp import menuApp
 from pong import pong_app
-
+from stacker import stacker_app
 from imageshowApp import imageshowApp
 
 deviceID = 0
@@ -37,7 +37,7 @@ strip = 0
 apps = {}
 currentApp = 'Menu'
 simIndex = 0
-simArray = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show']
+simArray = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
 
 
 async def connectToServer():
@@ -203,7 +203,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Menu': menuApp(0), 'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app(), 'Image Show': imageshowApp()}
+    apps = {'Menu': menuApp(0), 'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app(), 'Image Show': imageshowApp(), 'Stacker': stacker_app()}
     # Create led_strip object with appropriate configuration.
     strip = Adafruit_NeoMatrix()
     gridMake()

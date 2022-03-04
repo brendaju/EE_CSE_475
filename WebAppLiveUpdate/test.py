@@ -105,6 +105,11 @@ def tugofwar():
 	id = request.args['id']
 	return render_template('tugofwar.html', deviceID = id)
 
+@app.route('/stacker')
+def stacker():
+	id = request.args['id']
+	return render_template('stacker.html', deviceID = id)
+
 @app.route('/simonsays')
 def simonsays():
 	id = request.args['id']
