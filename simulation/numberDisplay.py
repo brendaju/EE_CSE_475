@@ -3,15 +3,15 @@
 
 
 class numberDisplay:
-    def __init__(self):
-        self.startx = 2
-        self.starty = 2
-        self.current = 0
+    def __init__(self, x=0, y=0, num=0):
+        self.startx = x
+        self.starty = y
+        self.current = num
         self.array = [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1]
 
 
     def displayNumber(self):
-        
+
         if self.number.current == 1:
             self.number.array = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0]
 
@@ -38,10 +38,9 @@ class numberDisplay:
 
         if self.number.current == 9:
             self.number.array = [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1]
-        
+
         for i in range(0, 5):
             for j in range(0, 3):
-            
                 if (self.number.array[i * 3 + j] == 1):
                     self.touchGrid[self.convert(self.number.startx + j, self.number.starty + i)] = (255, 255, 255)
                 else:

@@ -101,6 +101,10 @@ Simon Says
 Pong
 </div>
 
+<div class="color-container" onclick="gotoimageshow()">
+Image Show
+</div>
+
 <script> 
 var socket = io();
 
@@ -152,6 +156,12 @@ function gotopong() {
 	socket.emit('changeApp', {appName: "Pong", deviceID: deviceID})
         window.location.replace('/pong'+redirect);
 }
+
+function gotoimageshow() {
+	socket.emit('changeApp', {appName: "Image Show", deviceID: deviceID})
+        window.location.replace('/imageshow'+redirect);
+}
+
 
 </script>
     </body>

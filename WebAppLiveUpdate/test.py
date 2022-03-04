@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request, jsonify, json, copy_current_request_context
+from flask import Flask, render_template, request, jsonify, json, copy_current_request_context, redirect, url_for, abort
 import json
 import requests
 from threading import Lock
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
+
+import os
+from werkzeug.utils import secure_filename
+import matplotlib.image as mpimg
+import numpy as np
+from json import JSONEncoder
 
 async_mode = None
 
@@ -12,8 +18,16 @@ socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 thread_lock = Lock()
 
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.jpeg']
 
 color_array1 = []
+
+class NumpyArrayEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)
+
 
 @socketio.event
 def buttonPressed(message):
@@ -31,6 +45,21 @@ def load_array():
 		 'userId':id})
 	print(array_json)
 	return array_json
+
+@app.route('/upload', methods = ['POST'])
+def upload():
+	uploaded_file = request.files['image']
+	filename = secure_filename(uploaded_file.filename)
+	id = request.form.get("id")
+	if filename != '':
+		file_ext = os.path.splitext(filename)[1]
+		if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+			abort(400)
+		file = np.array(mpimg.imread(uploaded_file))
+		image_data = {"array": file}
+		image = json.dumps(image_data, cls = NumpyArrayEncoder)
+		socketio.emit('sendimg', {'file':image})
+	return redirect(url_for('imageshow', id=id))
 
 @app.route('/')
 def index():
@@ -86,6 +115,11 @@ def pong():
 	id = request.args['id']
 	return render_template('pong.html', deviceID = id)
 
+@app.route('/imageshow')
+def imageshow():
+	id = request.args['id']
+	return render_template('imageshow.html', deviceID = id)
+
 
 deviceID = 0
 @socketio.event
@@ -99,7 +133,6 @@ def connect():
 def changeApp(appName):
 	print(appName)
 	socketio.emit('appChange', {'data':appName})
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
