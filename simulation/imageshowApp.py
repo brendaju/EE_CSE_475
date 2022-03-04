@@ -10,8 +10,8 @@ class imageshowApp:
     def __init__(self):
         self.touchGrid = [(0,0,0)]*192
         self.IS_TIMER_BASED = False
-        self.showimage=0
         self.file=None
+        self.SPEED = 0.1
         self.setup()
     
     def paint(self,x,y):
@@ -20,8 +20,8 @@ class imageshowApp:
         pass
 
     def read_new(self,img):
-        self.showimage=1
-        self.file=img
+        self.IS_TIMER_BASED = True
+        self.file = img
 
     def convert(self, x, y):
         # if in an odd column, reverse the order
@@ -32,9 +32,9 @@ class imageshowApp:
     async def getGrid(self):
         return self.touchGrid
 
-    def display(self):
+    def move(self):
         self.touchGrid=self.arrayConvert(self.image_processing())
-        self.showimage=0
+        self.IS_TIMER_BASED = False
 
     def arrayConvert(self, grid):
         blankArray = [(0,0,0)]*192
