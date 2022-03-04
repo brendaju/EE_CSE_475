@@ -10,7 +10,6 @@ from led_strip import led_strip
 from paintApp import paintingApp
 from tictactoeApp import tictactoeApp
 from chessApp import chessApp
-from simonsaysApp import simonsaysApp
 import numpy as np
 from PIL import Image
 from animation import animation_app
@@ -19,7 +18,10 @@ import threading
 from brick_shooter import brick_shooter_app
 from tugofwarApp import tugofwarApp
 from simonsaysApp import simonsaysApp
+from menuApp import menuApp
 from pong import pong_app
+from stacker import stacker_app
+from imageshowApp import imageshowApp
 
 deviceID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
@@ -32,9 +34,9 @@ lastPressedIndex = -1
 pressedIndex = -1
 strip = 0
 apps = {}
-currentApp = 'Painting'
+currentApp = 'Menu'
 simIndex = 0
-simArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong']
+simArray = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
 
 async def connectToServer():
     await sio.connect(ip)
@@ -44,8 +46,11 @@ json_array = {"array": touchArr}
 
 gridSelect = 1
 
+lastFourUniqueInputs = [(-1, -1)]*4
+touchIndex = 0
+
 def readUART():
-    global gridLoc, pressedIndex, gridSelect, apps, currentApp
+    global gridLoc, pressedIndex, gridSelect, apps, currentApp, touchIndex, lastFourUniqueInputs
     received_data = ser.read()              #read serial port
     time.sleep(0.03)
     data_left = ser.inWaiting()             #check for remaining byte
@@ -56,6 +61,19 @@ def readUART():
     global gridSelect
     if (gridSelect == 1):
         apps[currentApp].paint(gridLoc[0], gridLoc[1])
+
+    # Menu App Logic
+    if ((gridLoc[0], gridLoc[1]) != lastFourUniqueInputs[touchIndex]):
+                if (touchIndex >= 3):
+                    touchIndex = 0
+                else:
+                    touchIndex = touchIndex + 1
+                lastFourUniqueInputs[touchIndex] = (gridLoc[0], gridLoc[1])
+                if ((0,0) in lastFourUniqueInputs and (11, 0) in lastFourUniqueInputs and (0, 15) in lastFourUniqueInputs and (11, 15) in lastFourUniqueInputs):
+                    currentApp = 'Menu'
+                    apps['Menu'].setup_menu()
+
+
     pressedIndex = convert(gridLoc[0],gridLoc[1])
     return received_data
 
@@ -172,7 +190,13 @@ async def onConnected(data):
     print(data['deviceID'])
     #await sio.emit('deviceConnected', {'foo': 'bar'})
     deviceID = data['deviceID']
+    apps['Menu'].deviceID = deviceID
+    apps['Menu'].setup_menu()
 
+@sio.on('sendimg')
+async def receive(file):
+    if (currentApp == 'Image Show'):
+        apps[currentApp].read_new(file)
 
 
 # Main program logic follows:
@@ -182,8 +206,8 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
     # pApp = tictactoeApp()
-    apps = {'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app()}
-    # Create led_strip object with appropriate configuration.
+    apps = {'Menu': menuApp(0), 'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app(), 'Image Show': imageshowApp(), 'Stacker': stacker_app()}
+   # Create led_strip object with appropriate configuration.
     strip = led_strip()
     gridMake()
     print('Press Ctrl-C to quit.')
