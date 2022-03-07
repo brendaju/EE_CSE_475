@@ -27,7 +27,7 @@ deviceID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)    #Open port with baud rate
 touchArr = [0]*192
 sio = socketio.AsyncClient()
-ip = 'http://100.64.66.234:5000'
+ip = 'http://10.19.76.51:5000'
 received_data = "0"
 gridLoc = [0,0]
 lastPressedIndex = -1
@@ -61,7 +61,7 @@ def readUART():
     global gridSelect
     if (gridSelect == 1):
         apps[currentApp].paint(gridLoc[0], gridLoc[1])
-
+    print(gridLoc[0], gridLoc[1])
     # Menu App Logic
     if ((gridLoc[0], gridLoc[1]) != lastFourUniqueInputs[touchIndex]):
                 if (touchIndex >= 3):
@@ -91,7 +91,10 @@ async def timerReaction():
     while True:
         if (apps[currentApp].IS_TIMER_BASED):
             apps[currentApp].move()
-        await asyncio.sleep(apps[currentApp].SPEED)
+            print("move")
+            await asyncio.sleep(apps[currentApp].SPEED)
+        else:
+            await asyncio.sleep(.01)
         
 
 def arrayConvert(grid):
@@ -101,7 +104,7 @@ def arrayConvert(grid):
             blankArray[convert(i,j)] = grid[i+j*12]
     return blankArray
     #return [[m[j][i] for j in range(len(m))] for i in range(len(m[0])-1,-1,-1)]
-
+'''
 def gridMake():
     global data_array, data_rotate
     image = Image.open('pixel.png')
@@ -114,7 +117,7 @@ def gridMake():
     data_array = arrayConvert(data_array)
     image = image.save("mario.png")
     print(data_array)
-
+'''
 
 def convert(x, y):
     # if in an odd column, reverse the order
@@ -149,6 +152,8 @@ storedGrid = []
 async def mainProgram(strip):
     while True:
         global gridSelect, storedGrid, apps, currentApp
+        if (currentApp == 'Menu' and apps['Menu'].newAppSelected == 1):
+            currentApp = apps['Menu'].nextApp
         if (gridSelect == 1):
             selectedGrid = apps[currentApp].touchGrid
         elif (gridSelect == 0):
@@ -209,7 +214,7 @@ if __name__ == '__main__':
     apps = {'Menu': menuApp(0), 'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app(), 'Image Show': imageshowApp(), 'Stacker': stacker_app()}
    # Create led_strip object with appropriate configuration.
     strip = led_strip()
-    gridMake()
+    #()
     print('Press Ctrl-C to quit.')
     if not args.clear:
         print('Use "-c" argument to clear LEDs on exit')

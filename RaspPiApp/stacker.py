@@ -36,7 +36,7 @@ class stacker_app:
         self.hasLost = False
         self.hasWon = False
         self.IS_TIMER_BASED = True
-        self.SPEED = 0.1
+        self.SPEED = 1
         self.blankColor = (0, 0, 0)
         self.setup()
 
@@ -55,7 +55,7 @@ class stacker_app:
         # create target
         # draw slider
         self.stacker = stacker()
-        self.SPEED = .1
+        self.SPEED = 1
         self.direction = 1
         self.touchGrid = [(0,0,0)]*192
         self.hasLost = False
@@ -138,7 +138,7 @@ class stacker_app:
         else:
             self.checkGameState() 
             self.stacker.y_loc = self.stacker.y_loc - 1
-            self.SPEED = self.SPEED - .01
+            self.SPEED = self.SPEED - .05
             if (self.stacker.y_loc == 8):
                 self.stacker.length = 2
                 self.stacker.x_max = 10
