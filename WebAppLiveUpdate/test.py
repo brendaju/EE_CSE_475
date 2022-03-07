@@ -18,7 +18,7 @@ socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 thread_lock = Lock()
 
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.jpeg']
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg']
 
 color_array1 = []
 
