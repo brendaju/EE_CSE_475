@@ -14,8 +14,8 @@ class rope:
 
 class tugofwarApp:
     def __init__(self):
-        self.touchGrid = [(0, 0, 0)]*192
-        self.gameGrid = ['-']*10
+        self.touchGrid = [(0, 0, 0)] * 192
+        self.gameGrid = ['-'] * 10
         self.gameOver = 0
         self.IS_TIMER_BASED = False
         self.SPEED = 0
@@ -64,8 +64,8 @@ class tugofwarApp:
         return self.touchGrid
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         self.paint(x, y)
 
     def paint(self, x, y):
@@ -78,10 +78,10 @@ class tugofwarApp:
         if game_over:
 
             if win_left:
-                self.touchGrid = [(0, 0, 255)]*192
+                self.touchGrid = [(0, 0, 255)] * 192
 
             else:
-                self.touchGrid = [(0, 255, 0)]*192
+                self.touchGrid = [(0, 255, 0)] * 192
 
             for i in range(4, 12):
                 self.touchGrid[self.convert(2, i)] = (255, 255, 255)
@@ -103,7 +103,7 @@ class tugofwarApp:
 
             if (x < 10) and (x > 1) and (y < 12) and (y > 3):
                 game_over = False
-                self.touchGrid = [(0, 0, 0)]*192
+                self.touchGrid = [(0, 0, 0)] * 192
                 self.rope.start = 4
                 self.rope.end = 12
                 self.draw_rope()
@@ -123,10 +123,10 @@ class tugofwarApp:
                 self.rope.end = self.rope.end + 1
 
             if win_left:
-                self.touchGrid = [(0, 0, 255)]*192
+                self.touchGrid = [(0, 0, 255)] * 192
 
             elif win_right:
-                self.touchGrid = [(0, 255, 0)]*192
+                self.touchGrid = [(0, 255, 0)] * 192
 
             else:
                 self.draw_rope()

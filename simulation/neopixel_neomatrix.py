@@ -18,8 +18,8 @@ setColors = [
 class Adafruit_NeoMatrix(Adafruit_GFX):
 
     def __init__(self):
-        self.create_matrix(12, 16, 6, self.positions["NEO_MATRIX_TOP"]+self.positions["NEO_MATRIX_LEFT"] +
-                           self.positions["NEO_MATRIX_COLUMNS"]+self.positions["NEO_MATRIX_PROGRESSIVE"])
+        self.create_matrix(12, 16, 6, self.positions["NEO_MATRIX_TOP"] + self.positions["NEO_MATRIX_LEFT"] +
+                           self.positions["NEO_MATRIX_COLUMNS"] + self.positions["NEO_MATRIX_PROGRESSIVE"])
         # Create NeoPixel object with appropriate configuration.
        # self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         # Intialize the library (must be called once before other functions).
@@ -58,9 +58,9 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         self.pin = pin
         self.matrix_type = matrix_type
         self.pixels = Adafruit_NeoPixel(
-            self.width*self.height, self.pin, "NEO_GRB + NEO_KHZ800")
+            self.width * self.height, self.pin, "NEO_GRB + NEO_KHZ800")
         self.new_touch = 0
-        self.new_touch_cord = [0]*2
+        self.new_touch_cord = [0] * 2
         self.was_right_click = False
 
     def convert(self, x, y):
@@ -70,10 +70,10 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         return (x * 16) + y
 
     def arrayConvert(self, grid):
-        blankArray = [(0, 0, 0)]*192
+        blankArray = [(0, 0, 0)] * 192
         for i in range(12):
             for j in range(16):
-                blankArray[i+j*12] = grid[self.convert(i, j)]
+                blankArray[i + j * 12] = grid[self.convert(i, j)]
         return blankArray
 
     async def update_buffer(self, grid):
@@ -90,21 +90,21 @@ class Adafruit_NeoMatrix(Adafruit_GFX):
         self.show()
 
     def delay(self, ms):
-        sleep(ms/1000)
+        sleep(ms / 1000)
 
     def begin(self):
-        self.new_touch_cord = [0]*2
-        needed_w = self.width*35
-        needed_h = self.height*34+4
+        self.new_touch_cord = [0] * 2
+        needed_w = self.width * 35
+        needed_h = self.height * 34 + 4
         self.pixels.begin(draw_matrix=True, width=self.width,
                           height=self.height, window_w=needed_w, window_h=needed_h)
 
     def drawPixel(self, x, y, color):
         x, y = self.mapPixelToRotation(x, y)
-        if x == None or y == None:
+        if x is None or y is None:
             pass
         else:
-            self.pixels.setPixelColor(y*self.width+x, color)
+            self.pixels.setPixelColor(y * self.width + x, color)
 
     def show(self):
         self.pixels.gui.render()
@@ -127,8 +127,8 @@ bitmap_array = [0x00, 0x84 >> 1, 0x84 >> 1,
 
 if __name__ == "__main__":
     matrix = Adafruit_NeoMatrix()
-    matrix.create_matrix(12, 16, 6, matrix.positions["NEO_MATRIX_TOP"]+matrix.positions["NEO_MATRIX_LEFT"] +
-                         matrix.positions["NEO_MATRIX_COLUMNS"]+matrix.positions["NEO_MATRIX_PROGRESSIVE"])
+    matrix.create_matrix(12, 16, 6, matrix.positions["NEO_MATRIX_TOP"] + matrix.positions["NEO_MATRIX_LEFT"] +
+                         matrix.positions["NEO_MATRIX_COLUMNS"] + matrix.positions["NEO_MATRIX_PROGRESSIVE"])
     matrix.begin()
     matrix.show()
     matrix.setRotation(0)

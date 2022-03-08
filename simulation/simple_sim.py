@@ -66,7 +66,8 @@ async def simulationInput(strip):
                 strip.new_touch_cord[0],
                 strip.new_touch_cord[1])
             strip.pixels.gui.new_touch = 0
-            if ((strip.new_touch_cord[0], strip.new_touch_cord[1]) != lastFourUniqueInputs[touchIndex]):
+            if ((strip.new_touch_cord[0], strip.new_touch_cord[1])
+                    != lastFourUniqueInputs[touchIndex]):
                 if (touchIndex >= 3):
                     touchIndex = 0
                 else:

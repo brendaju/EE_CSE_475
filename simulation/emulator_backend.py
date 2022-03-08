@@ -10,7 +10,8 @@ class Adafruit_NeoPixel():
         self.pixel_type = pixel_type
         self.brightness = 100
 
-    def begin(self, draw_matrix=False, width=0, height=0, window_w=1765, window_h=400):
+    def begin(self, draw_matrix=False, width=0,
+              height=0, window_w=1765, window_h=400):
         self.gui = NeoPixel_Emulator(window_w=window_w, window_h=window_h)
         self.pixel_list = list()
         for pixel in range(self.pixel_number):
@@ -41,7 +42,7 @@ class Adafruit_NeoPixel():
         if start + count > self.pixel_number:
             return False
         else:
-            for pixel in range(start, count+start):
+            for pixel in range(start, count + start):
                 self.setPixelColor(pixel, color)
 
     def setBrightness(self, new_brightness):  # use opacity to represent this
@@ -67,4 +68,4 @@ class Adafruit_NeoPixel():
         return self.brightness
 
     def delay(self, ms):
-        time.sleep(ms/1000)
+        time.sleep(ms / 1000)

@@ -25,7 +25,7 @@ class paintingApp:
         self.stored_R = 0
         self.stored_G = 0
         self.stored_B = 0
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.IS_TIMER_BASED = False
         self.SPEED = 0
         self.setup_painting()
@@ -56,8 +56,8 @@ class paintingApp:
         return self.touchGrid
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         print(x, y)
         print(self.convert(x, y))
         self.touchGrid[self.convert(x, y)] = webColor

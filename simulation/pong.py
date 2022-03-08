@@ -44,7 +44,7 @@ class ball:
 
 class pong_app:
     def __init__(self):
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.p1 = slider(15)
         self.p2 = slider(0)
         self.ball = ball()
@@ -70,23 +70,23 @@ class pong_app:
         # draw ball
         for i in range(self.ball.length):
             self.touchGrid[self.convert(
-                self.ball.x_loc+i, self.ball.y_loc)] = (255, 255, 255)
+                self.ball.x_loc + i, self.ball.y_loc)] = (255, 255, 255)
 
     async def getGrid(self):
         return self.touchGrid
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         self.paint(x, y)
 
     def draw_sliders(self):
         for i in range(self.p1.length):
             self.touchGrid[self.convert(
-                self.p1.x_loc+i, self.p1.y_loc)] = (255, 255, 255)
+                self.p1.x_loc + i, self.p1.y_loc)] = (255, 255, 255)
         for i in range(self.p2.length):
             self.touchGrid[self.convert(
-                self.p2.x_loc+i, self.p2.y_loc)] = (255, 255, 255)
+                self.p2.x_loc + i, self.p2.y_loc)] = (255, 255, 255)
 
     def move(self, x=0, y=0):
         # clear ball location
@@ -105,7 +105,8 @@ class pong_app:
         if self.ball.x_loc == 0 or self.ball.x_loc == 11:
             self.ball.x_velocity *= -1
 
-        # determine x and y velocity based off of where ball strickes paddle for P1
+        # determine x and y velocity based off of where ball strickes paddle
+        # for P1
         if self.ball.y_loc == self.p1.y_loc - 1 and self.ball.y_velocity == 1:
             if self.ball.x_loc == self.p1.x_loc + 1:
                 self.ball.y_velocity = -1
@@ -113,11 +114,12 @@ class pong_app:
             elif self.ball.x_loc == self.p1.x_loc:
                 self.ball.x_velocity = -1
                 self.ball.y_velocity = -1
-            elif self.ball.x_loc == self.p1.x_loc+2:
+            elif self.ball.x_loc == self.p1.x_loc + 2:
                 self.ball.x_velocity = 1
                 self.ball.y_velocity = -1
 
-        # determine x and y velocity based off of where ball strickes paddle for P2
+        # determine x and y velocity based off of where ball strickes paddle
+        # for P2
         if self.ball.y_loc == self.p2.y_loc + 1 and self.ball.y_velocity == -1:
             if self.ball.x_loc == self.p2.x_loc + 1:
                 self.ball.y_velocity = 1
@@ -125,7 +127,7 @@ class pong_app:
             elif self.ball.x_loc == self.p2.x_loc:
                 self.ball.x_velocity = -1
                 self.ball.y_velocity = 1
-            elif self.ball.x_loc == self.p2.x_loc+2:
+            elif self.ball.x_loc == self.p2.x_loc + 2:
                 self.ball.x_velocity = 1
                 self.ball.y_velocity = 1
 
@@ -152,17 +154,17 @@ class pong_app:
         # clear p1
         for i in range(self.p1.length):
             self.touchGrid[self.convert(
-                self.p1.x_loc+i, self.p1.y_loc)] = (0, 0, 0)
+                self.p1.x_loc + i, self.p1.y_loc)] = (0, 0, 0)
 
         # clear p2
         for i in range(self.p2.length):
             self.touchGrid[self.convert(
-                self.p2.x_loc+i, self.p2.y_loc)] = (0, 0, 0)
+                self.p2.x_loc + i, self.p2.y_loc)] = (0, 0, 0)
 
         # clear ball
         for i in range(self.ball.length):
             self.touchGrid[self.convert(
-                self.ball.x_loc+i, self.ball.y_loc)] = (0, 0, 0)
+                self.ball.x_loc + i, self.ball.y_loc)] = (0, 0, 0)
 
         # define slider movement for p1
         slider_center_p1 = self.p1.x_loc + 1

@@ -20,8 +20,8 @@ def Color(red, green, blue):
 class tictactoeApp:
     def __init__(self):
         self.currentPlayer = 'X'
-        self.touchGrid = [(0, 0, 0)]*192
-        self.gameGrid = ['-']*10
+        self.touchGrid = [(0, 0, 0)] * 192
+        self.gameGrid = ['-'] * 10
         self.gameOver = 0
         self.IS_TIMER_BASED = False
         self.SPEED = 0
@@ -79,73 +79,75 @@ class tictactoeApp:
         return self.touchGrid
 
     def boardCheck(self):
-        if (self.gameGrid[0] == self.gameGrid[1] == self.gameGrid[2] and self.gameGrid[0] != '-'):
+        if (self.gameGrid[0] == self.gameGrid[1] ==
+                self.gameGrid[2] and self.gameGrid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i+1, 4)] = (255, 0, 0)
+                self.touchGrid[self.convert(i + 1, 4)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[3] == self.gameGrid[4] == self.gameGrid[5] and self.gameGrid[3] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i+1, 8)] = (255, 0, 0)
+                self.touchGrid[self.convert(i + 1, 8)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[6] == self.gameGrid[7] == self.gameGrid[8] and self.gameGrid[6] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i+1, 12)] = (255, 0, 0)
+                self.touchGrid[self.convert(i + 1, 12)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[0] == self.gameGrid[3] == self.gameGrid[6] and self.gameGrid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(2, 3+i)] = (255, 0, 0)
+                self.touchGrid[self.convert(2, 3 + i)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[1] == self.gameGrid[4] == self.gameGrid[7] and self.gameGrid[1] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(6, 3+i)] = (255, 0, 0)
+                self.touchGrid[self.convert(6, 3 + i)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[2] == self.gameGrid[5] == self.gameGrid[8] and self.gameGrid[2] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(10, 3+i)] = (255, 0, 0)
+                self.touchGrid[self.convert(10, 3 + i)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[0] == self.gameGrid[4] == self.gameGrid[8] and self.gameGrid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i+1, i+4)] = (255, 0, 0)
+                self.touchGrid[self.convert(i + 1, i + 4)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[2] == self.gameGrid[4] == self.gameGrid[6] and self.gameGrid[2] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i+1, 13-i)] = (255, 0, 0)
+                self.touchGrid[self.convert(i + 1, 13 - i)] = (255, 0, 0)
             return 1
         else:
             return 0
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         self.paint(x, y)
 
     def paint(self, x, y):
         gameIndex, gameX, gameY = self.gameConvert(x, y)
-        if (gameIndex == -1 or self.gameGrid[gameIndex] != '-' or self.gameOver == 1):
+        if (gameIndex == -
+                1 or self.gameGrid[gameIndex] != '-' or self.gameOver == 1):
             return
 
         self.gameGrid[gameIndex] = self.currentPlayer
 
         if (self.currentPlayer == 'X'):
             self.touchGrid[self.convert(
-                (gameX*4+1), (gameY*4+3))] = (255, 0, 255)
+                (gameX * 4 + 1), (gameY * 4 + 3))] = (255, 0, 255)
             self.touchGrid[self.convert(
-                (gameX*4+3), (gameY*4+3))] = (255, 0, 255)
+                (gameX * 4 + 3), (gameY * 4 + 3))] = (255, 0, 255)
             self.touchGrid[self.convert(
-                (gameX*4+2), (gameY*4+4))] = (255, 0, 255)
+                (gameX * 4 + 2), (gameY * 4 + 4))] = (255, 0, 255)
             self.touchGrid[self.convert(
-                (gameX*4+1), (gameY*4+5))] = (255, 0, 255)
+                (gameX * 4 + 1), (gameY * 4 + 5))] = (255, 0, 255)
             self.touchGrid[self.convert(
-                (gameX*4+3), (gameY*4+5))] = (255, 0, 255)
+                (gameX * 4 + 3), (gameY * 4 + 5))] = (255, 0, 255)
         else:
             self.touchGrid[self.convert(
-                (gameX*4+2), (gameY*4+3))] = (255, 255, 0)
+                (gameX * 4 + 2), (gameY * 4 + 3))] = (255, 255, 0)
             self.touchGrid[self.convert(
-                (gameX*4+1), (gameY*4+4))] = (255, 255, 0)
+                (gameX * 4 + 1), (gameY * 4 + 4))] = (255, 255, 0)
             self.touchGrid[self.convert(
-                (gameX*4+3), (gameY*4+4))] = (255, 255, 0)
+                (gameX * 4 + 3), (gameY * 4 + 4))] = (255, 255, 0)
             self.touchGrid[self.convert(
-                (gameX*4+2), (gameY*4+5))] = (255, 255, 0)
+                (gameX * 4 + 2), (gameY * 4 + 5))] = (255, 255, 0)
 
         self.gameOver = self.boardCheck()
 

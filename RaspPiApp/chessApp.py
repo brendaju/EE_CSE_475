@@ -27,7 +27,7 @@ def Color(red, green, blue):
 class chessApp:
     def __init__(self):
         self.board = chess.Board()
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.moveState = 0  # 0 - selecting piece, 1 - selecting move
         self.moveOptions = []
         self.selectedPiece = 0
@@ -64,15 +64,15 @@ class chessApp:
         for x in range(1, 9):
             for y in range(8):
                 self.touchGrid[self.convert(
-                    x-1, y)] = pieceColors[self.boardState[(8-x)*8+y]]
+                    x - 1, y)] = pieceColors[self.boardState[(8 - x) * 8 + y]]
         # print(self.boardState)
 
     async def getGrid(self):
         return self.touchGrid
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         self.paint(x, y)
 
     def updateBoard(self):
@@ -80,7 +80,7 @@ class chessApp:
         for x in range(1, 9):
             for y in range(8):
                 self.touchGrid[self.convert(
-                    x-1, y)] = pieceColors[self.boardState[(8-x)*8+y]]
+                    x - 1, y)] = pieceColors[self.boardState[(8 - x) * 8 + y]]
 
     def paint(self, x, y):
         n, locationCode = self.chessConvert(x, y)

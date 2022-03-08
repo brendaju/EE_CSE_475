@@ -13,7 +13,7 @@ class menuApp:
         self.appArray = ['Painting', 'tictactoe', 'chess', 'animation',
                          'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
         self.newAppSelected = 0
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.IS_TIMER_BASED = False
         self.SPEED = 1
 
@@ -104,7 +104,7 @@ class menuApp:
         self.newAppSelected = 0
         self.selectedApp = ''
         self.displayNumber(int(self.deviceID % 10), 2, 2)
-        self.displayNumber(int(self.deviceID/10), 6, 2)
+        self.displayNumber(int(self.deviceID / 10), 6, 2)
 
         self.touchGrid[self.convert(2, 10)] = (255, 0, 255)
         self.touchGrid[self.convert(3, 10)] = (255, 255, 255)
@@ -121,8 +121,8 @@ class menuApp:
         return self.touchGrid
 
     def webPaint(self, n):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         print(x, y)
         print(self.convert(x, y))
 
@@ -130,10 +130,10 @@ class menuApp:
         print(x, y)
         if y == 10:
             if (x >= 2 and x <= 9):
-                self.nextApp = self.appArray[x-2]
+                self.nextApp = self.appArray[x - 2]
                 self.newAppSelected = 1
         if y == 11:
             if (x >= 2 and x <= 3):
-                self.nextApp = self.appArray[x+6]
+                self.nextApp = self.appArray[x + 6]
                 self.newAppSelected = 1
         print(self.nextApp)

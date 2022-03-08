@@ -45,13 +45,13 @@ class Adafruit_GFX():
         pass
 
     def drawFastVLine(self, x, y, h, color):
-        self.drawLine(x, y, x, y+h-1, color)
+        self.drawLine(x, y, x, y + h - 1, color)
 
     def drawFastHLine(self, x, y, w, color):
-        self.drawLine(x, y, x+w-1, y, color)
+        self.drawLine(x, y, x + w - 1, y, color)
 
     def drawLine(self, x0, y0, x1, y1, color):
-        steep = abs(y1-y0) > abs(x1-x0)
+        steep = abs(y1 - y0) > abs(x1 - x0)
         if steep:
             x0, y0 = y0, x0
             x1, y1 = y1, x1
@@ -78,7 +78,7 @@ class Adafruit_GFX():
             x0 += 1
 
     def fillRect(self, x, y, w, h, color):
-        for i in range(x, x+w):
+        for i in range(x, x + w):
             self.drawFastVLine(i, y, h, color)
 
     def fillScreen(self, color):
@@ -89,9 +89,9 @@ class Adafruit_GFX():
 
     def drawRect(self, x, y, w, h, color):
         self.drawFastHLine(x, y, w, color)
-        self.drawFastHLine(x, y+h-1, w, color)
+        self.drawFastHLine(x, y + h - 1, w, color)
         self.drawFastVLine(x, y, h, color)
-        self.drawFastVLine(x+w-1, y, h, color)
+        self.drawFastVLine(x + w - 1, y, h, color)
 
     def drawCircle(self, x0, y0, r, color):
         r = int(r)
@@ -100,10 +100,10 @@ class Adafruit_GFX():
         ddF_y = -2 * r
         x = 0
         y = r
-        self.drawPixel(x0, y0+r, color)
-        self.drawPixel(x0, y0-r, color)
-        self.drawPixel(x0+r, y0, color)
-        self.drawPixel(x0-r, y0, color)
+        self.drawPixel(x0, y0 + r, color)
+        self.drawPixel(x0, y0 - r, color)
+        self.drawPixel(x0 + r, y0, color)
+        self.drawPixel(x0 - r, y0, color)
 
         while x < y:
             if f >= 0:
@@ -113,14 +113,14 @@ class Adafruit_GFX():
             x += 1
             ddF_x += 2
             f += ddF_x
-            self.drawPixel(x0+x, y0+y, color)
-            self.drawPixel(x0-x, y0+y, color)
-            self.drawPixel(x0+x, y0-y, color)
-            self.drawPixel(x0-x, y0-y, color)
-            self.drawPixel(x0+y, y0+x, color)
-            self.drawPixel(x0-y, y0+x, color)
-            self.drawPixel(x0+y, y0-x, color)
-            self.drawPixel(x0-y, y0-x, color)
+            self.drawPixel(x0 + x, y0 + y, color)
+            self.drawPixel(x0 - x, y0 + y, color)
+            self.drawPixel(x0 + x, y0 - y, color)
+            self.drawPixel(x0 - x, y0 - y, color)
+            self.drawPixel(x0 + y, y0 + x, color)
+            self.drawPixel(x0 - y, y0 + x, color)
+            self.drawPixel(x0 + y, y0 - x, color)
+            self.drawPixel(x0 - y, y0 - x, color)
 
     def drawCircleHelper(self, x0, y0, r, cornername, color):
         f = 1 - r
@@ -139,20 +139,20 @@ class Adafruit_GFX():
             f += ddF_x
 
             if cornername & 4:
-                self.drawPixel(x0+x, y0+y, color)
-                self.drawPixel(x0+y, y0+x, color)
+                self.drawPixel(x0 + x, y0 + y, color)
+                self.drawPixel(x0 + y, y0 + x, color)
             if cornername & 2:
-                self.drawPixel(x0+x, y0-y, color)
-                self.drawPixel(x0+y, y0-x, color)
+                self.drawPixel(x0 + x, y0 - y, color)
+                self.drawPixel(x0 + y, y0 - x, color)
             if cornername & 8:
-                self.drawPixel(x0-y, y0+x, color)
-                self.drawPixel(x0-x, y0+y, color)
+                self.drawPixel(x0 - y, y0 + x, color)
+                self.drawPixel(x0 - x, y0 + y, color)
             if cornername & 1:
-                self.drawPixel(x0-y, y0-x, color)
-                self.drawPixel(x0-x, y0-y, color)
+                self.drawPixel(x0 - y, y0 - x, color)
+                self.drawPixel(x0 - x, y0 - y, color)
 
     def fillCircle(self, x0, y0, r, color):
-        self.drawFastVLine(x0, y0-r, 2*r+1, color)
+        self.drawFastVLine(x0, y0 - r, 2 * r + 1, color)
         self.fillCircleHelper(x0, y0, r, 3, 0, color)
 
     def fillCircleHelper(self, x0, y0, r, corners, delta, color):
@@ -172,16 +172,16 @@ class Adafruit_GFX():
             x += 1
             ddF_x += 2
             f += ddF_x
-            if x < (y+1):
+            if x < (y + 1):
                 if corners & 1:
-                    self.drawFastVLine(x0+x, y0-y, 2*y+delta, color)
+                    self.drawFastVLine(x0 + x, y0 - y, 2 * y + delta, color)
                 if corners & 2:
-                    self.drawFastVLine(x0-x, y0-y, 2*y+delta, color)
+                    self.drawFastVLine(x0 - x, y0 - y, 2 * y + delta, color)
             if y != py:
                 if corners & 1:
-                    self.drawFastVLine(x0+py, y0-px, 2*px+delta, color)
+                    self.drawFastVLine(x0 + py, y0 - px, 2 * px + delta, color)
                 if corners & 2:
-                    self.drawFastVLine(x0-py, y0-px, 2*px+delta, color)
+                    self.drawFastVLine(x0 - py, y0 - px, 2 * px + delta, color)
                 py = y
             px = x
 
@@ -211,7 +211,7 @@ class Adafruit_GFX():
                 a = x2
             elif x2 > b:
                 b = x2
-            self.drawFastHLine(a, y0, b-a+1, color)
+            self.drawFastHLine(a, y0, b - a + 1, color)
             return True
         dx01 = x1 - x0
         dy01 = y1 - y0
@@ -224,17 +224,17 @@ class Adafruit_GFX():
         if y1 == y2:
             last = y1
         else:
-            last = y1-1
-        for y in range(y0, last+1):
-            a = int(x0+sa/dy01)
-            b = int(x0+sb/dy02)
+            last = y1 - 1
+        for y in range(y0, last + 1):
+            a = int(x0 + sa / dy01)
+            b = int(x0 + sb / dy02)
             sa += dx01
             sb += dx02
             if a > b:
                 a, b = b, a
-            self.drawFastHLine(a, y, b-a+1, color)
-        sa = dx12 * (y-y1)
-        sb = dx02 * (y-y0)
+            self.drawFastHLine(a, y, b - a + 1, color)
+        sa = dx12 * (y - y1)
+        sb = dx02 * (y - y0)
         while(y <= y2):
             a = int(x1 + sa / dy12)
             b = int(x0 + sb / dy02)
@@ -242,7 +242,7 @@ class Adafruit_GFX():
             sb += dx02
             if a > b:
                 a, b = b, a
-            self.drawFastHLine(a, y, b-a+1, color)
+            self.drawFastHLine(a, y, b - a + 1, color)
             y += 1
 
     def drawRoundRect(self, x, y, w, h, radius, color):
@@ -252,18 +252,18 @@ class Adafruit_GFX():
             max_radius = w
         else:
             max_radius = h
-        max_radius = int(max_radius/2)
+        max_radius = int(max_radius / 2)
         if r > max_radius:
             r = max_radius
-        self.drawFastHLine(x+r, y, w-2*r, color)
-        self.drawFastHLine(x+r, y+h-1, w-2*r, color)
-        self.drawFastVLine(x, y+r, h-2*r, color)
-        self.drawFastVLine(x+w-1, y+r, h-2*r, color)
+        self.drawFastHLine(x + r, y, w - 2 * r, color)
+        self.drawFastHLine(x + r, y + h - 1, w - 2 * r, color)
+        self.drawFastVLine(x, y + r, h - 2 * r, color)
+        self.drawFastVLine(x + w - 1, y + r, h - 2 * r, color)
 
-        self.drawCircleHelper(x+r, y+r, r, 1, color)
-        self.drawCircleHelper(x+w-r-1, y+r, r, 2, color)
-        self.drawCircleHelper(x+w-r-1, y+h-r-1, r, 4, color)
-        self.drawCircleHelper(x+r, y+h-r-1, r, 8, color)
+        self.drawCircleHelper(x + r, y + r, r, 1, color)
+        self.drawCircleHelper(x + w - r - 1, y + r, r, 2, color)
+        self.drawCircleHelper(x + w - r - 1, y + h - r - 1, r, 4, color)
+        self.drawCircleHelper(x + r, y + h - r - 1, r, 8, color)
 
     def fillRoundRect(self, x, y, w, h, radius, color):
         r = radius
@@ -272,25 +272,26 @@ class Adafruit_GFX():
             max_radius = w
         else:
             max_radius = h
-        max_radius = int(max_radius/2)
+        max_radius = int(max_radius / 2)
         if r > max_radius:
             r = max_radius
-        self.fillRect(x+r, y, w-2*r, h, color)
-        self.fillCircleHelper(x+w-r-1, y+r, r, 1, h-2*r-1, color)
-        self.fillCircleHelper(x+r, y+r, r, 2, h-2*r-1, color)
+        self.fillRect(x + r, y, w - 2 * r, h, color)
+        self.fillCircleHelper(x + w - r - 1, y + r, r, 1, h - 2 * r - 1, color)
+        self.fillCircleHelper(x + r, y + r, r, 2, h - 2 * r - 1, color)
 
-    def drawBitmap(self, x, y, bitmap_array, w, h, color, background_color=(0, 0, 0)):
+    def drawBitmap(self, x, y, bitmap_array, w, h,
+                   color, background_color=(0, 0, 0)):
         self.fillRect(x, y, w, h, background_color)
-        byteWidth = int((w+7)/8)
+        byteWidth = int((w + 7) / 8)
         byte = 0
         for j in range(h):
             for i in range(w):
                 if i & 7:
                     byte <<= 1
                 else:
-                    byte = bitmap_array[int(j*byteWidth+i/8)]
+                    byte = bitmap_array[int(j * byteWidth + i / 8)]
                 if byte & 0x80:
-                    self.drawPixel(x+i, y, color)
+                    self.drawPixel(x + i, y, color)
             y += 1
 
     def getRotation(self):

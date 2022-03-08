@@ -25,7 +25,7 @@ from imageshowApp import imageshowApp
 
 deviceID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)  # Open port with baud rate
-touchArr = [0]*192
+touchArr = [0] * 192
 sio = socketio.AsyncClient()
 ip = 'http://10.19.76.51:5000'
 received_data = "0"
@@ -48,7 +48,7 @@ json_array = {"array": touchArr}
 
 gridSelect = 1
 
-lastFourUniqueInputs = [(-1, -1)]*4
+lastFourUniqueInputs = [(-1, -1)] * 4
 touchIndex = 0
 
 
@@ -72,7 +72,8 @@ def readUART():
         else:
             touchIndex = touchIndex + 1
         lastFourUniqueInputs[touchIndex] = (gridLoc[0], gridLoc[1])
-        if ((0, 0) in lastFourUniqueInputs and (11, 0) in lastFourUniqueInputs and (0, 15) in lastFourUniqueInputs and (11, 15) in lastFourUniqueInputs):
+        if ((0, 0) in lastFourUniqueInputs and (11, 0) in lastFourUniqueInputs and (
+                0, 15) in lastFourUniqueInputs and (11, 15) in lastFourUniqueInputs):
             currentApp = 'Menu'
             apps['Menu'].setup_menu()
 
@@ -86,7 +87,7 @@ def interpretUART(uartData):
     gridLocString = gridLocString.decode('utf-8')
     firstValEnd = gridLocString.index(',')
     gridLoc = [int(gridLocString[3:firstValEnd]),
-               int(gridLocString[firstValEnd+5:])]
+               int(gridLocString[firstValEnd + 5:])]
     return gridLoc
 
 
@@ -104,14 +105,15 @@ async def timerReaction():
 
 
 def arrayConvert(grid):
-    blankArray = [(0, 0, 0)]*192
+    blankArray = [(0, 0, 0)] * 192
     for i in range(12):
         for j in range(16):
-            blankArray[convert(i, j)] = grid[i+j*12]
+            blankArray[convert(i, j)] = grid[i + j * 12]
     return blankArray
 
 
-    # return [[m[j][i] for j in range(len(m))] for i in range(len(m[0])-1,-1,-1)]
+    # return [[m[j][i] for j in range(len(m))] for i in
+    # range(len(m[0])-1,-1,-1)]
 '''
 def gridMake():
     global data_array, data_rotate
@@ -191,7 +193,7 @@ async def mainProgram(strip):
             await strip.update_buffer(selectedGrid)
             # arrayConvert(strip.touch_array)
             strip.json_array["array"] = strip.touch_array
-            r = requests.post(ip + '/array?id='+str(deviceID),
+            r = requests.post(ip + '/array?id=' + str(deviceID),
                               json=json.dumps(strip.json_array))
             storedGrid = selectedGrid.copy()
         await asyncio.sleep(0.1)

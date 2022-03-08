@@ -10,7 +10,7 @@ def Color(red, green, blue):
 
 class imageshowApp:
     def __init__(self):
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.IS_TIMER_BASED = False
         self.file = None
         self.SPEED = 0.1
@@ -40,7 +40,7 @@ class imageshowApp:
         self.IS_TIMER_BASED = False
 
     def arrayConvert(self, grid):
-        blankArray = [(0, 0, 0)]*192
+        blankArray = [(0, 0, 0)] * 192
         for i in range(12):
             for j in range(16):
                 val1 = np.int32(grid[j, i][0])
@@ -54,7 +54,7 @@ class imageshowApp:
         return blankArray
 
     def image_processing(self):
-        if self.file != None:
+        if self.file is not None:
             decodedArray = json.loads(self.file["file"])
             image = np.asarray(decodedArray["array"])
             x = image.shape[1]
@@ -72,15 +72,15 @@ class imageshowApp:
                 x = image.shape[0]
                 y = image.shape[1]
             output = np.zeros((16, 12, 3), dtype='int')
-            x_ds = float(x-1)/(12 - 1)
-            y_ds = float(y-1)/(16 - 1)
+            x_ds = float(x - 1) / (12 - 1)
+            y_ds = float(y - 1) / (16 - 1)
             for k in range(0, 3):
                 for i in range(0, 16):
                     for j in range(0, 12):
-                        x_low = math.floor(x_ds*j)
-                        x_high = math.ceil(x_ds*j)
-                        y_low = math.floor(y_ds*i)
-                        y_high = math.ceil(y_ds*i)
+                        x_low = math.floor(x_ds * j)
+                        x_high = math.ceil(x_ds * j)
+                        y_low = math.floor(y_ds * i)
+                        y_high = math.ceil(y_ds * i)
 
                         fir_pix = rotate_image[y_low, x_low, k]
                         sec_pix = rotate_image[y_low, x_high, k]

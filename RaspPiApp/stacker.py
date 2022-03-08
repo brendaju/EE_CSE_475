@@ -31,7 +31,7 @@ class stacker:
 
 class stacker_app:
     def __init__(self):
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.stacker = stacker()
         self.direction = 1  # 1 - right -1 - left
         self.hasLost = False
@@ -58,7 +58,7 @@ class stacker_app:
         self.stacker = stacker()
         self.SPEED = 1
         self.direction = 1
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.hasLost = False
         self.hasWon = False
         self.endStateGridLocation = 0
@@ -69,8 +69,8 @@ class stacker_app:
         return self.touchGrid
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         self.paint(x, y)
 
     def draw_changeRows(self):
@@ -81,7 +81,7 @@ class stacker_app:
     def draw_stacker(self):
         for i in range(self.stacker.length):
             self.touchGrid[self.convert(
-                self.stacker.x_loc+i, self.stacker.y_loc)] = (255, 0, 0)
+                self.stacker.x_loc + i, self.stacker.y_loc)] = (255, 0, 0)
 
     lastColor = (0, 0, 0)
 
@@ -92,9 +92,12 @@ class stacker_app:
             tmpColor = self.blankColor
             self.blankColor = lastColor
             lastColor = tmpColor
-        for i in range(self.endStateGridLocation, 12 - self.endStateGridLocation):
-            for j in range(self.endStateGridLocation, 16 - self.endStateGridLocation):
-                if ((i == (self.endStateGridLocation) or i == 11 - (self.endStateGridLocation)) or (j == (self.endStateGridLocation) or j == 15 - (self.endStateGridLocation))):
+        for i in range(self.endStateGridLocation,
+                       12 - self.endStateGridLocation):
+            for j in range(self.endStateGridLocation,
+                           16 - self.endStateGridLocation):
+                if ((i == (self.endStateGridLocation) or i == 11 - (self.endStateGridLocation))
+                        or (j == (self.endStateGridLocation) or j == 15 - (self.endStateGridLocation))):
                     self.touchGrid[self.convert(i, j)] = lastColor
                 else:
                     self.touchGrid[self.convert(i, j)] = self.blankColor
@@ -111,7 +114,7 @@ class stacker_app:
         else:
             for i in range(self.stacker.length):
                 self.touchGrid[self.convert(
-                    self.stacker.x_loc+i, self.stacker.y_loc)] = (0, 0, 0)
+                    self.stacker.x_loc + i, self.stacker.y_loc)] = (0, 0, 0)
 
             # Determine direction and iterate x location
             at_left_edge = self.stacker.x_loc == 0
@@ -129,7 +132,8 @@ class stacker_app:
             lastColor = (0, 255, 0)
         if (self.stacker.y_loc != 15):
             for i in range(self.stacker.length):
-                if (self.touchGrid[self.convert(self.stacker.x_loc + i, self.stacker.y_loc + 1)] == (0, 0, 0)):
+                if (self.touchGrid[self.convert(
+                        self.stacker.x_loc + i, self.stacker.y_loc + 1)] == (0, 0, 0)):
                     self.hasLost = True
                     lastColor = (255, 0, 0)
         if (self.hasWon or self.hasLost):

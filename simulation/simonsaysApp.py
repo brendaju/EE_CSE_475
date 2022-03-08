@@ -25,7 +25,7 @@ class simonsaysApp:
         self.curr_count = 0
         self.level = 0
         self.incorrect_touch = (0, 0)
-        self.touchGrid = [(0, 0, 0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.pattern = []
         self.blink = 0
         self.correct_touch = 0
@@ -47,8 +47,8 @@ class simonsaysApp:
         return self.touchGrid
 
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         print(x, y)
         print(self.convert(x, y))
         self.touchGrid[self.convert(x, y)] = webColor
@@ -79,7 +79,8 @@ class simonsaysApp:
             self.level += 1
             self.blink_square = 1
 
-        # during display pattern, the user watches the pattern and tries to memorize it. user inputs are not accepted
+        # during display pattern, the user watches the pattern and tries to
+        # memorize it. user inputs are not accepted
         elif (self.display_pattern):
             # blinks the square in the pattern white
             if (self.blink_square):
@@ -95,12 +96,14 @@ class simonsaysApp:
                 # next two lines need to be moved to when the user gets to the next level
                 #self.pattern.append((random.randrange(0, 11, 1), random.randrange(0, 15, 1)))
                 #self.level += 1
-                # checks if the pattern is done. if it is, turn control over to the user and reset the current index of the pattern array
+                # checks if the pattern is done. if it is, turn control over to
+                # the user and reset the current index of the pattern array
                 if (self.curr_count >= self.level):
                     self.display_pattern = 0
                     self.curr_count = 0
 
-        # now the user tries to input the pattern and is either right (new square gets added to the pattern) or wrong (gameover)
+        # now the user tries to input the pattern and is either right (new
+        # square gets added to the pattern) or wrong (gameover)
         else:
             print(self.correct_touch)
             print(self.level)
@@ -118,7 +121,8 @@ class simonsaysApp:
                 self.wipescreen()
 
     def paint(self, x, y):
-        if (x == self.pattern[self.curr_count][0] and y == self.pattern[self.curr_count][1]):
+        if (x == self.pattern[self.curr_count][0]
+                and y == self.pattern[self.curr_count][1]):
             # blink correct touch green and move forward in pattern array
             self.touchGrid[self.convert(
                 self.pattern[self.curr_count][0], self.pattern[self.curr_count][1])] = (0, 255, 0)
