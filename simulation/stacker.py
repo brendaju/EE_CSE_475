@@ -18,6 +18,7 @@ setColors = [
 def Color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
+
 class stacker:
     def __init__(self):
         self.x_loc = 5
@@ -30,9 +31,9 @@ class stacker:
 
 class stacker_app:
     def __init__(self):
-        self.touchGrid = [(0,0,0)]*192
+        self.touchGrid = [(0, 0, 0)]*192
         self.stacker = stacker()
-        self.direction = 1 # 1 - right -1 - left
+        self.direction = 1  # 1 - right -1 - left
         self.hasLost = False
         self.hasWon = False
         self.IS_TIMER_BASED = True
@@ -57,7 +58,7 @@ class stacker_app:
         self.stacker = stacker()
         self.SPEED = .1
         self.direction = 1
-        self.touchGrid = [(0,0,0)]*192
+        self.touchGrid = [(0, 0, 0)]*192
         self.hasLost = False
         self.hasWon = False
         self.endStateGridLocation = 0
@@ -79,8 +80,9 @@ class stacker_app:
 
     def draw_stacker(self):
         for i in range(self.stacker.length):
-            self.touchGrid[self.convert(self.stacker.x_loc+i, self.stacker.y_loc)] = (255,0,0)
-    
+            self.touchGrid[self.convert(
+                self.stacker.x_loc+i, self.stacker.y_loc)] = (255, 0, 0)
+
     lastColor = (0, 0, 0)
 
     def endGameEvent(self):
@@ -103,13 +105,14 @@ class stacker_app:
 
     def move(self, x=0, y=0):
         # Clear Stacker
-        
+
         if (self.hasWon or self.hasLost):
             self.endGameEvent()
         else:
             for i in range(self.stacker.length):
-                self.touchGrid[self.convert(self.stacker.x_loc+i, self.stacker.y_loc)] = (0,0,0)
-        
+                self.touchGrid[self.convert(
+                    self.stacker.x_loc+i, self.stacker.y_loc)] = (0, 0, 0)
+
             # Determine direction and iterate x location
             at_left_edge = self.stacker.x_loc == 0
             at_right_edge = self.stacker.x_loc == self.stacker.x_max
@@ -136,7 +139,7 @@ class stacker_app:
         if self.hasLost or self.hasWon:
             self.setup()
         else:
-            self.checkGameState() 
+            self.checkGameState()
             self.stacker.y_loc = self.stacker.y_loc - 1
             self.SPEED = self.SPEED - .01
             if (self.stacker.y_loc == 8):
@@ -145,8 +148,6 @@ class stacker_app:
             if (self.stacker.y_loc == 3):
                 self.stacker.length = 1
                 self.stacker.x_max = 11
-            
+
             # update slider location
             self.draw_stacker()
-
-

@@ -1,5 +1,4 @@
 import asyncio
-#from rpi_ws281x import Color
 
 setColors = [
     (255, 0, 0),
@@ -15,12 +14,14 @@ setColors = [
 X_MAX = 16
 Y_MAX = 12
 
+
 def Color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
+
 class animation_app:
     def __init__(self):
-        self.touchGrid = [(0,0,0)]*192
+        self.touchGrid = [(0, 0, 0)] * 192
         self.x_loc = 15
         self.y_loc = 10
         self.IS_TIMER_BASED = True
@@ -48,8 +49,8 @@ class animation_app:
 
     # Prolly don't work
     def webPaint(self, n, webColor):
-        x = int(n/16)
-        y = int(n-x*16)
+        x = int(n / 16)
+        y = int(n - x * 16)
         self.paint(x, y)
 
     def paint(self, x=0, y=0):
@@ -59,4 +60,4 @@ class animation_app:
         if self.x_loc == X_MAX or self.y_loc == Y_MAX:
             self.x_loc = 0
             # self.y_loc = 0
-        self.touchGrid[self.convert(self.y_loc, self.x_loc)] = (255,255,255)
+        self.touchGrid[self.convert(self.y_loc, self.x_loc)] = (255, 255, 255)

@@ -9,7 +9,6 @@ class numberDisplay:
         self.current = num
         self.array = [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1]
 
-
     def displayNumber(self):
 
         if self.number.current == 1:
@@ -42,6 +41,8 @@ class numberDisplay:
         for i in range(0, 5):
             for j in range(0, 3):
                 if (self.number.array[i * 3 + j] == 1):
-                    self.touchGrid[self.convert(self.number.startx + j, self.number.starty + i)] = (255, 255, 255)
+                    self.touchGrid[self.convert(
+                        self.number.startx + j, self.number.starty + i)] = (255, 255, 255)
                 else:
-                    self.touchGrid[self.convert(self.number.startx + j, self.number.starty + i)] = (0, 0, 0)
+                    self.touchGrid[self.convert(
+                        self.number.startx + j, self.number.starty + i)] = (0, 0, 0)

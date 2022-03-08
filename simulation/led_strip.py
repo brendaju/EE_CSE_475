@@ -18,7 +18,8 @@ LED_PIN = 18          # GPIO pin connected to the pixels (18 uses PWM!).
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10          # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
-LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
+# True to invert the signal (when using NPN transistor level shift)
+LED_INVERT = False
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 5
 
 setColors = [
@@ -32,15 +33,17 @@ setColors = [
     (0, 0, 0)
 ]
 
+
 class led_strip:
     def __init__(self):
         # Create NeoPixel object with appropriate configuration.
-        self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+        self.strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ,
+                                LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         # Intialize the library (must be called once before other functions).
         self.strip.begin()
         self.num_pixels = self.strip.numPixels()
         self.stored_color = Color(0, 0, 0)
-        self.send_color = self.rgbToHex(0,0,0)
+        self.send_color = self.rgbToHex(0, 0, 0)
         self.stored_R = 0
         self.stored_G = 0
         self.stored_B = 0
@@ -48,7 +51,7 @@ class led_strip:
         self.json_array = {"array": self.touch_array}
 
         for i in range(self.num_pixels):
-            self.turn_on_led(i, Color(0,0,0))
+            self.turn_on_led(i, Color(0, 0, 0))
        # self.setup_painting()
 
     # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
@@ -61,7 +64,7 @@ class led_strip:
         Wipe color across display a pixel at a time.
         """
         for i in range(self, self.num_pixels):
-            #print(i)
+            # print(i)
             self.strip.setPixelColor(i, color)
             self.strip.show()
             #time.sleep(wait_ms / 1000.0)
@@ -102,4 +105,3 @@ class led_strip:
         self.turn_on_led(self.convert(11,15), self.stored_color)
         self.touch_array[self.convert(11, 15)] = self.rgbToHex(self.stored_R, self.stored_G, self.stored_B)
 '''
-

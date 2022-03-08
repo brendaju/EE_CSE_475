@@ -18,6 +18,7 @@ setColors = [
 def Color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
+
 class slider:
     def __init__(self):
         self.x_loc = 5
@@ -51,7 +52,7 @@ class target:
 
 class brick_shooter_app:
     def __init__(self):
-        self.touchGrid = [(0,0,0)]*192
+        self.touchGrid = [(0, 0, 0)]*192
         self.slider = slider()
         self.ball = ball()
         self.targets = []
@@ -83,14 +84,15 @@ class brick_shooter_app:
 
         # draw ball
         for i in range(self.ball.length):
-            self.touchGrid[self.convert(self.ball.x_loc+i, self.ball.y_loc)] = (255,255,255)
+            self.touchGrid[self.convert(
+                self.ball.x_loc+i, self.ball.y_loc)] = (255, 255, 255)
 
         # draw targets (uses slightly different form but does same as below)
         for t in self.targets:
             for x in range(t.x_loc, t.x_loc + t.length):
                 for y in range(t.y_loc, t.y_loc + t.height):
                     self.target_locations.add((x, y))
-                    self.touchGrid[self.convert(x, y)] = (0,0,255)
+                    self.touchGrid[self.convert(x, y)] = (0, 0, 255)
 
     async def getGrid(self):
         return self.touchGrid
@@ -104,13 +106,16 @@ class brick_shooter_app:
         for i in range(self.slider.length):
             # paint the middle dot red and other dots white
             if (i == 1):
-                self.touchGrid[self.convert(self.slider.x_loc+i, self.slider.y_loc)] = (255,0,0)
+                self.touchGrid[self.convert(
+                    self.slider.x_loc+i, self.slider.y_loc)] = (255, 0, 0)
             else:
-                self.touchGrid[self.convert(self.slider.x_loc+i, self.slider.y_loc)] = (255,255,255)
+                self.touchGrid[self.convert(
+                    self.slider.x_loc+i, self.slider.y_loc)] = (255, 255, 255)
 
     def move(self, x=0, y=0):
         # clear ball location
-        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (0,0,0)
+        self.touchGrid[self.convert(
+            self.ball.x_loc, self.ball.y_loc)] = (0, 0, 0)
 
         # check if ball should move
         location = (self.ball.x_loc, self.ball.y_loc)
@@ -156,7 +161,8 @@ class brick_shooter_app:
             self.ball.x_loc += self.ball.x_velocity
 
         # display ball location
-        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
+        self.touchGrid[self.convert(
+            self.ball.x_loc, self.ball.y_loc)] = (255, 255, 255)
 
         #  gameover
         if len(self.target_locations) == 0:
@@ -167,17 +173,18 @@ class brick_shooter_app:
             self.ball.y_velocity = 0
             self.setup()
 
-
     def paint(self, x, y):
         slider_center = self.slider.x_loc + 1
 
         # clear slider
         for i in range(self.slider.length):
-            self.touchGrid[self.convert(self.slider.x_loc+i, self.slider.y_loc)] = (0,0,0)
+            self.touchGrid[self.convert(
+                self.slider.x_loc+i, self.slider.y_loc)] = (0, 0, 0)
 
         # clear ball
         for i in range(self.ball.length):
-            self.touchGrid[self.convert(self.ball.x_loc+i, self.ball.y_loc)] = (0,0,0)
+            self.touchGrid[self.convert(
+                self.ball.x_loc+i, self.ball.y_loc)] = (0, 0, 0)
 
         # define slider movement
         move_left = (y == self.slider.y_loc) and (x < slider_center)
@@ -215,6 +222,5 @@ class brick_shooter_app:
         self.draw_slider()
 
         # display ball location
-        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
-
-
+        self.touchGrid[self.convert(
+            self.ball.x_loc, self.ball.y_loc)] = (255, 255, 255)

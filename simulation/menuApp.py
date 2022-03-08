@@ -1,16 +1,19 @@
 import asyncio
 #from rpi_ws281x import Color
 
+
 def Color(red, green, blue):
     return (red << 16) | (green << 8) | blue
+
 
 class menuApp:
     def __init__(self, deviceID):
         self.deviceID = deviceID
         self.nextApp = ''
-        self.appArray = ['Painting', 'tictactoe', 'chess', 'animation', 'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
+        self.appArray = ['Painting', 'tictactoe', 'chess', 'animation',
+                         'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
         self.newAppSelected = 0
-        self.touchGrid = [(0,0,0)]*192
+        self.touchGrid = [(0, 0, 0)]*192
         self.IS_TIMER_BASED = False
         self.SPEED = 0
 
@@ -43,14 +46,16 @@ class menuApp:
 
         if number == 9:
             array = [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1]
-        
+
         for i in range(0, 5):
             for j in range(0, 3):
-            
+
                 if (array[i * 3 + j] == 1):
-                    self.touchGrid[self.convert(startx + j, starty + i)] = (255, 255, 255)
+                    self.touchGrid[self.convert(
+                        startx + j, starty + i)] = (255, 255, 255)
                 else:
-                    self.touchGrid[self.convert(startx + j, starty + i)] = (0, 0, 0)
+                    self.touchGrid[self.convert(
+                        startx + j, starty + i)] = (0, 0, 0)
 
     def convert(self, x, y):
         # if in an odd column, reverse the order
@@ -68,7 +73,7 @@ class menuApp:
         self.selectedApp = ''
         self.displayNumber(int(self.deviceID/10), 2, 2)
         self.displayNumber(int(self.deviceID % 10), 6, 2)
-            
+
         self.touchGrid[self.convert(2, 10)] = (255, 0, 255)
         self.touchGrid[self.convert(3, 10)] = (255, 255, 255)
         self.touchGrid[self.convert(4, 10)] = (255, 255, 0)
@@ -79,16 +84,15 @@ class menuApp:
         self.touchGrid[self.convert(9, 10)] = (255, 120, 0)
         self.touchGrid[self.convert(2, 11)] = (255, 0, 120)
         self.touchGrid[self.convert(3, 11)] = (120, 120, 255)
-        
-    
+
     async def getGrid(self):
         return self.touchGrid
 
     def webPaint(self, n):
         x = int(n/16)
         y = int(n-x*16)
-        print(x,y)
-        print(self.convert(x,y))
+        print(x, y)
+        print(self.convert(x, y))
 
     def paint(self, x, y):
         print(x, y)

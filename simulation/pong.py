@@ -18,6 +18,7 @@ setColors = [
 def Color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
+
 class slider:
     def __init__(self, y_loc):
         self.x_loc = 5
@@ -43,7 +44,7 @@ class ball:
 
 class pong_app:
     def __init__(self):
-        self.touchGrid = [(0,0,0)]*192
+        self.touchGrid = [(0, 0, 0)]*192
         self.p1 = slider(15)
         self.p2 = slider(0)
         self.ball = ball()
@@ -68,7 +69,8 @@ class pong_app:
 
         # draw ball
         for i in range(self.ball.length):
-            self.touchGrid[self.convert(self.ball.x_loc+i, self.ball.y_loc)] = (255,255,255)
+            self.touchGrid[self.convert(
+                self.ball.x_loc+i, self.ball.y_loc)] = (255, 255, 255)
 
     async def getGrid(self):
         return self.touchGrid
@@ -80,13 +82,16 @@ class pong_app:
 
     def draw_sliders(self):
         for i in range(self.p1.length):
-            self.touchGrid[self.convert(self.p1.x_loc+i, self.p1.y_loc)] = (255,255,255)
+            self.touchGrid[self.convert(
+                self.p1.x_loc+i, self.p1.y_loc)] = (255, 255, 255)
         for i in range(self.p2.length):
-            self.touchGrid[self.convert(self.p2.x_loc+i, self.p2.y_loc)] = (255,255,255)
+            self.touchGrid[self.convert(
+                self.p2.x_loc+i, self.p2.y_loc)] = (255, 255, 255)
 
     def move(self, x=0, y=0):
         # clear ball location
-        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (0,0,0)
+        self.touchGrid[self.convert(
+            self.ball.x_loc, self.ball.y_loc)] = (0, 0, 0)
 
         # if we're at bottom or top of the screen set ball to middle
         if self.ball.y_loc == 15 or self.ball.y_loc == 0:
@@ -124,14 +129,13 @@ class pong_app:
                 self.ball.x_velocity = 1
                 self.ball.y_velocity = 1
 
-
         if self.ball.is_moving:
             self.ball.y_loc += self.ball.y_velocity
             self.ball.x_loc += self.ball.x_velocity
 
-
         # display ball location
-        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
+        self.touchGrid[self.convert(
+            self.ball.x_loc, self.ball.y_loc)] = (255, 255, 255)
 
         score = 0
         #  gameover
@@ -143,21 +147,22 @@ class pong_app:
             self.ball.y_velocity = 0
             self.setup()
 
-
     def paint(self, x, y):
 
         # clear p1
         for i in range(self.p1.length):
-            self.touchGrid[self.convert(self.p1.x_loc+i, self.p1.y_loc)] = (0,0,0)
+            self.touchGrid[self.convert(
+                self.p1.x_loc+i, self.p1.y_loc)] = (0, 0, 0)
 
         # clear p2
         for i in range(self.p2.length):
-            self.touchGrid[self.convert(self.p2.x_loc+i, self.p2.y_loc)] = (0,0,0)
+            self.touchGrid[self.convert(
+                self.p2.x_loc+i, self.p2.y_loc)] = (0, 0, 0)
 
         # clear ball
         for i in range(self.ball.length):
-            self.touchGrid[self.convert(self.ball.x_loc+i, self.ball.y_loc)] = (0,0,0)
-
+            self.touchGrid[self.convert(
+                self.ball.x_loc+i, self.ball.y_loc)] = (0, 0, 0)
 
         # define slider movement for p1
         slider_center_p1 = self.p1.x_loc + 1
@@ -178,7 +183,6 @@ class pong_app:
                 self.p1.x_loc = 0
             else:
                 self.p1.x_loc += 1
-
 
         # define slider movement for p2
         slider_center_p2 = self.p2.x_loc + 1
@@ -210,6 +214,5 @@ class pong_app:
         self.draw_sliders()
 
         # display ball location
-        self.touchGrid[self.convert(self.ball.x_loc, self.ball.y_loc)] = (255,255,255)
-
-
+        self.touchGrid[self.convert(
+            self.ball.x_loc, self.ball.y_loc)] = (255, 255, 255)
