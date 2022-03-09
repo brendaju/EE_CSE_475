@@ -1,7 +1,6 @@
 from ast import Not
 import asyncio
 from shutil import move
-#from rpi_ws281x import Color
 
 setColors = [
     (255, 0, 0),
@@ -58,7 +57,6 @@ class pong_app:
             y = 15 - y
         return (x * 16) + y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
@@ -150,7 +148,6 @@ class pong_app:
             self.setup()
 
     def paint(self, x, y):
-
         # clear p1
         for i in range(self.p1.length):
             self.touchGrid[self.convert(
@@ -210,8 +207,6 @@ class pong_app:
             self.ball.y_velocity = 1
             self.ball.is_moving = True
 
-        print("p2 loc", self.p2.x_loc, self.p2.y_loc)
-        print("x and y", x, y)
         # update p1 and p2 sliders location
         self.draw_sliders()
 

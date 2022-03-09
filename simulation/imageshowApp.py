@@ -50,7 +50,6 @@ class imageshowApp:
                 val3 = np.int32(grid[j, i][2])
                 pyval3 = val3.item()
                 blankArray[self.convert(i, j)] = tuple(pyval1, pyval2, pyval3)
-                #blankArray[self.convert(i,j)] = tuple()
         return blankArray
 
     def image_processing(self):

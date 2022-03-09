@@ -64,7 +64,6 @@ def readUART():
     global gridSelect
     if (gridSelect == 1):
         apps[currentApp].paint(gridLoc[0], gridLoc[1])
-    print(gridLoc[0], gridLoc[1])
     # Menu App Logic
     if ((gridLoc[0], gridLoc[1]) != lastFourUniqueInputs[touchIndex]):
         if (touchIndex >= 3):
@@ -80,7 +79,6 @@ def readUART():
     pressedIndex = convert(gridLoc[0], gridLoc[1])
     return received_data
 
-
 def interpretUART(uartData):
     dataEnd = uartData.index(b'\r\n')
     gridLocString = uartData[0:dataEnd]
@@ -90,19 +88,15 @@ def interpretUART(uartData):
                int(gridLocString[firstValEnd + 5:])]
     return gridLoc
 
-
 data_array = []
-
 
 async def timerReaction():
     while True:
         if (apps[currentApp].IS_TIMER_BASED):
             apps[currentApp].move()
-            print("move")
             await asyncio.sleep(apps[currentApp].SPEED)
         else:
             await asyncio.sleep(.01)
-
 
 def arrayConvert(grid):
     blankArray = [(0, 0, 0)] * 192
@@ -110,25 +104,6 @@ def arrayConvert(grid):
         for j in range(16):
             blankArray[convert(i, j)] = grid[i + j * 12]
     return blankArray
-
-
-    # return [[m[j][i] for j in range(len(m))] for i in
-    # range(len(m[0])-1,-1,-1)]
-'''
-def gridMake():
-    global data_array, data_rotate
-    image = Image.open('pixel.png')
-    image = image.rotate(180)
-    # convert image to numpy array
-    image = image.convert('RGB')
-    data = image.getdata()
-    data_array = list(data)
-    print(data_array)
-    data_array = arrayConvert(data_array)
-    image = image.save("mario.png")
-    print(data_array)
-'''
-
 
 def convert(x, y):
     # if in an odd column, reverse the order
@@ -207,7 +182,6 @@ async def main(strip):
 
 @sio.on('my_response')
 async def response(data):
-    print(data)
     if (data['data']['deviceID'] == deviceID):
         global apps, currentApp
         readFrom = data['data']
@@ -220,7 +194,6 @@ async def response(data):
 
 @sio.on('appChange')
 async def changeApp(data):
-    print(data)
     global currentApp
     if (data['data']['deviceID'] == deviceID):
         currentApp = data['data']['appName']
@@ -230,7 +203,6 @@ async def changeApp(data):
 async def onConnected(data):
     global deviceID
     print(data['deviceID'])
-    # await sio.emit('deviceConnected', {'foo': 'bar'})
     deviceID = data['deviceID']
     apps['Menu'].deviceID = deviceID
     apps['Menu'].setup_menu()

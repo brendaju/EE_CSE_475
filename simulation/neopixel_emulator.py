@@ -25,7 +25,6 @@ class NeoPixel_Emulator(pyglet.window.Window):
                 led - 50 * (led // 50)) * 35, y=self.height - 34 - ((led // 50) * 34) - 5, group=self.color_group))
             self.sprites[led].scale = .1
             self.color_sprites[led].color = (0, 0, 0)
-            # print(self.sprites[led].position)
 
     def draw_LED_matrix(self, width, height):
         for y in range(height):

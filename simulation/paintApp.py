@@ -36,7 +36,6 @@ class paintingApp:
             y = 15 - y
         return (x * 16) + y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
@@ -58,8 +57,6 @@ class paintingApp:
     def webPaint(self, n, webColor):
         x = int(n / 16)
         y = int(n - x * 16)
-        print(x, y)
-        print(self.convert(x, y))
         self.touchGrid[self.convert(x, y)] = webColor
 
     def paint(self, x, y):
@@ -82,13 +79,9 @@ class paintingApp:
             self.clearingMode = (x == 7)
             self.send_color = self.rgbToHex(
                 self.stored_R, self.stored_G, self.stored_B)
-
-            #touchArr[n] = sendColor
         else:
-            #touchArr[n] = rgbToHex(storedR, storedG, storedB)
             self.touchGrid[self.convert(x, y)] = (
                 self.stored_R, self.stored_G, self.stored_B)
-            print(self.stored_R, self.stored_G, self.stored_B)
             if(self.clearingMode):
                 self.send_color = '#505050'
             elif (self.stored_R == self.stored_G and self.stored_R == self.stored_B):
@@ -96,12 +89,3 @@ class paintingApp:
             else:
                 self.send_color = self.rgbToHex(
                     self.stored_R, self.stored_G, self.stored_B)
-        #json_array["array"] = touchArr
-        # print(json.dumps(json_array))
-        #global lastPressedIndex
-        # if (pressedIndex != lastPressedIndex):
-        #    r = requests.post(ip + '/array', json=json.dumps(json_array))
-        #    lastPressedIndex = pressedIndex
-        # await loop.run_in_executor(None, show, matrix)
-        # show(matrix)
-        # await asyncio.sleep(0.1)

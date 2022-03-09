@@ -1,5 +1,4 @@
 import asyncio
-#from rpi_ws281x import Color
 
 
 def Color(red, green, blue):
@@ -63,7 +62,6 @@ class menuApp:
             y = 15 - y
         return (x * 16) + y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
@@ -73,7 +71,6 @@ class menuApp:
         self.selectedApp = ''
         self.displayNumber(int(self.deviceID / 10), 2, 2)
         self.displayNumber(int(self.deviceID % 10), 6, 2)
-
         self.touchGrid[self.convert(2, 10)] = (255, 0, 255)
         self.touchGrid[self.convert(3, 10)] = (255, 255, 255)
         self.touchGrid[self.convert(4, 10)] = (255, 255, 0)
@@ -91,11 +88,8 @@ class menuApp:
     def webPaint(self, n):
         x = int(n / 16)
         y = int(n - x * 16)
-        print(x, y)
-        print(self.convert(x, y))
 
     def paint(self, x, y):
-        print(x, y)
         if y == 10:
             if (x >= 2 and x <= 9):
                 self.nextApp = self.appArray[x - 2]
@@ -104,4 +98,3 @@ class menuApp:
             if (x >= 2 and x <= 3):
                 self.nextApp = self.appArray[x + 6]
                 self.newAppSelected = 1
-        print(self.nextApp)

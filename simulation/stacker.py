@@ -47,7 +47,6 @@ class stacker_app:
             y = 15 - y
         return (x * 16) + y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
@@ -87,7 +86,6 @@ class stacker_app:
 
     def endGameEvent(self):
         global lastColor
-        print(self.endStateGridLocation)
         if (self.endStateGridLocation == 6):
             tmpColor = self.blankColor
             self.blankColor = lastColor
@@ -107,16 +105,12 @@ class stacker_app:
             self.endStateGridLocation += 1
 
     def move(self, x=0, y=0):
-        # Clear Stacker
-
         if (self.hasWon or self.hasLost):
             self.endGameEvent()
         else:
             for i in range(self.stacker.length):
                 self.touchGrid[self.convert(
                     self.stacker.x_loc + i, self.stacker.y_loc)] = (0, 0, 0)
-
-            # Determine direction and iterate x location
             at_left_edge = self.stacker.x_loc == 0
             at_right_edge = self.stacker.x_loc == self.stacker.x_max
             if (at_left_edge or at_right_edge):

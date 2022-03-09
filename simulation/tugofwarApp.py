@@ -33,7 +33,6 @@ class tugofwarApp:
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_tug(self):
-
         for i in range(0, 12):
             self.touchGrid[self.convert(i, 0)] = (0, 0, 255)
             self.touchGrid[self.convert(i, 15)] = (0, 255, 0)
@@ -76,23 +75,17 @@ class tugofwarApp:
         game_over = win_left or win_right
 
         if game_over:
-
             if win_left:
                 self.touchGrid = [(0, 0, 255)] * 192
-
             else:
                 self.touchGrid = [(0, 255, 0)] * 192
-
             for i in range(4, 12):
                 self.touchGrid[self.convert(2, i)] = (255, 255, 255)
                 self.touchGrid[self.convert(9, i)] = (255, 255, 255)
-
             for i in range(2, 9):
                 self.touchGrid[self.convert(i, 11)] = (255, 255, 255)
-
             for i in range(5, 9):
                 self.touchGrid[self.convert(i, 4)] = (255, 255, 255)
-
             self.touchGrid[self.convert(5, 3)] = (255, 255, 255)
             self.touchGrid[self.convert(6, 2)] = (255, 255, 255)
             self.touchGrid[self.convert(7, 1)] = (255, 255, 255)
@@ -100,7 +93,6 @@ class tugofwarApp:
             self.touchGrid[self.convert(5, 5)] = (255, 255, 255)
             self.touchGrid[self.convert(6, 6)] = (255, 255, 255)
             self.touchGrid[self.convert(7, 7)] = (255, 255, 255)
-
             if (x < 10) and (x > 1) and (y < 12) and (y > 3):
                 game_over = False
                 self.touchGrid = [(0, 0, 0)] * 192
@@ -108,25 +100,19 @@ class tugofwarApp:
                 self.rope.end = 12
                 self.draw_rope()
                 self.setup_tug()
-
         else:
             for i in range(self.rope.start, self.rope.end):
                 self.touchGrid[self.convert(5, i)] = (0, 0, 0)
                 self.touchGrid[self.convert(6, i)] = (0, 0, 0)
-
             if move_left:
                 self.rope.start = self.rope.start - 1
                 self.rope.end = self.rope.end - 1
-
             if move_right:
                 self.rope.start = self.rope.start + 1
                 self.rope.end = self.rope.end + 1
-
             if win_left:
                 self.touchGrid = [(0, 0, 255)] * 192
-
             elif win_right:
                 self.touchGrid = [(0, 255, 0)] * 192
-
             else:
                 self.draw_rope()

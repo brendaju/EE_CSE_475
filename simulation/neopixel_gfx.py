@@ -6,8 +6,6 @@ class Adafruit_GFX():
         self.absoluteWidth = 0
         self.absoluteHeight = 0
 
-    # must define this function in matrix subclass
-
     def drawPixel(self, x, y, color):
         pass
 

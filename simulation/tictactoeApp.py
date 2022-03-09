@@ -1,5 +1,4 @@
 import asyncio
-#from rpi_ws281x import Color
 
 setColors = [
     (255, 0, 0),
@@ -59,8 +58,6 @@ class tictactoeApp:
             return -1, -1, -1
 
         return gameIndex, gameX, gameY
-
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
 
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]

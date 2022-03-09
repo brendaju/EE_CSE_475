@@ -1,7 +1,3 @@
-# REFERENCE ONLY
-# copy each section and paste into your own file accordingly
-
-
 class numberDisplay:
     def __init__(self, x=0, y=0, num=0):
         self.startx = x

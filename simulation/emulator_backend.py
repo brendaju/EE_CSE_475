@@ -23,8 +23,6 @@ class Adafruit_NeoPixel():
         self.gui.render()
 
     def show(self):
-        # for pixel in self.pixel_list:
-        #print("Pixel {0} has color {1}".format(pixel.get_position(),pixel.get_color()))
         self.gui.render()
 
     def setPixelColor(self, pixel_position, color):

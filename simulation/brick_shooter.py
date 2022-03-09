@@ -1,6 +1,4 @@
-from ast import Not
 import asyncio
-from shutil import move
 
 setColors = [
     (255, 0, 0),
@@ -162,7 +160,7 @@ class brick_shooter_app:
         self.touchGrid[self.convert(
             self.ball.x_loc, self.ball.y_loc)] = (255, 255, 255)
 
-        #  gameover
+        # gameover
         if len(self.target_locations) == 0:
             self.ball.y_loc = 14
             self.ball.x_loc = self.slider.x_loc + 1

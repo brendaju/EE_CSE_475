@@ -53,9 +53,7 @@ class led_strip:
 
         for i in range(self.num_pixels):
             self.turn_on_led(i, Color(0, 0, 0))
-       # self.setup_painting()
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
@@ -65,15 +63,12 @@ class led_strip:
         Wipe color across display a pixel at a time.
         """
         for i in range(self, self.num_pixels):
-            # print(i)
             self.strip.setPixelColor(i, color)
             self.strip.show()
-            #time.sleep(wait_ms / 1000.0)
 
     def turn_on_led(self, n, color, wait_ms=50):
         self.strip.setPixelColor(n, color)
         self.strip.show()
-        #time.sleep(wait_ms / 1000.0)
 
     async def update_buffer(self, grid):
         for i in range(0, len(grid)):
@@ -92,17 +87,3 @@ class led_strip:
             y = 15 - y
         return (x * 16) + y
 
-    '''def setup_painting(self):
-        for i in range(8):
-            n = self.convert(i, 15)
-            self.turn_on_led(n, Color(setColors[i][0], setColors[i][1], setColors[i][2]))
-            self.touch_array[n] = self.rgbToHex(setColors[i][0], setColors[i][1], setColors[i][2])
-        self.turn_on_led(self.convert(8,15), Color(0, 0, 255))
-        self.touch_array[self.convert(8, 15)] = self.rgbToHex(0, 0, 255)
-        self.turn_on_led(self.convert(9,15), Color(0, 255, 0))
-        self.touch_array[self.convert(9, 15)] = self.rgbToHex(0, 255, 0)
-        self.turn_on_led(self.convert(10,15), Color(255, 0, 0))
-        self.touch_array[self.convert(10, 15)] = self.rgbToHex(255, 0, 0)
-        self.turn_on_led(self.convert(11,15), self.stored_color)
-        self.touch_array[self.convert(11, 15)] = self.rgbToHex(self.stored_R, self.stored_G, self.stored_B)
-'''
