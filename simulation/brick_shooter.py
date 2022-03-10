@@ -1,6 +1,12 @@
+"""
+Creates the classic "brick shooter" game where a small sliding board
+shoots/bounces a ball to break various bricks in the playing field.
+Once all of the bricks are broken, the game resets with the player/ball
+returned to the start position and all of the bricks refilled.
+"""
 import asyncio
 
-setColors = [
+set_colors = [
     (255, 0, 0),
     (255, 127, 0),
     (255, 255, 0),
@@ -13,10 +19,16 @@ setColors = [
 
 
 def Color(red, green, blue):
+    """
+    Model color object for simulation
+    """
     return (red << 16) | (green << 8) | blue
 
 
 class slider:
+    """
+    Three pixel wide slider
+    """
     def __init__(self):
         self.x_loc = 5
         self.y_loc = 15
@@ -27,6 +39,9 @@ class slider:
 
 
 class ball:
+    """
+    One pixel wide ball
+    """
     def __init__(self):
         self.x_loc = 6
         self.y_loc = 14
@@ -40,6 +55,9 @@ class ball:
 
 
 class target:
+    """
+    Two by two pixel size target
+    """
     def __init__(self, x_loc=0, y_loc=0):
         self.x_loc = x_loc
         self.y_loc = y_loc
@@ -48,7 +66,13 @@ class target:
 
 
 class brick_shooter_app:
+    """
+    Main app logic
+    """
     def __init__(self):
+        """
+        Stores app's state
+        """
         self.touchGrid = [(0, 0, 0)] * 192
         self.slider = slider()
         self.ball = ball()
@@ -59,16 +83,25 @@ class brick_shooter_app:
         self.setup()
 
     def convert(self, x, y):
+        """
+        Converts x and y values into index for LED strip
+        """
         # if in an odd column, reverse the order
         if (x % 2 != 0):
             y = 15 - y
         return (x * 16) + y
 
-    def rgbToHex(self, r, g, b):
+    def rgb_to_hex(self, r, g, b):
+        """
+        Converts RGB form to HEX
+        """
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup(self):
+        """
+        Creates app's initial state
+        """
         # create targets
         self.targets.append(target(2, 1))
         self.targets.append(target(8, 3))
@@ -90,15 +123,25 @@ class brick_shooter_app:
                     self.target_locations.add((x, y))
                     self.touchGrid[self.convert(x, y)] = (0, 0, 255)
 
-    async def getGrid(self):
+    async def get_grid(self):
+        """
+        Returns the current state of the board to be displayed
+        """
         return self.touchGrid
 
-    def webPaint(self, n, webColor):
+    def web_paint(self, n, webColor):
+        """
+        Performs paint function in website format to allow
+        for website live updates
+        """
         x = int(n / 16)
         y = int(n - x * 16)
         self.paint(x, y)
 
     def draw_slider(self):
+        """
+        Draws slider at updated location
+        """
         for i in range(self.slider.length):
             # paint the middle dot red and other dots white
             if (i == 1):
@@ -109,6 +152,9 @@ class brick_shooter_app:
                     self.slider.x_loc + i, self.slider.y_loc)] = (255, 255, 255)
 
     def move(self, x=0, y=0):
+        """
+        Updates game state based on an asynchronous timer
+        """
         # clear ball location
         self.touchGrid[self.convert(
             self.ball.x_loc, self.ball.y_loc)] = (0, 0, 0)
@@ -170,6 +216,10 @@ class brick_shooter_app:
             self.setup()
 
     def paint(self, x, y):
+        """
+        Takes in an X and Y input from the touch sensors and updates app
+        state based on the given input
+        """
         slider_center = self.slider.x_loc + 1
 
         # clear slider
