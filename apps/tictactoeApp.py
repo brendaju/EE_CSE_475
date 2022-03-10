@@ -53,10 +53,10 @@ class TicTacToeApp:
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_tictactoe(self):
-        self.currentPlayer = 'X'
-        self.touchGrid = [(0, 0, 0)] * 192
-        self.gameGrid = ['-'] * 10
-        self.gameOver = 0
+        self.current_player = 'X'
+        self.touch_grid = [(0, 0, 0)] * 192
+        self.game_grid = ['-'] * 10
+        self.game_over = 0
         for i in range(1, 12):
             self.touch_grid[self.convert(i, 6)] = (200, 200, 200)
             self.touch_grid[self.convert(i, 10)] = (200, 200, 200)
@@ -96,7 +96,7 @@ class TicTacToeApp:
             return 1
         elif (self.game_grid[0] == self.game_grid[4] == self.game_grid[8] and self.game_grid[0] != '-'):
             for i in range(11):
-                self.touch_grid[self.convert(i + 1, i + 4)] = (255, 0, 0)
+                self.touch_grid[self.convert(i + 1, i + 3)] = (255, 0, 0)
             return 1
         elif (self.game_grid[2] == self.game_grid[4] == self.game_grid[6] and self.game_grid[2] != '-'):
             for i in range(11):
@@ -112,8 +112,10 @@ class TicTacToeApp:
 
     def paint(self, x, y):
         game_index, game_x, game_y = self.game_convert(x, y)
-        if (game_index == -
-                1 or self.game_grid[game_index] != '-' or self.game_over == 1):
+        if (self.game_over == 1):
+            self.setup_tictactoe()
+            return
+        if (game_index == -1 or self.game_grid[game_index] != '-'):
             return
 
         self.game_grid[game_index] = self.current_player

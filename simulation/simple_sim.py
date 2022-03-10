@@ -6,26 +6,25 @@ import requests
 import json
 import socketio
 import asyncio
-import os, sys
 from neopixel_neomatrix import Adafruit_NeoMatrix
 from PIL import Image
 
 # Needed to allow for apps to imported from upper directory
+import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 # App imports
 from MenuApp import MenuApp
-from PaintApp import PaintingApp
-from TicTacToeApp import TicTacToeApp
-from ChessApp import ChessApp
-from LEDStrip import LEDStrip
-from AnimationApp import AnimationApp
-from BrickShooterApp import BrickShooterApp
-from TugOfWarApp import TugOfWarApp
-from SimonSaysApp import SimonSaysApp
-from PongApp import PongApp
-from StackerApp import StackerApp
-from ImageShowApp import ImageShowApp
+from apps.PaintApp import PaintingApp
+from apps.TicTacToeApp import TicTacToeApp
+from apps.ChessApp import ChessApp
+from apps.AnimationApp import AnimationApp
+from apps.BrickShooterApp import BrickShooterApp
+from apps.TugOfWarApp import TugOfWarApp
+from apps.SimonSaysApp import SimonSaysApp
+from apps.PongApp import PongApp
+from apps.StackerApp import StackerApp
+from apps.ImageShowApp import ImageShowApp
 
 import numpy as np
 import threading
@@ -33,7 +32,7 @@ import threading
 device_ID = 0
 touch_arr = [0] * 192
 sio = socketio.AsyncClient()
-ip = 'http://172.20.20.20:5000/'
+ip = 'http://192.168.0.11:5000/'
 received_data = "0"
 grid_loc = [0, 0]
 last_pressed_index = -1

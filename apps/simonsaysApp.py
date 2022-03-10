@@ -2,10 +2,19 @@ import asyncio
 import random
 
 def color(red, green, blue):
+    '''
+    Takes in the red, green, and blue values and converts them to the
+    proper format for the LED strip. From the LED strip library
+    '''
     return (red << 16) | (green << 8) | blue
 
 class SimonSaysApp:
     def __init__(self):
+        '''
+        Initiates the simon says app as a timer based app
+        with a pattern of integers, a current level, and a
+        current count
+        '''
         self.display_pattern = 1
         self.display_square = 1
         self.curr_count = 0
@@ -26,15 +35,27 @@ class SimonSaysApp:
             y = 15 - y
         return (x * 16) + y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgb_to_hex(self, r, g, b):
+        '''
+        Converts an give r g b value to the equivalent Hex form with
+        the format #FFFFFF
+        Based on: https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
+        '''
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     async def get_grid(self):
+        '''
+        Gets the current grid with all pixel colors from the app
+        '''
         return self.touch_grid
 
     def web_paint(self, n, webColor):
+        '''
+        Determines the x and y value of the grid based on the
+        input from the remote website. Then sets that index in the
+        to be equal to the color sent from the website
+        '''
         x = int(n / 16)
         y = int(n - x * 16)
         print(x, y)

@@ -6,22 +6,27 @@ import requests
 import json
 import socketio
 import asyncio
-from LED_Strip import LED_Strip
-from PaintApp import PaintingApp
-from TicTacToeApp import TicTacToeApp
-from ChessApp import ChessApp
+from LEDStrip import LEDStrip
 import numpy as np
 from PIL import Image
-from animation import AnimationApp
-import time
 import threading
-from BrickShooterApp import BrickShooterApp
-from TugOfWarApp import TugOfWarApp
-from SimonSaysApp import SimonSaysApp
-from MenuApp import MenuApp
-from PongApp import PongApp
-from StackerApp import StackerApp
-from ImageShowApp import ImageShowApp
+
+# Needed to allow for apps to imported from upper directory
+import os, sys
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
+# App imports
+from apps.MenuApp import MenuApp
+from apps.PaintApp import PaintingApp
+from apps.TicTacToeApp import TicTacToeApp
+from apps.ChessApp import ChessApp
+from apps.AnimationApp import AnimationApp
+from apps.BrickShooterApp import BrickShooterApp
+from apps.TugOfWarApp import TugOfWarApp
+from apps.SimonSaysApp import SimonSaysApp
+from apps.PongApp import PongApp
+from apps.StackerApp import StackerApp
+from apps.ImageShowApp import ImageShowApp
 
 device_ID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)  # Open port with baud rate
@@ -154,35 +159,35 @@ DRAWING = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0,
 stored_grid = []
 
 
-async def mainProgram(strip):
+async def main_program(strip):
     while True:
         global grid_select, stored_grid, apps, current_app
-        if (current_app == 'Menu' and apps['Menu'].newAppSelected == 1):
+        if (current_app == 'Menu' and apps['Menu'].new_app_selected == 1):
             current_app = apps['Menu'].nextApp
         if (grid_select == 1):
-            selectedGrid = apps[current_app].touchGrid
+            selected_grid = apps[current_app].touch_grid
         elif (grid_select == 0):
-            selectedGrid = data_array
+            selected_grid = data_array
         loop = asyncio.get_event_loop()
-        if (stored_grid != selectedGrid):
-            await strip.update_buffer(selectedGrid)
+        if (stored_grid != selected_grid):
+            await strip.update_buffer(selected_grid)
             # array_convert(strip.touch_array)
             strip.json_array["array"] = strip.touch_array
             r = requests.post(ip + '/array?id=' + str(device_ID),
                               json=json.dumps(strip.json_array))
-            stored_grid = selectedGrid.copy()
+            stored_grid = selected_grid.copy()
         await asyncio.sleep(0.1)
 
 
 async def main(strip):
     await connect_to_server()
-    asyncio.create_task(mainProgram(strip))
+    asyncio.create_task(main_program(strip))
     asyncio.create_task(timer_reaction())
 
 
 @sio.on('my_response')
 async def response(data):
-    if (data['data']['device_ID'] == device_ID):
+    if (data['data']['deviceID'] == device_ID):
         global apps, current_app
         read_from = data['data']
         #print("okay 2: ", read_from)
@@ -195,15 +200,15 @@ async def response(data):
 @sio.on('appChange')
 async def change_app(data):
     global current_app
-    if (data['data']['device_ID'] == device_ID):
+    if (data['data']['deviceID'] == device_ID):
         current_app = data['data']['appName']
 
 
 @sio.on('connected')
 async def on_connected(data):
     global device_ID
-    print(data['device_ID'])
-    device_ID = data['device_ID']
+    print(data['deviceID'])
+    device_ID = data['deviceID']
     apps['Menu'].device_ID = device_ID
     apps['Menu'].setup_menu()
 
@@ -225,7 +230,7 @@ if __name__ == '__main__':
     apps = {'Menu': MenuApp(0), 'Painting': PaintingApp(), 'tictactoe': TicTacToeApp(), 'chess': ChessApp(), 'animation': AnimationApp(), 'Brick Shooter': BrickShooterApp(
     ), 'Simon Says': SimonSaysApp(), 'Tug of War': TugOfWarApp(), 'Pong': PongApp(), 'Image Show': ImageShowApp(), 'Stacker': StackerApp()}
    # Create LED_Strip object with appropriate configuration.
-    strip = LED_Strip()
+    strip = LEDStrip()
     # ()
     print('Press Ctrl-C to quit.')
     if not args.clear:
