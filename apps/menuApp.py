@@ -21,53 +21,49 @@ class menuApp:
 
         array = [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1]
         if number == 1:
-            array = [0, 0, 1,
-                     0, 0, 1,
-                     0, 0, 1,
-                     0, 0, 1,
-                     0, 0, 1]
+            array = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0]
 
         if number == 2:
             array = [1, 1, 1,
-                     0, 0, 1,
-                     1, 1, 1,
                      1, 0, 0,
+                     1, 1, 1,
+                     0, 0, 1,
                      1, 1, 1]
 
         if number == 3:
             array = [1, 1, 1,
-                     0, 0, 1,
+                     1, 0, 0,
                      1, 1, 1,
-                     0, 0, 1,
+                     1, 0, 0,
                      1, 1, 1]
 
         if number == 4:
             array = [1, 0, 1,
                      1, 0, 1,
                      1, 1, 1,
-                     0, 0, 1,
-                     0, 0, 1]
+                     1, 0, 0,
+                     1, 0, 0]
 
         if number == 5:
             array = [1, 1, 1,
-                     0, 0, 1,
-                     1, 1, 1,
                      1, 0, 0,
+                     1, 1, 1,
+                     0, 0, 1,
                      1, 1, 1]
 
         if number == 6:
             array = [1, 1, 1,
-                     1, 0, 0,
+                     0, 0, 1,
                      1, 1, 1,
                      1, 0, 1,
                      1, 1, 1]
 
         if number == 7:
             array = [1, 1, 1,
-                     0, 0, 1,
-                     0, 0, 1,
-                     0, 0, 1,
-                     0, 0, 1]
+                     1, 0, 0,
+                     1, 0, 0,
+                     1, 0, 0,
+                     1, 0, 0]
 
         if number == 8:
             array = [1, 1, 1,
@@ -80,8 +76,8 @@ class menuApp:
             array = [1, 1, 1,
                      1, 0, 1,
                      1, 1, 1,
-                     0, 0, 1,
-                     0, 0, 1]
+                     1, 0, 0,
+                     1, 0, 0]
 
         for i in range(0, 5):
             for j in range(0, 3):
@@ -107,8 +103,8 @@ class menuApp:
     def setup_menu(self):
         self.newAppSelected = 0
         self.selectedApp = ''
-        self.displayNumber(int(self.deviceID / 10), 2, 2)
-        self.displayNumber(int(self.deviceID % 10), 6, 2)
+        self.displayNumber(int(self.deviceID % 10), 2, 2)
+        self.displayNumber(int(self.deviceID / 10), 6, 2)
 
         self.touchGrid[self.convert(2, 10)] = (255, 0, 255)
         self.touchGrid[self.convert(3, 10)] = (255, 255, 255)

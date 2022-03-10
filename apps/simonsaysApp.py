@@ -38,6 +38,7 @@ class simonsaysApp:
             y = 15 - y
         return (x * 16) + y
 
+    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
@@ -48,6 +49,8 @@ class simonsaysApp:
     def webPaint(self, n, webColor):
         x = int(n / 16)
         y = int(n - x * 16)
+        print(x, y)
+        print(self.convert(x, y))
         self.touchGrid[self.convert(x, y)] = webColor
 
     def checkTouch(self, x, y):
@@ -60,6 +63,8 @@ class simonsaysApp:
                 self.touchGrid[self.convert(x_wipe, y_wipe)] = (0, 0, 0)
 
     def move(self, x=0, y=0):
+        print(self.pattern)
+
         # if at game start, select random square to add to pattern
         if (self.level == 0):
             self.wipescreen()
@@ -100,6 +105,8 @@ class simonsaysApp:
         # now the user tries to input the pattern and is either right (new
         # square gets added to the pattern) or wrong (gameover)
         else:
+            print(self.correct_touch)
+            print(self.level)
             if (self.correct_touch >= self.level):
                 self.curr_count += 1
                 if (self.curr_count >= self.level):

@@ -1,6 +1,7 @@
 import asyncio
 #from rpi_ws281x import Color
 
+# The default set of colors that can be selected
 setColors = [
     (255, 0, 0),
     (255, 127, 0),
@@ -12,16 +13,22 @@ setColors = [
     (0, 0, 0)
 ]
 
-
+'''
+Takes in the red, green, and blue values and converts them to the
+proper format for the LED strip. From the LED strip library
+'''
 def Color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
 
 class paintingApp:
+    '''
+    Initiates the painting app as a non-timer based app
+    '''
     def __init__(self):
-        self.stored_color = Color(0, 0, 0)
-        self.clearingMode = 1
-        self.send_color = self.rgbToHex(0, 0, 0)
+        self.stored_color = Color(0, 0, 0) # Current color being used
+        self.clearingMode = 1 # Set to 1 if each input should set pixels to be off
+        self.send_color = self.rgbToHex(0, 0, 0) # Color to be sent to the website
         self.stored_R = 0
         self.stored_G = 0
         self.stored_B = 0
@@ -30,16 +37,27 @@ class paintingApp:
         self.SPEED = 0
         self.setup_painting()
 
+    '''
+    Converts a given x and y value to the proper index for the touch grid
+    '''
     def convert(self, x, y):
         # if in an odd column, reverse the order
         if (x % 2 != 0):
             y = 15 - y
         return (x * 16) + y
 
+    '''
+    Converts an give r g b value to the equivalent Hex form with
+    the format #FFFFFF
+    '''
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
+    '''
+    Sets up the painting app. This sets the selection row pixels
+    to all have the correct selection colors 
+    '''
     def setup_painting(self):
         for i in range(8):
             n = self.convert(i, 15)
@@ -51,14 +69,26 @@ class paintingApp:
         self.touchGrid[self.convert(11, 15)] = (
             self.stored_R, self.stored_G, self.stored_B)
 
+    '''
+    Gets the current grid with all pixel colors from the app
+    '''
     async def getGrid(self):
         return self.touchGrid
 
+    '''
+    Determines the x and y value of the grid based on the
+    input from the remote website. Then sets that index in the
+    to be equal to the color sent from the website
+    '''
     def webPaint(self, n, webColor):
         x = int(n / 16)
         y = int(n - x * 16)
         self.touchGrid[self.convert(x, y)] = webColor
-
+    '''
+    Takes in x and y from board input and either changes
+    that pixel to be the current selected color, or, if the pixel
+    touched is in the selection row, changes the selected color accordingly
+    '''
     def paint(self, x, y):
         if y == 15:
             if x < 8:
@@ -82,6 +112,7 @@ class paintingApp:
         else:
             self.touchGrid[self.convert(x, y)] = (
                 self.stored_R, self.stored_G, self.stored_B)
+            print(self.stored_R, self.stored_G, self.stored_B)
             if(self.clearingMode):
                 self.send_color = '#505050'
             elif (self.stored_R == self.stored_G and self.stored_R == self.stored_B):

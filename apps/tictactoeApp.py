@@ -1,4 +1,5 @@
 import asyncio
+#from rpi_ws281x import Color
 
 setColors = [
     (255, 0, 0),
@@ -59,11 +60,17 @@ class tictactoeApp:
 
         return gameIndex, gameX, gameY
 
+    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
+
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_tictactoe(self):
+        self.currentPlayer = 'X'
+        self.touchGrid = [(0, 0, 0)] * 192
+        self.gameGrid = ['-'] * 10
+        self.gameOver = 0
         for i in range(1, 12):
             self.touchGrid[self.convert(i, 6)] = (200, 200, 200)
             self.touchGrid[self.convert(i, 10)] = (200, 200, 200)
@@ -103,7 +110,7 @@ class tictactoeApp:
             return 1
         elif (self.gameGrid[0] == self.gameGrid[4] == self.gameGrid[8] and self.gameGrid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i + 1, i + 4)] = (255, 0, 0)
+                self.touchGrid[self.convert(i + 1, i + 3)] = (255, 0, 0)
             return 1
         elif (self.gameGrid[2] == self.gameGrid[4] == self.gameGrid[6] and self.gameGrid[2] != '-'):
             for i in range(11):
@@ -119,8 +126,10 @@ class tictactoeApp:
 
     def paint(self, x, y):
         gameIndex, gameX, gameY = self.gameConvert(x, y)
-        if (gameIndex == -
-                1 or self.gameGrid[gameIndex] != '-' or self.gameOver == 1):
+        if (self.gameOver == 1):
+            self.setup_tictactoe()
+            return
+        if (gameIndex == -1 or self.gameGrid[gameIndex] != '-'):
             return
 
         self.gameGrid[gameIndex] = self.currentPlayer
@@ -138,13 +147,13 @@ class tictactoeApp:
                 (gameX * 4 + 3), (gameY * 4 + 5))] = (255, 0, 255)
         else:
             self.touchGrid[self.convert(
-                (gameX * 4 + 2), (gameY * 4 + 3))] = (255, 255, 0)
+                (gameX * 4 + 2), (gameY * 4 + 3))] = (0, 255, 255)
             self.touchGrid[self.convert(
-                (gameX * 4 + 1), (gameY * 4 + 4))] = (255, 255, 0)
+                (gameX * 4 + 1), (gameY * 4 + 4))] = (0, 255, 255)
             self.touchGrid[self.convert(
-                (gameX * 4 + 3), (gameY * 4 + 4))] = (255, 255, 0)
+                (gameX * 4 + 3), (gameY * 4 + 4))] = (0, 255, 255)
             self.touchGrid[self.convert(
-                (gameX * 4 + 2), (gameY * 4 + 5))] = (255, 255, 0)
+                (gameX * 4 + 2), (gameY * 4 + 5))] = (0, 255, 255)
 
         self.gameOver = self.boardCheck()
 

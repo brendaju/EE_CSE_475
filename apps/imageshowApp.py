@@ -43,13 +43,7 @@ class imageshowApp:
         blankArray = [(0, 0, 0)] * 192
         for i in range(12):
             for j in range(16):
-                val1 = np.int32(grid[j, i][0])
-                pyval1 = val1.item()
-                val2 = np.int32(grid[j, i][1])
-                pyval2 = val2.item()
-                val3 = np.int32(grid[j, i][2])
-                pyval3 = val3.item()
-                blankArray[self.convert(i, j)] = tuple(pyval1, pyval2, pyval3)
+                blankArray[self.convert(i, j)] = tuple(grid[j, i])
         return blankArray
 
     def image_processing(self):

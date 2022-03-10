@@ -1,5 +1,6 @@
 import asyncio
 import chess
+#from rpi_ws281x import Color
 
 pieceColors = {
     'r': (255, 50, 0),
@@ -33,7 +34,7 @@ class chessApp:
         self.checkMate = 0
         self.boardState = []
         self.IS_TIMER_BASED = False
-        self.SPEED = 0
+        self.SPEED = 1
         self.setup_chess()
 
     def convert(self, x, y):
@@ -51,17 +52,20 @@ class chessApp:
         x = int(stringVal[1]) - 1
         y = ord(stringVal[0]) - 97
         return x, y
+    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
 
     def rgbToHex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_chess(self):
+        print("chess start")
         self.boardState = str(self.board).replace('\n', ' ').split(' ')
         for x in range(1, 9):
             for y in range(8):
                 self.touchGrid[self.convert(
                     x - 1, y)] = pieceColors[self.boardState[(8 - x) * 8 + y]]
+        # print(self.boardState)
 
     async def getGrid(self):
         return self.touchGrid
@@ -88,6 +92,7 @@ class chessApp:
             self.moveState = 1
         if (self.moveState == 0):
             for i, x in enumerate(list(self.board.legal_moves)):
+                # print(x)
                 if (str(x)[0:2] == locationCode):
                     newX, newY = self.chessConvertToIndex(str(x)[2:4])
                     self.touchGrid[self.convert(newX, newY)] = (0, 255, 255)
@@ -95,8 +100,10 @@ class chessApp:
         if (self.moveState == 1):
             move = chess.Move.from_uci(
                 str(self.selectedPiece) + str(locationCode))
+            # print(move)
             self.board.push(move)
             self.updateBoard()
             self.selectedPiece = 0
             self.moveOptions = []
             self.moveState = 0
+        # print(self.moveOptions)
