@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/welcomestyle.css') }}">
-
-
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/welcomestyle.css') }}">
     </head>
     <body>
         <div class="container">
@@ -19,13 +15,12 @@
                 </form>
             </div>
         </div>
-<script>
-
-function submit_pro_id() {
-    var product_id=document.getElementById('product_id').value;
-    window.location.replace('/menu?id='+product_id);
-}
-
-</script>
+        <script>
+            function submit_pro_id() {
+                var product_id=document.getElementById('product_id').value;
+                window.location.replace('/menu?id='+product_id);
+            }
+            
+        </script>
     </body>
 </html>
