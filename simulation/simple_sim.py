@@ -6,22 +6,29 @@ import requests
 import json
 import socketio
 import asyncio
-from LEDStrip import LEDStrip
+import os, sys
+from neopixel_neomatrix import Adafruit_NeoMatrix
+from PIL import Image
+
+# Needed to allow for apps to imported from upper directory
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
+# App imports
+from MenuApp import MenuApp
 from PaintApp import PaintingApp
 from TicTacToeApp import TicTacToeApp
 from ChessApp import ChessApp
-import numpy as np
-from PIL import Image
-from neopixel_neomatrix import Adafruit_NeoMatrix
+from LEDStrip import LEDStrip
 from AnimationApp import AnimationApp
-import threading
 from BrickShooterApp import BrickShooterApp
 from TugOfWarApp import TugOfWarApp
 from SimonSaysApp import SimonSaysApp
-from MenuApp import MenuApp
 from PongApp import PongApp
 from StackerApp import StackerApp
 from ImageShowApp import ImageShowApp
+
+import numpy as np
+import threading
 
 device_ID = 0
 touch_arr = [0] * 192
