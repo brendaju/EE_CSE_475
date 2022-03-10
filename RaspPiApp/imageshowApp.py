@@ -40,7 +40,14 @@ class imageshowApp:
         blankArray = [(0,0,0)]*192
         for i in range(12):
             for j in range(16):
-                blankArray[self.convert(i,j)] = tuple(grid[j,i]) 
+                val1=np.int32(grid[j,i][0])
+                pyval1=val1.item()
+                val2=np.int32(grid[j,i][1])
+                pyval2=val2.item()
+                val3=np.int32(grid[j,i][2])
+                pyval3=val3.item()
+                blankArray[self.convert(i,j)] = (pyval1,pyval2,pyval3)
+                #blankArray[self.convert(i,j)] = tuple() 
         return blankArray
 
     def image_processing(self):
@@ -56,7 +63,7 @@ class imageshowApp:
                 rotate_image[:,:,0] = np.fliplr(rotate_image[:,:,0])  # transpose and flip can rotate 90 degree
                 rotate_image[:,:,1] = image[:,:,1].T
                 rotate_image[:,:,1] = np.fliplr(rotate_image[:,:,1])
-                rotate_image[:,:,2] = image[:,:,2].T
+                rotate_image[:, :,2] = image[:,:,2].T
                 rotate_image[:,:,2] = np.fliplr(rotate_image[:,:,2])
                 x=image.shape[0]
                 y=image.shape[1]
