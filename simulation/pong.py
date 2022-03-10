@@ -1,6 +1,10 @@
-from ast import Not
+"""
+Creates the classic "pong" game where two small sliding boards
+shoots/bounces a ball around and whenever the ball hit the top
+or bottom of the board. it counts as point. Players and ball
+are then returned to the middle so game can start again.
+"""
 import asyncio
-from shutil import move
 
 setColors = [
     (255, 0, 0),
@@ -15,10 +19,16 @@ setColors = [
 
 
 def Color(red, green, blue):
+    """
+    Model color object for simulation
+    """
     return (red << 16) | (green << 8) | blue
 
 
 class slider:
+    """
+    Three pixel wide slider
+    """
     def __init__(self, y_loc):
         self.x_loc = 5
         self.y_loc = y_loc
@@ -29,6 +39,9 @@ class slider:
 
 
 class ball:
+    """
+    One pixel wide ball
+    """
     def __init__(self):
         self.x_loc = 6
         self.y_loc = 7
@@ -42,7 +55,13 @@ class ball:
 
 
 class pong_app:
+    """
+    Main app logic
+    """
     def __init__(self):
+        """
+        Stores app's state
+        """
         self.touchGrid = [(0, 0, 0)] * 192
         self.p1 = slider(15)
         self.p2 = slider(0)
@@ -52,16 +71,25 @@ class pong_app:
         self.setup()
 
     def convert(self, x, y):
+        """
+        Converts x and y values into index for LED strip
+        """
         # if in an odd column, reverse the order
         if (x % 2 != 0):
             y = 15 - y
         return (x * 16) + y
 
-    def rgbToHex(self, r, g, b):
+    def rgb_to_hex(self, r, g, b):
+        """
+        Converts RGB form to HEX
+        """
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup(self):
+        """
+        Creates app's initial state
+        """
         # draw slider
         self.draw_sliders()
 
@@ -71,14 +99,24 @@ class pong_app:
                 self.ball.x_loc + i, self.ball.y_loc)] = (255, 255, 255)
 
     async def getGrid(self):
+        """
+        Returns the current state of the board to be displayed
+        """
         return self.touchGrid
 
     def webPaint(self, n, webColor):
+        """
+        Performs paint function in website format to allow
+        for website live updates
+        """
         x = int(n / 16)
         y = int(n - x * 16)
         self.paint(x, y)
 
     def draw_sliders(self):
+        """
+        Draws slider at updated location
+        """
         for i in range(self.p1.length):
             self.touchGrid[self.convert(
                 self.p1.x_loc + i, self.p1.y_loc)] = (255, 255, 255)
@@ -87,6 +125,9 @@ class pong_app:
                 self.p2.x_loc + i, self.p2.y_loc)] = (255, 255, 255)
 
     def move(self, x=0, y=0):
+        """
+        Updates game state based on an asynchronous timer
+        """
         # clear ball location
         self.touchGrid[self.convert(
             self.ball.x_loc, self.ball.y_loc)] = (0, 0, 0)
@@ -148,6 +189,10 @@ class pong_app:
             self.setup()
 
     def paint(self, x, y):
+        """
+        Takes in an X and Y input from the touch sensors and updates app
+        state based on the given input
+        """
         # clear p1
         for i in range(self.p1.length):
             self.touchGrid[self.convert(
@@ -203,7 +248,7 @@ class pong_app:
                 self.p2.x_loc += 1
 
         # check if ball should move
-        if shoot_ball_p1 and self.ball.is_moving == False:
+        if shoot_ball_p1 and not self.ball.is_moving:
             self.ball.y_velocity = 1
             self.ball.is_moving = True
 

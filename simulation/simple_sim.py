@@ -20,7 +20,7 @@ from imageshowApp import imageshowApp
 deviceID = 0
 touchArr = [0] * 192
 sio = socketio.AsyncClient()
-ip = 'http://192.168.0.11:5000'
+ip = 'http://10.0.0.204:5000/'
 received_data = "0"
 gridLoc = [0, 0]
 lastPressedIndex = -1
