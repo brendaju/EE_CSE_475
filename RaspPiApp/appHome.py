@@ -6,104 +6,104 @@ import requests
 import json
 import socketio
 import asyncio
-from led_strip import led_strip
-from paintApp import paintingApp
-from tictactoeApp import tictactoeApp
-from chessApp import chessApp
+from LED_Strip import LED_Strip
+from PaintApp import PaintingApp
+from TicTacToeApp import TicTacToeApp
+from ChessApp import ChessApp
 import numpy as np
 from PIL import Image
-from animation import animation_app
+from animation import AnimationApp
 import time
 import threading
-from brick_shooter import brick_shooter_app
-from tugofwarApp import tugofwarApp
-from simonsaysApp import simonsaysApp
-from menuApp import menuApp
-from pong import pong_app
-from stacker import stacker_app
-from imageshowApp import imageshowApp
+from BrickShooterApp import BrickShooterApp
+from TugOfWarApp import TugOfWarApp
+from SimonSaysApp import SimonSaysApp
+from MenuApp import MenuApp
+from PongApp import PongApp
+from StackerApp import StackerApp
+from ImageShowApp import ImageShowApp
 
-deviceID = 0
+device_ID = 0
 ser = serial.Serial("/dev/ttyS0", 115200)  # Open port with baud rate
-touchArr = [0] * 192
+touch_arr = [0] * 192
 sio = socketio.AsyncClient()
 ip = 'http://10.19.76.51:5000'
 received_data = "0"
-gridLoc = [0, 0]
-lastPressedIndex = -1
-pressedIndex = -1
+grid_loc = [0, 0]
+last_pressed_index = -1
+pressed_index = -1
 strip = 0
 apps = {}
-currentApp = 'Menu'
-simIndex = 0
-simArray = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation',
+current_app = 'Menu'
+sim_index = 0
+sim_array = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation',
             'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
 
 
-async def connectToServer():
+async def connect_to_server():
     await sio.connect(ip)
     await sio.sleep(1)
 
-json_array = {"array": touchArr}
+json_array = {"array": touch_arr}
 
-gridSelect = 1
+grid_select = 1
 
-lastFourUniqueInputs = [(-1, -1)] * 4
-touchIndex = 0
+last_four_unique_inputs = [(-1, -1)] * 4
+touch_index = 0
 
 
-def readUART():
-    global gridLoc, pressedIndex, gridSelect, apps, currentApp, touchIndex, lastFourUniqueInputs
+def read_UART():
+    global grid_loc, pressed_index, grid_select, apps, current_app, touch_index, last_four_unique_inputs
     received_data = ser.read()  # read serial port
     time.sleep(0.03)
     data_left = ser.inWaiting()  # check for remaining byte
     received_data += ser.read(data_left)
     ser.write(received_data)
-    gridLoc = interpretUART(received_data)
-    global pressedIndex
-    global gridSelect
-    if (gridSelect == 1):
-        apps[currentApp].paint(gridLoc[0], gridLoc[1])
+    grid_loc = interpret_UART(received_data)
+    global pressed_index
+    global grid_select
+    if (grid_select == 1):
+        apps[current_app].paint(grid_loc[0], grid_loc[1])
     # Menu App Logic
-    if ((gridLoc[0], gridLoc[1]) != lastFourUniqueInputs[touchIndex]):
-        if (touchIndex >= 3):
-            touchIndex = 0
+    if ((grid_loc[0], grid_loc[1]) != last_four_unique_inputs[touch_index]):
+        if (touch_index >= 3):
+            touch_index = 0
         else:
-            touchIndex = touchIndex + 1
-        lastFourUniqueInputs[touchIndex] = (gridLoc[0], gridLoc[1])
-        if ((0, 0) in lastFourUniqueInputs and (11, 0) in lastFourUniqueInputs and (
-                0, 15) in lastFourUniqueInputs and (11, 15) in lastFourUniqueInputs):
-            currentApp = 'Menu'
+            touch_index = touch_index + 1
+        last_four_unique_inputs[touch_index] = (grid_loc[0], grid_loc[1])
+        if ((0, 0) in last_four_unique_inputs and (11, 0) in last_four_unique_inputs and (
+                0, 15) in last_four_unique_inputs and (11, 15) in last_four_unique_inputs):
+            current_app = 'Menu'
             apps['Menu'].setup_menu()
 
-    pressedIndex = convert(gridLoc[0], gridLoc[1])
+    pressed_index = convert(grid_loc[0], grid_loc[1])
     return received_data
 
-def interpretUART(uartData):
-    dataEnd = uartData.index(b'\r\n')
-    gridLocString = uartData[0:dataEnd]
-    gridLocString = gridLocString.decode('utf-8')
-    firstValEnd = gridLocString.index(',')
-    gridLoc = [int(gridLocString[3:firstValEnd]),
-               int(gridLocString[firstValEnd + 5:])]
-    return gridLoc
+def interpret_UART(uart_data):
+    data_end = uart_data.index(b'\r\n')
+    grid_loc_string = uart_data[0:data_end]
+    grid_loc_string = grid_loc_string.decode('utf-8')
+    first_val_end = grid_loc_string.index(',')
+    grid_loc = [int(grid_loc_string[3:first_val_end]),
+               int(grid_loc_string[first_val_end + 5:])]
+    return grid_loc
 
 data_array = []
 
-async def timerReaction():
+async def timer_reaction():
     while True:
-        if (apps[currentApp].IS_TIMER_BASED):
-            apps[currentApp].move()
-            await asyncio.sleep(apps[currentApp].SPEED)
+        if (apps[current_app].IS_TIMER_BASED):
+            apps[current_app].move()
+            await asyncio.sleep(apps[current_app].SPEED)
         else:
             await asyncio.sleep(.01)
 
-def arrayConvert(grid):
-    blankArray = [(0, 0, 0)] * 192
+def array_convert(grid):
+    blank_array = [(0, 0, 0)] * 192
     for i in range(12):
         for j in range(16):
-            blankArray[convert(i, j)] = grid[i + j * 12]
-    return blankArray
+            blank_array[convert(i, j)] = grid[i + j * 12]
+    return blank_array
 
 def convert(x, y):
     # if in an odd column, reverse the order
@@ -114,7 +114,7 @@ def convert(x, y):
 # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
 
 
-def rgbToHex(r, g, b):
+def rgb_to_hex(r, g, b):
     numbers = [r, g, b]
     return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
@@ -151,67 +151,67 @@ DRAWING = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0,
            [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 
-storedGrid = []
+stored_grid = []
 
 
 async def mainProgram(strip):
     while True:
-        global gridSelect, storedGrid, apps, currentApp
-        if (currentApp == 'Menu' and apps['Menu'].newAppSelected == 1):
-            currentApp = apps['Menu'].nextApp
-        if (gridSelect == 1):
-            selectedGrid = apps[currentApp].touchGrid
-        elif (gridSelect == 0):
+        global grid_select, stored_grid, apps, current_app
+        if (current_app == 'Menu' and apps['Menu'].newAppSelected == 1):
+            current_app = apps['Menu'].nextApp
+        if (grid_select == 1):
+            selectedGrid = apps[current_app].touchGrid
+        elif (grid_select == 0):
             selectedGrid = data_array
         loop = asyncio.get_event_loop()
-        if (storedGrid != selectedGrid):
+        if (stored_grid != selectedGrid):
             await strip.update_buffer(selectedGrid)
-            # arrayConvert(strip.touch_array)
+            # array_convert(strip.touch_array)
             strip.json_array["array"] = strip.touch_array
-            r = requests.post(ip + '/array?id=' + str(deviceID),
+            r = requests.post(ip + '/array?id=' + str(device_ID),
                               json=json.dumps(strip.json_array))
-            storedGrid = selectedGrid.copy()
+            stored_grid = selectedGrid.copy()
         await asyncio.sleep(0.1)
 
 
 async def main(strip):
-    await connectToServer()
+    await connect_to_server()
     asyncio.create_task(mainProgram(strip))
-    asyncio.create_task(timerReaction())
+    asyncio.create_task(timer_reaction())
 
 
 @sio.on('my_response')
 async def response(data):
-    if (data['data']['deviceID'] == deviceID):
-        global apps, currentApp
-        readFrom = data['data']
-        #print("okay 2: ", readFrom)
-        readColor = readFrom['color']
-        newColor = (int(readColor[1:3], 16), int(
-            readColor[3:5], 16), int(readColor[5:7], 16))
-        apps[currentApp].webPaint(readFrom['index'], newColor)
+    if (data['data']['device_ID'] == device_ID):
+        global apps, current_app
+        read_from = data['data']
+        #print("okay 2: ", read_from)
+        read_color = read_from['color']
+        new_color = (int(read_color[1:3], 16), int(
+            read_color[3:5], 16), int(read_color[5:7], 16))
+        apps[current_app].web_paint(read_from['index'], new_color)
 
 
 @sio.on('appChange')
-async def changeApp(data):
-    global currentApp
-    if (data['data']['deviceID'] == deviceID):
-        currentApp = data['data']['appName']
+async def change_app(data):
+    global current_app
+    if (data['data']['device_ID'] == device_ID):
+        current_app = data['data']['appName']
 
 
 @sio.on('connected')
-async def onConnected(data):
-    global deviceID
-    print(data['deviceID'])
-    deviceID = data['deviceID']
-    apps['Menu'].deviceID = deviceID
+async def on_connected(data):
+    global device_ID
+    print(data['device_ID'])
+    device_ID = data['device_ID']
+    apps['Menu'].device_ID = device_ID
     apps['Menu'].setup_menu()
 
 
 @sio.on('sendimg')
 async def receive(file):
-    if (currentApp == 'Image Show'):
-        apps[currentApp].read_new(file)
+    if (current_app == 'Image Show'):
+        apps[current_app].read_new(file)
 
 
 # Main program logic follows:
@@ -221,18 +221,18 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true',
                         help='clear the display on exit')
     args = parser.parse_args()
-    # pApp = tictactoeApp()
-    apps = {'Menu': menuApp(0), 'Painting': paintingApp(), 'tictactoe': tictactoeApp(), 'chess': chessApp(), 'animation': animation_app(), 'Brick Shooter': brick_shooter_app(
-    ), 'Simon Says': simonsaysApp(), 'Tug of War': tugofwarApp(), 'Pong': pong_app(), 'Image Show': imageshowApp(), 'Stacker': stacker_app()}
-   # Create led_strip object with appropriate configuration.
-    strip = led_strip()
+    # pApp = TicTacToeApp()
+    apps = {'Menu': MenuApp(0), 'Painting': PaintingApp(), 'tictactoe': TicTacToeApp(), 'chess': ChessApp(), 'animation': AnimationApp(), 'Brick Shooter': BrickShooterApp(
+    ), 'Simon Says': SimonSaysApp(), 'Tug of War': TugOfWarApp(), 'Pong': PongApp(), 'Image Show': ImageShowApp(), 'Stacker': StackerApp()}
+   # Create LED_Strip object with appropriate configuration.
+    strip = LED_Strip()
     # ()
     print('Press Ctrl-C to quit.')
     if not args.clear:
         print('Use "-c" argument to clear LEDs on exit')
     try:
         loop = asyncio.get_event_loop()
-        loop.add_reader(ser, readUART)
+        loop.add_reader(ser, read_UART)
         loop.run_until_complete(main(strip))
         loop.run_forever()
 

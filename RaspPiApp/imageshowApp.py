@@ -3,14 +3,9 @@ import math
 import asyncio
 import json
 
-
-def Color(red, green, blue):
-    return (red << 16) | (green << 8) | blue
-
-
-class imageshowApp:
+class ImageShowApp:
     def __init__(self):
-        self.touchGrid = [(0, 0, 0)] * 192
+        self.touch_grid = [(0, 0, 0)] * 192
         self.IS_TIMER_BASED = False
         self.file = None
         self.SPEED = 0.1
@@ -32,24 +27,24 @@ class imageshowApp:
             y = 15 - y
         return (x * 16) + y
 
-    async def getGrid(self):
-        return self.touchGrid
+    async def get_grid(self):
+        return self.touch_grid
 
     def move(self):
-        self.touchGrid = self.arrayConvert(self.image_processing())
+        self.touch_grid = self.array_convert(self.image_processing())
         self.IS_TIMER_BASED = False
 
-    def arrayConvert(self, grid):
-        blankArray = [(0, 0, 0)] * 192
+    def array_convert(self, grid):
+        blank_array = [(0, 0, 0)] * 192
         for i in range(12):
             for j in range(16):
-                blankArray[self.convert(i, j)] = tuple(grid[j, i])
-        return blankArray
+                blank_array[self.convert(i, j)] = tuple(grid[j, i])
+        return blank_array
 
     def image_processing(self):
         if self.file is not None:
-            decodedArray = json.loads(self.file["file"])
-            image = np.asarray(decodedArray["array"])
+            decoded_array = json.loads(self.file["file"])
+            image = np.asarray(decoded_array["array"])
             x = image.shape[1]
             y = image.shape[0]
             rotate_image = image.copy()
@@ -86,4 +81,4 @@ class imageshowApp:
                         output[i, j, k] = fir_pix * (1 - x_weight) * (1 - y_weight) + sec_pix * x_weight * (
                             1 - y_weight) + thir_pix * y_weight * (1 - x_weight) + four_pix * x_weight * y_weight
             return output
-        return self.touchGrid
+        return self.touch_grid

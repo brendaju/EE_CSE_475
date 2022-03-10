@@ -1,11 +1,11 @@
-class numberDisplay:
+class NumberDisplay:
     def __init__(self, x=0, y=0, num=0):
-        self.startx = x
-        self.starty = y
+        self.start_x = x
+        self.start_y = y
         self.current = num
         self.array = [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1]
 
-    def displayNumber(self):
+    def display_number(self):
 
         if self.number.current == 1:
             self.number.array = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0]
@@ -37,8 +37,8 @@ class numberDisplay:
         for i in range(0, 5):
             for j in range(0, 3):
                 if (self.number.array[i * 3 + j] == 1):
-                    self.touchGrid[self.convert(
-                        self.number.startx + j, self.number.starty + i)] = (255, 255, 255)
+                    self.touch_grid[self.convert(
+                        self.number.start_x + j, self.number.start_y + i)] = (255, 255, 255)
                 else:
-                    self.touchGrid[self.convert(
-                        self.number.startx + j, self.number.starty + i)] = (0, 0, 0)
+                    self.touch_grid[self.convert(
+                        self.number.start_x + j, self.number.start_y + i)] = (0, 0, 0)

@@ -1,27 +1,14 @@
 import asyncio
 
-setColors = [
-    (255, 0, 0),
-    (255, 127, 0),
-    (255, 255, 0),
-    (0, 255, 0),
-    (0, 0, 255),
-    (148, 0, 211),
-    (255, 255, 255),
-    (0, 0, 0)
-]
-
-
-def Color(red, green, blue):
+def color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
-
-class tictactoeApp:
+class TicTacToeApp:
     def __init__(self):
-        self.currentPlayer = 'X'
-        self.touchGrid = [(0, 0, 0)] * 192
-        self.gameGrid = ['-'] * 10
-        self.gameOver = 0
+        self.current_player = 'X'
+        self.touch_grid = [(0, 0, 0)] * 192
+        self.game_grid = ['-'] * 10
+        self.game_over = 0
         self.IS_TIMER_BASED = False
         self.SPEED = 0
         self.setup_tictactoe()
@@ -32,123 +19,125 @@ class tictactoeApp:
             y = 15 - y
         return (x * 16) + y
 
-    def gameConvert(self, x, y):
+    def game_convert(self, x, y):
         if (y >= 3 and y <= 5):
-            gameIndex = 0
-            gameY = 0
+            game_index = 0
+            game_y = 0
         elif (y >= 7 and y <= 9):
-            gameIndex = 3
-            gameY = 1
+            game_index = 3
+            game_y = 1
         elif (y >= 11 and y <= 13):
-            gameIndex = 6
-            gameY = 2
+            game_index = 6
+            game_y = 2
         else:
             return -1, -1, -1
 
         if (x >= 1 and x <= 3):
-            gameIndex = gameIndex
+            game_index = game_index
             gameX = 0
         elif (x >= 5 and x <= 7):
-            gameIndex = gameIndex + 1
+            game_index = game_index + 1
             gameX = 1
         elif (x >= 9 and x <= 11):
-            gameIndex = gameIndex + 2
+            game_index = game_index + 2
             gameX = 2
         else:
             return -1, -1, -1
 
-        return gameIndex, gameX, gameY
+        return game_index, gameX, game_y
 
-    def rgbToHex(self, r, g, b):
+    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
+
+    def rgb_to_hex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_tictactoe(self):
         for i in range(1, 12):
-            self.touchGrid[self.convert(i, 6)] = (200, 200, 200)
-            self.touchGrid[self.convert(i, 10)] = (200, 200, 200)
+            self.touch_grid[self.convert(i, 6)] = (200, 200, 200)
+            self.touch_grid[self.convert(i, 10)] = (200, 200, 200)
 
         for i in range(3, 14):
-            self.touchGrid[self.convert(4, i)] = (200, 200, 200)
-            self.touchGrid[self.convert(8, i)] = (200, 200, 200)
+            self.touch_grid[self.convert(4, i)] = (200, 200, 200)
+            self.touch_grid[self.convert(8, i)] = (200, 200, 200)
 
-    async def getGrid(self):
-        return self.touchGrid
+    async def get_grid(self):
+        return self.touch_grid
 
-    def boardCheck(self):
-        if (self.gameGrid[0] == self.gameGrid[1] ==
-                self.gameGrid[2] and self.gameGrid[0] != '-'):
+    def board_check(self):
+        if (self.game_grid[0] == self.game_grid[1] ==
+                self.game_grid[2] and self.game_grid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i + 1, 4)] = (255, 0, 0)
+                self.touch_grid[self.convert(i + 1, 4)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[3] == self.gameGrid[4] == self.gameGrid[5] and self.gameGrid[3] != '-'):
+        elif (self.game_grid[3] == self.game_grid[4] == self.game_grid[5] and self.game_grid[3] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i + 1, 8)] = (255, 0, 0)
+                self.touch_grid[self.convert(i + 1, 8)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[6] == self.gameGrid[7] == self.gameGrid[8] and self.gameGrid[6] != '-'):
+        elif (self.game_grid[6] == self.game_grid[7] == self.game_grid[8] and self.game_grid[6] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i + 1, 12)] = (255, 0, 0)
+                self.touch_grid[self.convert(i + 1, 12)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[0] == self.gameGrid[3] == self.gameGrid[6] and self.gameGrid[0] != '-'):
+        elif (self.game_grid[0] == self.game_grid[3] == self.game_grid[6] and self.game_grid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(2, 3 + i)] = (255, 0, 0)
+                self.touch_grid[self.convert(2, 3 + i)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[1] == self.gameGrid[4] == self.gameGrid[7] and self.gameGrid[1] != '-'):
+        elif (self.game_grid[1] == self.game_grid[4] == self.game_grid[7] and self.game_grid[1] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(6, 3 + i)] = (255, 0, 0)
+                self.touch_grid[self.convert(6, 3 + i)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[2] == self.gameGrid[5] == self.gameGrid[8] and self.gameGrid[2] != '-'):
+        elif (self.game_grid[2] == self.game_grid[5] == self.game_grid[8] and self.game_grid[2] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(10, 3 + i)] = (255, 0, 0)
+                self.touch_grid[self.convert(10, 3 + i)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[0] == self.gameGrid[4] == self.gameGrid[8] and self.gameGrid[0] != '-'):
+        elif (self.game_grid[0] == self.game_grid[4] == self.game_grid[8] and self.game_grid[0] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i + 1, i + 4)] = (255, 0, 0)
+                self.touch_grid[self.convert(i + 1, i + 4)] = (255, 0, 0)
             return 1
-        elif (self.gameGrid[2] == self.gameGrid[4] == self.gameGrid[6] and self.gameGrid[2] != '-'):
+        elif (self.game_grid[2] == self.game_grid[4] == self.game_grid[6] and self.game_grid[2] != '-'):
             for i in range(11):
-                self.touchGrid[self.convert(i + 1, 13 - i)] = (255, 0, 0)
+                self.touch_grid[self.convert(i + 1, 13 - i)] = (255, 0, 0)
             return 1
         else:
             return 0
 
-    def webPaint(self, n, webColor):
+    def web_paint(self, n, web_color):
         x = int(n / 16)
         y = int(n - x * 16)
         self.paint(x, y)
 
     def paint(self, x, y):
-        gameIndex, gameX, gameY = self.gameConvert(x, y)
-        if (gameIndex == -
-                1 or self.gameGrid[gameIndex] != '-' or self.gameOver == 1):
+        game_index, gameX, game_y = self.game_convert(x, y)
+        if (game_index == -
+                1 or self.game_grid[game_index] != '-' or self.game_over == 1):
             return
 
-        self.gameGrid[gameIndex] = self.currentPlayer
+        self.game_grid[game_index] = self.current_player
 
-        if (self.currentPlayer == 'X'):
-            self.touchGrid[self.convert(
-                (gameX * 4 + 1), (gameY * 4 + 3))] = (255, 0, 255)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 3), (gameY * 4 + 3))] = (255, 0, 255)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 2), (gameY * 4 + 4))] = (255, 0, 255)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 1), (gameY * 4 + 5))] = (255, 0, 255)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 3), (gameY * 4 + 5))] = (255, 0, 255)
+        if (self.current_player == 'X'):
+            self.touch_grid[self.convert(
+                (gameX * 4 + 1), (game_y * 4 + 3))] = (255, 0, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 3), (game_y * 4 + 3))] = (255, 0, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 2), (game_y * 4 + 4))] = (255, 0, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 1), (game_y * 4 + 5))] = (255, 0, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 3), (game_y * 4 + 5))] = (255, 0, 255)
         else:
-            self.touchGrid[self.convert(
-                (gameX * 4 + 2), (gameY * 4 + 3))] = (255, 255, 0)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 1), (gameY * 4 + 4))] = (255, 255, 0)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 3), (gameY * 4 + 4))] = (255, 255, 0)
-            self.touchGrid[self.convert(
-                (gameX * 4 + 2), (gameY * 4 + 5))] = (255, 255, 0)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 2), (game_y * 4 + 3))] = (0, 255, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 1), (game_y * 4 + 4))] = (0, 255, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 3), (game_y * 4 + 4))] = (0, 255, 255)
+            self.touch_grid[self.convert(
+                (gameX * 4 + 2), (game_y * 4 + 5))] = (0, 255, 255)
 
-        self.gameOver = self.boardCheck()
+        self.game_over = self.board_check()
 
-        if (self.currentPlayer == 'X'):
-            self.currentPlayer = 'O'
+        if (self.current_player == 'X'):
+            self.current_player = 'O'
         else:
-            self.currentPlayer = 'X'
+            self.current_player = 'X'

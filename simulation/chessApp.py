@@ -1,7 +1,7 @@
 import asyncio
 import chess
 
-pieceColors = {
+piece_colors = {
     'r': (255, 50, 0),
     'n': (255, 150, 0),
     'b': (255, 255, 0),
@@ -18,22 +18,21 @@ pieceColors = {
     '.': (0, 0, 0)
 }
 
-
-def Color(red, green, blue):
+def color(red, green, blue):
     return (red << 16) | (green << 8) | blue
 
 
-class chessApp:
+class ChessApp:
     def __init__(self):
-        self.board = chess.Board()
-        self.touchGrid = [(0, 0, 0)] * 192
-        self.moveState = 0  # 0 - selecting piece, 1 - selecting move
-        self.moveOptions = []
-        self.selectedPiece = 0
-        self.checkMate = 0
-        self.boardState = []
+        self.Board = chess.Board()
+        self.touch_grid = [(0, 0, 0)] * 192
+        self.move_state = 0  # 0 - selecting piece, 1 - selecting move
+        self.move_options = []
+        self.selected_piece = 0
+        self.check_mate = 0
+        self.board_state = []
         self.IS_TIMER_BASED = False
-        self.SPEED = 0
+        self.SPEED = 1
         self.setup_chess()
 
     def convert(self, x, y):
@@ -42,61 +41,67 @@ class chessApp:
             y = 15 - y
         return (x * 16) + y
 
-    def chessConvert(self, x, y):
+    def chess_convert(self, x, y):
         n = x * 8 + y
-        locationCode = chr(y + 97) + str(x + 1)
-        return n, locationCode
+        location_code = chr(y + 97) + str(x + 1)
+        return n, location_code
 
-    def chessConvertToIndex(self, stringVal):
-        x = int(stringVal[1]) - 1
-        y = ord(stringVal[0]) - 97
+    def chess_convert_to_index(self, string_val):
+        x = int(string_val[1]) - 1
+        y = ord(string_val[0]) - 97
         return x, y
+    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
 
-    def rgbToHex(self, r, g, b):
+    def rgb_to_hex(self, r, g, b):
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_chess(self):
-        self.boardState = str(self.board).replace('\n', ' ').split(' ')
+        print("chess start")
+        self.board_state = str(self.Board).replace('\n', ' ').split(' ')
         for x in range(1, 9):
             for y in range(8):
-                self.touchGrid[self.convert(
-                    x - 1, y)] = pieceColors[self.boardState[(8 - x) * 8 + y]]
+                self.touch_grid[self.convert(
+                    x - 1, y)] = piece_colors[self.board_state[(8 - x) * 8 + y]]
+        # print(self.board_state)
 
-    async def getGrid(self):
-        return self.touchGrid
+    async def get_grid(self):
+        return self.touch_grid
 
-    def webPaint(self, n, webColor):
+    def web_paint(self, n, web_color):
         x = int(n / 16)
         y = int(n - x * 16)
         self.paint(x, y)
 
-    def updateBoard(self):
-        self.boardState = str(self.board).replace('\n', ' ').split(' ')
+    def update_board(self):
+        self.board_state = str(self.Board).replace('\n', ' ').split(' ')
         for x in range(1, 9):
             for y in range(8):
-                self.touchGrid[self.convert(
-                    x - 1, y)] = pieceColors[self.boardState[(8 - x) * 8 + y]]
+                self.touch_grid[self.convert(
+                    x - 1, y)] = piece_colors[self.board_state[(8 - x) * 8 + y]]
 
     def paint(self, x, y):
-        n, locationCode = self.chessConvert(x, y)
+        n, location_code = self.chess_convert(x, y)
 
-        if (locationCode not in self.moveOptions):
-            self.moveState = 0
-            self.selectedPiece = locationCode
+        if (location_code not in self.move_options):
+            self.move_state = 0
+            self.selected_piece = location_code
         else:
-            self.moveState = 1
-        if (self.moveState == 0):
-            for i, x in enumerate(list(self.board.legal_moves)):
-                if (str(x)[0:2] == locationCode):
-                    newX, newY = self.chessConvertToIndex(str(x)[2:4])
-                    self.touchGrid[self.convert(newX, newY)] = (0, 255, 255)
-                    self.moveOptions.append(str(x)[2:4])
-        if (self.moveState == 1):
+            self.move_state = 1
+        if (self.move_state == 0):
+            for i, x in enumerate(list(self.Board.legal_moves)):
+                # print(x)
+                if (str(x)[0:2] == location_code):
+                    newX, newY = self.chess_convert_to_index(str(x)[2:4])
+                    self.touch_grid[self.convert(newX, newY)] = (0, 255, 255)
+                    self.move_options.append(str(x)[2:4])
+        if (self.move_state == 1):
             move = chess.Move.from_uci(
-                str(self.selectedPiece) + str(locationCode))
-            self.board.push(move)
-            self.updateBoard()
-            self.selectedPiece = 0
-            self.moveOptions = []
-            self.moveState = 0
+                str(self.selected_piece) + str(location_code))
+            # print(move)
+            self.Board.push(move)
+            self.update_board()
+            self.selected_piece = 0
+            self.move_options = []
+            self.move_state = 0
+        # print(self.move_options)
