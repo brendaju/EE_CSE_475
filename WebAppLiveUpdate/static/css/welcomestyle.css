@@ -1,0 +1,55 @@
+body {
+    height: 750px;
+    background-image: linear-gradient(to bottom right, rgba(255,0,0,0.3),
+    rgba(255,165,0,1));
+}
+
+.container img {
+    border-radius:70px;
+    height:600px;
+    width:630px;
+}
+
+.container {
+    position:relative;
+    width:45%;
+    margin:auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #FFA500;
+}
+
+.container:hover .overlay {
+    opacity:1;
+}
+
+.form{
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.text {
+    color: white;
+    font-size: 50px;
+    font-family:Chalkduster, fantasy;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
