@@ -40,9 +40,9 @@ class MenuApp:
 
         if number == 5:
             array = [1, 1, 1,
-                     1, 0, 0,
-                     1, 1, 1,
                      0, 0, 1,
+                     1, 1, 1,
+                     1, 0, 0,
                      1, 1, 1]
 
         if number == 6:
