@@ -2,9 +2,20 @@ import asyncio
 #from rpi_ws281x import Color
 
 def color(red, green, blue):
+    '''
+    Takes in the red, green, and blue values and converts them to the
+    proper format for the LED strip. From the LED strip library
+    '''
     return (red << 16) | (green << 8) | blue
 
 class TicTacToeApp:
+    '''
+    Initiates the TicTacToe app. In addition to the standard
+    app variables it also has:
+        Current player to represent the current active player
+        Game_grid, a smaller grid used to determine the game state
+        Game_over to set determine whether or not the game has ended
+    '''
     def __init__(self):
         self.current_player = 'X'
         self.touch_grid = [(0, 0, 0)] * 192
@@ -15,12 +26,20 @@ class TicTacToeApp:
         self.setup_tictactoe()
 
     def convert(self, x, y):
-        # if in an odd column, reverse the order
+        '''
+        Converts x and y to the equivalent index in the grid
+        if in an odd column, reverse the order
+        '''
         if (x % 2 != 0):
             y = 15 - y
         return (x * 16) + y
 
     def game_convert(self, x, y):
+        '''
+        Converts an x and y input into the equivalent
+        game x and y coordinates as well as finds the
+        index in the game_grid array
+        '''
         if (y >= 3 and y <= 5):
             game_index = 0
             game_y = 0
@@ -47,12 +66,21 @@ class TicTacToeApp:
 
         return game_index, game_x, game_y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgb_to_hex(self, r, g, b):
+        '''
+        Converts an give r g b value to the equivalent Hex form with
+        the format #FFFFFF
+        Based on: https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
+        '''
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_tictactoe(self):
+        '''
+        Initializes the tic tac toe game to have current player
+        be X's, clears the game_grid and sets the touch grid to have
+        the tic-tac-toe board displayed in grey
+        '''
         self.current_player = 'X'
         self.touch_grid = [(0, 0, 0)] * 192
         self.game_grid = ['-'] * 10
@@ -66,9 +94,18 @@ class TicTacToeApp:
             self.touch_grid[self.convert(8, i)] = (200, 200, 200)
 
     async def get_grid(self):
+        '''
+        Sends the touch_grid
+        '''
         return self.touch_grid
 
     def board_check(self):
+        '''
+        Checks if their is a winner of the current game
+        if there is, draws a red line over the middle of the
+            winning line and returns 1
+        Otherwise returns 0
+        '''
         if (self.game_grid[0] == self.game_grid[1] ==
                 self.game_grid[2] and self.game_grid[0] != '-'):
             for i in range(11):
@@ -106,11 +143,27 @@ class TicTacToeApp:
             return 0
 
     def web_paint(self, n, web_color):
+        '''
+        Takes the web input index and converts it to the
+        equivalent x and y coordinate and then runs the user
+        input function
+        '''
         x = int(n / 16)
         y = int(n - x * 16)
         self.paint(x, y)
 
     def paint(self, x, y):
+        '''
+        Determines users game input based on the x and y input
+            if the game is over, resets the game
+            if the input is outside of the board or is in a square
+                already selected, does nothing
+            if it is a valid input, it sets that space in the game_grid
+                to the current players symbol and then updates the
+                touch_grid to display it
+            At the end checks the board state for a winner and sets the
+                current player to be the other player
+        '''
         game_index, game_x, game_y = self.game_convert(x, y)
         if (self.game_over == 1):
             self.setup_tictactoe()
