@@ -1,3 +1,10 @@
+"""
+Creates the "Simon Says" memory game where a user is tasked
+with memorizing a pattern of flashing lights as they light
+up one at a time. The game increases in level as the user
+gets the pattern right, adding one new square to the pattern
+at each level.
+"""
 import asyncio
 import random
 
