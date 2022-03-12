@@ -52,8 +52,10 @@ sim_index = 0
 sim_array = ['Menu', 'Painting', 'tictactoe', 'chess', 'animation',
             'Brick Shooter', 'Tug of War', 'Simon Says', 'Pong', 'Image Show', 'Stacker']
 
-# Connect to the server
 async def connect_to_server():
+    '''
+    Connects to the remote web app server
+    '''
     await sio.connect(ip)
     await sio.sleep(1)
 
