@@ -2,6 +2,11 @@ import asyncio
 #from rpi_ws281x import Color
 
 class MenuApp:
+    '''
+    Initilizes the menu app, which displays the device_ID of the board
+    as well as has a pixel representing each of the boards app. This is the app
+    shown on boot and can navigate to other apps
+    '''
     def __init__(self, device_id):
         self.device_id = device_id
         self.next_app = ''
@@ -13,7 +18,10 @@ class MenuApp:
         self.SPEED = 1
 
     def display_number(self, number, start_x, start_y):
-
+        '''
+        Displays a given number on the touch array based on a 
+        starting x and y coordinate.
+        '''
         array = [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1]
         if number == 1:
             array = [0, 0, 1,
@@ -89,17 +97,28 @@ class MenuApp:
                         start_x + j, start_y + i)] = (0, 0, 0)
 
     def convert(self, x, y):
-        # if in an odd column, reverse the order
+        '''
+        Converts x and y to the equivalent index in the grid
+        if in an odd column, reverse the order
+        '''
         if (x % 2 != 0):
             y = 15 - y
         return (x * 16) + y
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgb_to_hex(self, r, g, b):
+        '''
+        Converts an give r g b value to the equivalent Hex form with
+        the format #FFFFFF
+        Based on: https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
+        '''
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
     def setup_menu(self):
+        '''
+        Sets up the menu app by displaying the device id, and setting
+        the drawing a unique color on each pixel for each app
+        '''
         self.new_app_selected = 0
         self.selectedApp = ''
         self.display_number(int(self.device_id % 10), 2, 2)
@@ -117,15 +136,27 @@ class MenuApp:
         self.touch_grid[self.convert(3, 11)] = (120, 120, 255)
 
     async def get_grid(self):
+        '''
+        Sends the current grid state
+        '''
         return self.touch_grid
 
     def web_paint(self, n):
+        '''
+        Finds the x and y values based on the index and then runs the apps user
+        paint function
+        '''
         x = int(n / 16)
         y = int(n - x * 16)
         print(x, y)
         print(self.convert(x, y))
 
     def paint(self, x, y):
+        '''
+        Determines if the user selected an app and if they did,
+        sets the next_app to be that app as well as sets the new_app_selected
+        variable to be 1 so the upper program can see there is a new app
+        '''
         print(x, y)
         if y == 10:
             if (x >= 2 and x <= 9):
