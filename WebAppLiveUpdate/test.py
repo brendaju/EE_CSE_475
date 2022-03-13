@@ -78,7 +78,7 @@ def upload():
 		image_data = {"array": file}
 		image = json.dumps(image_data, cls = NumpyArrayEncoder)
 		socketio.emit('sendimg', {'file':image})
-	return redirect(url_for('imageshow', id=id))
+	return redirect(url_for('imageshow', id = id))
 
 """
 Home page of the website
