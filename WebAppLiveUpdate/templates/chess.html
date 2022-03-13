@@ -211,15 +211,14 @@
             </div>
         </div>
         <script>
-            var elements = document.getElementsByClassName("grid-item");
-            
-            var socket = io();
-            
+            // Define variables used in the script
+            var elements = document.getElementsByClassName("grid-item");           
+            var socket = io();            
             var deviceID = {{deviceID}}
-            var redirect = '?id='+ deviceID;
-            
+            var redirect = '?id='+ deviceID;            
             var colors = new Array (0, 0, 0, 0, 0, 0, 0, 0, 0)
-            
+ 
+            // Update website's grid when change detected by touch sensors           
             socket.on('update_led', function(msg, cb) {
               console.log(msg)
               if (msg.userId == deviceID) {
@@ -231,7 +230,8 @@
               if (cb)
             	cb();
             });
-            
+     
+            Color each pixel on the grid grey       
             function reset() {
             	let i = 0;
             	let len = elements.length;
@@ -243,31 +243,20 @@
             		elements[i].style.borderColor = "black";
             		elements[i].style.outline = "solid";
             		elements[i].style.outlineColor = "black";
-            	}
-            
+            	}        
             }
             
-            
-            
-            // var x = document.getElementById("myColor");
-            
+            // Select a new color
             function colorSelect(newColor) {
             	currentColor = newColor;	
             }
             
             let count = 0;
-            
-            //var colors = new Array ("#FF0080", "#F5E87B", "#0059FF", "#FF0000", "#00FF00");
-            
-            //var colors = {{ color_array }}
-            
             var arranged_colors = new Array;
             
+            // Fill in website's grid according to current color array
             function fill() {
-            	// LoadFile();
-            	//var colors = {{ color_array | safe }}
-            	var color1 = '#FF0080'
-            
+            	var color1 = '#FF0080'           
             	let x = 0;
             	let len1 = elements.length;
             	
@@ -287,33 +276,26 @@
             
             	for (; i < len; i++) {
                		elements[i].style.background = arranged_colors[i];
-            		console.log(arranged_colors[i]);
-            
-            	}
-            
+            		console.log(arranged_colors[i]);       
+            	}   
             }
             
             
             var x = "#000000";
             
-            function changeColor(spot) {
-            	
+            // Change the color of a single pixel and send updated color
+            // array to the Raspberry Pi
+            function changeColor(spot) {      	
                elements[spot].style.background = x;
                socket.emit('buttonPressed', {index: spot, color: x, deviceID: deviceID})
             }
-            
-            function submit_pro_id() {
-                    window.location.replace('/painting'+redirect);
-            }
-            
-            function gotoart() {
-                    window.location.replace('/art'+redirect);
-            }
-            
+        
+            // Change window to menu page
             function gotomenu() {
                     window.location.replace('/menu'+redirect);
             }
-            
+   
+            // Change window to log in page         
             function gotowelcome() {
                     window.location.replace('/');
             }

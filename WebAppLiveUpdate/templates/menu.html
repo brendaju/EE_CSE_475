@@ -37,67 +37,76 @@
             Image Show
         </div>
         <script> 
-            var socket = io();
-            
+            // Define variables used by script
+            var socket = io(); 
             var deviceID = {{deviceID}}
             var redirect = '?id='+ {{deviceID}};
             
+            // Change window to painting app and emit app change to Raspberry Pi
             function gotopainting() {
               console.log('Done')
               socket.emit('changeApp', {appName: "Painting", deviceID: deviceID})
-              window.location.replace('/painting'+redirect)
-            	
+              window.location.replace('/painting'+redirect)          	
             }
-            
+  
+            // Change window to tic tac toe app and emit app change to Raspberry Pi          
             function gototictactoe() {
             	socket.emit('changeApp', {appName: "tictactoe", deviceID: deviceID})
                     window.location.replace('/tictactoe'+redirect);
             }
-            
+  
+            // Change window to log in page          
             function gotowelcome() {
                     window.location.replace('/');
             }
-            
+
+            // Change window to chess app and emit app change to Raspberry Pi            
             function gotochess() {
             	socket.emit('changeApp', {appName: "chess", deviceID: deviceID})
                     window.location.replace('/chess'+redirect);
             }
             
+            // Change window to animation app and emit app change to Raspberry Pi
             function gotoanimation() {
             	socket.emit('changeApp', {appName: "animation", deviceID: deviceID})
                     window.location.replace('/animation'+redirect);
             }
             
+            // Change window to brickshooter app and emit app change to Raspberry Pi
             function gotobrickshooter() {
             	socket.emit('changeApp', {appName: "Brick Shooter", deviceID: deviceID})
                     window.location.replace('/brickshooter'+redirect);
             }
             
+            // Change window to tug of war app and emit app change to Raspberry Pi
             function gototugofwar() {
             	socket.emit('changeApp', {appName: "Tug of War", deviceID: deviceID})
                     window.location.replace('/tugofwar'+redirect);
             }
-            
+  
+            // Change window to stacker app and emit app change to Raspberry Pi          
             function gotostacker() {
             	socket.emit('changeApp', {appName: "Stacker", deviceID: deviceID})
                     window.location.replace('/stacker'+redirect);
             }
-            
+ 
+            // Change window to simon says app and emit app change to Raspberry Pi           
             function gotosimonsays() {
             	socket.emit('changeApp', {appName: "Simon Says", deviceID: deviceID})
                     window.location.replace('/simonsays'+redirect);
             }
-            
+ 
+            // Change window to pong app and emit app change to Raspberry Pi           
             function gotopong() {
             	socket.emit('changeApp', {appName: "Pong", deviceID: deviceID})
                     window.location.replace('/pong'+redirect);
             }
-            
+ 
+            // Change window to image show app and emit app change to Raspberry Pi           
             function gotoimageshow() {
             	socket.emit('changeApp', {appName: "Image Show", deviceID: deviceID})
                     window.location.replace('/imageshow'+redirect);
-            }
-            
+            }    
             
         </script>
     </body>
