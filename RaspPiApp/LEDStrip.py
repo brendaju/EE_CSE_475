@@ -37,6 +37,9 @@ set_colors = [
 
 class LEDStrip:
     def __init__(self):
+        """
+        Initializes the strip and sets strips stored states to zero
+        """
         # Create NeoPixel object with appropriate configuration.
         self.Strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ,
                                 LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
@@ -53,10 +56,11 @@ class LEDStrip:
 
         for i in range(self.num_pixels):
             self.turn_on_led(i, Color(0, 0, 0))
-       # self.setup_painting()
 
-    # https://stackoverflow.com/questions/5661725/format-ints-into-string-of-hex
     def rgb_to_hex(self, r, g, b):
+        """
+        Converts from RGB to HEX
+        """
         numbers = [r, g, b]
         return '#' + ''.join('{:02X}'.format(a) for a in numbers)
 
@@ -71,11 +75,17 @@ class LEDStrip:
             #time.sleep(wait_ms / 1000.0)
 
     def turn_on_led(self, n, color, wait_ms=50):
+        """
+        Turns on a specified led
+        """
         self.Strip.setPixelColor(n, color)
         self.Strip.show()
         #time.sleep(wait_ms / 1000.0)
 
     async def update_buffer(self, grid):
+        """
+        Updates the strip buffer
+        """
         for i in range(0, len(grid)):
             R = grid[i][0]
             G = grid[i][1]
@@ -87,22 +97,10 @@ class LEDStrip:
         self.Strip.show()
 
     def convert(self, x, y):
+        """
+        Converts from x and y to index in our led array
+        """
         # if in an odd column, reverse the order
         if (x % 2 != 0):
             y = 15 - y
         return (x * 16) + y
-
-    '''def setup_painting(self):
-        for i in range(8):
-            n = self.convert(i, 15)
-            self.turn_on_led(n, Color(set_colors[i][0], set_colors[i][1], set_colors[i][2]))
-            self.touch_array[n] = self.rgb_to_hex(set_colors[i][0], set_colors[i][1], set_colors[i][2])
-        self.turn_on_led(self.convert(8,15), Color(0, 0, 255))
-        self.touch_array[self.convert(8, 15)] = self.rgb_to_hex(0, 0, 255)
-        self.turn_on_led(self.convert(9,15), Color(0, 255, 0))
-        self.touch_array[self.convert(9, 15)] = self.rgb_to_hex(0, 255, 0)
-        self.turn_on_led(self.convert(10,15), Color(255, 0, 0))
-        self.touch_array[self.convert(10, 15)] = self.rgb_to_hex(255, 0, 0)
-        self.turn_on_led(self.convert(11,15), self.stored_color)
-        self.touch_array[self.convert(11, 15)] = self.rgb_to_hex(self.stored_R, self.stored_G, self.stored_B)
-'''
